@@ -1,3 +1,6 @@
+html {
+  background-color: #fff8e7;
+}
 .custom-navbar {
   background-color: #296154;
 }
@@ -53,6 +56,7 @@
   justify-content: center; /* Center vertically */
   text-align: center; /* Align text center */
   background-color: #fff8e7;
+  padding-bottom: 8rem;
 }
 
 .card-container {
@@ -61,4 +65,26 @@
 
 .card {
   margin-right: 10px; /* Add some space between the cards */
+}
+
+.mission {
+  display: flex;
+}
+
+.mission img {
+  height: 10rem;
+  border-radius: 0.2rem;
+}
+
+.mission .description {
+  text-align: left;
+}
+
+.overlay-text-footer {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  color: white;
 }
