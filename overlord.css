@@ -1,0 +1,64 @@
+.custom-navbar {
+  background-color: #296154;
+}
+
+.navbar-brand {
+  margin-left: 1.4rem;
+}
+
+.custom-navbar .nav-link {
+  color: #f6ecec;
+}
+
+.custom-navbar .nav-link img {
+  height: 1.5rem;
+  width: 1.5rem;
+}
+
+.contact-point img {
+  width: 100%;
+  height: auto;
+}
+
+.contact-point {
+  position: relative;
+  width: 100%;
+}
+
+.overlay-text {
+  position: absolute;
+  top: 65%;
+  left: 25%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  color: white;
+}
+
+.overlay-text h1 {
+  font-size: 2rem;
+  margin-bottom: 10px;
+  text-align: left;
+}
+
+.overlay-text p {
+  font-size: 1rem;
+  margin: 0;
+  text-align: left;
+}
+
+.information {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Center horizontally */
+  justify-content: center; /* Center vertically */
+  text-align: center; /* Align text center */
+  background-color: #fff8e7;
+}
+
+.card-container {
+  display: flex;
+}
+
+.card {
+  margin-right: 10px; /* Add some space between the cards */
+}
