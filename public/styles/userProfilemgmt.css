@@ -1,0 +1,7 @@
+.container {
+  background-color: blue;
+}
+
+.nav-link:not(:nth-child(6)) {
+  margin-right: 1.4rem;
+}

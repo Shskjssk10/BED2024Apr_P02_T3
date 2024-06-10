@@ -84,3 +84,7 @@ footer img {
   background-repeat: no-repeat;
   background-position: 50% 50%;
 }
+
+.nav-link:not(:nth-child(3)) {
+  margin-right: 1.4rem;
+}
