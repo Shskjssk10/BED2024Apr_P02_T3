@@ -1,7 +1,61 @@
-.container {
-  background-color: blue;
-}
-
 .nav-link:not(:nth-child(6)) {
   margin-right: 1.4rem;
+}
+
+.edit-profile {
+  background-color: #fff8e7;
+}
+
+.edit-profile h2 {
+  padding: 4rem 0 0 18rem;
+}
+
+.general-user-info {
+  width: 55%;
+  height: 9rem;
+  margin: 1.5rem 0 0 18rem;
+  display: flex;
+  align-items: center;
+  background-color: #296154;
+  border-radius: 0.8rem;
+}
+
+.profile-picture {
+  margin-left: 3rem;
+  border-radius: 50%; /* Make the container element a circle */
+  overflow: hidden; /* Hide any parts of the image that overflow */
+  width: 6rem; /* Set a width for the container */
+  height: 6rem; /* Set a height for the container */
+}
+
+.profile-picture img {
+  width: 100%; /* Scale the image to fill the container */
+  height: 100%; /* Scale the image to fill the container */
+  object-fit: cover; /* Crop the image to fit the container while maintaining aspect ratio */
+  object-position: 50% 50%; /* Center the image within the container */
+}
+
+.user-info {
+  margin-left: 3rem;
+  font-size: 1.3rem;
+}
+
+.change-photo {
+  margin-left: 14rem;
+}
+
+.detailed-user-info {
+  margin: 2rem 0 0 18rem;
+  border: red solid;
+}
+
+.detailed-user-info input {
+  width: 12rem;
+  height: 2rem;
+  border: blue solid;
+}
+
+.names {
+  border: black solid;
+  display: flex;
 }
