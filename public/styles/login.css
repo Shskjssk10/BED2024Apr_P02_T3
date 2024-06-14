@@ -4,6 +4,7 @@ body, html {
 }
 
 .bg {
+  background-image: url("../images/volunteer-back-facing.jpeg");
   height: 100%;
   background-position: center;
   background-repeat: no-repeat;
