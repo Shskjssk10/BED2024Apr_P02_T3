@@ -127,6 +127,17 @@
                 ></textarea>
               </div>
               <div class="mb-3">
+                <label for="orgIssueAreas" class="form-label"
+                  >Issue Areas:</label
+                >
+                <select class="form-control" id="volunteerGender">
+                  <option value="">Select Issue Area:</option>
+                  <option value="1">Issue 1</option>
+                  <option value="2">Issue 2</option>
+                  <option value="Others">Others</option>
+                </select>
+              </div>
+              <div class="mb-3">
                 <label for="orgEmail" class="form-label"
                   >Organization Email Address:</label
                 >
@@ -212,13 +223,13 @@
                 />
               </div>
               <div class="mb-3">
-                <label for="orgPhoneNumber" class="form-label"
-                  >Organisation Phone Number:</label
+                <label for="volunteerPhoneNumber" class="form-label"
+                  >Phone Number:</label
                 >
                 <input
                   type="tel"
                   class="form-control"
-                  id="orgPhoneNumber"
+                  id="volunteerPhoneNumber"
                   placeholder="Phone Number"
                   pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
                 />
