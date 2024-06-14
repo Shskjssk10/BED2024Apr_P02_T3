@@ -1,4 +1,5 @@
-body, html {
+body,
+html {
   height: 100%;
   margin: 0;
 }
@@ -18,4 +19,29 @@ body, html {
   padding: 20px;
   border-radius: 10px;
   width: 600px;
+  background-color: #fff8e7;
+}
+
+.nav-link.active {
+  background-color: #d4a373 !important;
+  color: black !important;
+}
+
+.nav-link {
+  color: black !important;
+}
+
+.btn.btn-primary {
+  background-color: #d4a373;
+  color: white;
+  border-color: #d4a373;
+  width: 100%;
+}
+
+.btn.btn-primary:hover {
+  background-color: #bb8753;
+}
+
+.signUpLink {
+  color: black !important;
 }
