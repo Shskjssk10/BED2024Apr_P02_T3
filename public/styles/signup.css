@@ -1,0 +1,49 @@
+body,
+html {
+  height: 100%;
+  margin: 0;
+}
+
+.bg {
+  background-image: url("../images/volunteer-back-facing.jpeg");
+  height: 100%;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.card {
+  padding: 20px;
+  border-radius: 10px;
+  width: 600px;
+  background-color: #fff8e7;
+  max-height: calc(100vh - 120px);
+  overflow-y: auto;
+}
+
+.nav-link.active {
+  background-color: #d4a373 !important;
+  color: black !important;
+}
+
+.nav-link {
+  color: black !important;
+}
+
+.btn.btn-primary {
+  background-color: #d4a373;
+  color: white;
+  border-color: #d4a373;
+  width: 100%;
+}
+
+.btn.btn-primary:hover {
+  background-color: #bb8753;
+}
+
+.loginLink {
+  color: black !important;
+}
