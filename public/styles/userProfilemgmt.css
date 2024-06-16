@@ -23,6 +23,14 @@
   background-color: rgba(41, 97, 84, 0.85);
 }
 
-.names {
+.cardnames {
   margin: 0 0 0 3rem;
+}
+
+.fields > * {
+  margin: 1.2rem 0 0 0;
+}
+
+.username {
+  margin: 1.2rem 0 0 0;
 }

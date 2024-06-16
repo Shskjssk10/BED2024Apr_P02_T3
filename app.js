@@ -33,7 +33,7 @@ app.get("/userProfilemgmt/:id", (req, res) => {
   }
 });
 
-app.put("/userProfilemgmt/:id", (req, res) => {
+app.put("/userProfilemgmt/:id/", (req, res) => {
   const userId = parseInt(req.params.id);
   const updatedUser = req.body;
 
