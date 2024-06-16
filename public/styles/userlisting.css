@@ -1,0 +1,95 @@
+.location {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 60px;
+  padding-bottom: 60px;
+}
+
+.locations {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+}
+
+.userlistingbox {
+  width: 1000px;
+  height: 2000px;
+  background-color: #8ba697;
+  border-radius: 30px;
+  margin: 10px;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  padding-top: 100px;
+  padding-left: 80px;
+}
+
+.userlistingfilters {
+  width: 280px;
+  height: 500px;
+  text-align: center;
+}
+
+.userlistings {
+  margin-left: 60px;
+  width: 550px;
+  height: 1850px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+}
+
+.filters {
+  text-align: center;
+  color: white;
+  font-weight: 600;
+}
+
+.styled-line {
+  border: none;
+  height: 1.5px;
+  background-color: white;
+  opacity: 1;
+  margin: 20px 0;
+}
+
+.listings {
+  background-color: #fff8e7;
+  display: flex;
+  padding: 22px;
+  height: 150px;
+  margin-bottom: 25px;
+  border-radius: 10px;
+}
+
+.listingimage {
+  height: 100px;
+  width: 100px;
+  border-radius: 10px;
+  background-color: grey;
+}
+
+.listinginfobox {
+  margin-left: 25px;
+  width: 350px;
+  text-align: left;
+  padding: 0;
+}
+
+.listingname {
+  font-size: large;
+  color: #0d493b;
+  font-weight: bold;
+  margin: 0;
+  padding: 0;
+}
+
+.listinginfo {
+  margin: 0;
+  padding: 0;
+}
+
+.pages {
+  color: white;
+}
