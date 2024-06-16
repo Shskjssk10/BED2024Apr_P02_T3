@@ -1,0 +1,96 @@
+body {
+  font-family: Arial, sans-serif;
+  background-color: #fff8e7;
+  margin: 0;
+  padding: 0;
+}
+
+.profile-container {
+  max-width: 900px;
+  margin: 50px auto;
+  padding: 20px;
+}
+
+.profile-header {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 40px;
+}
+
+.profile-image {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.profile-info {
+  flex: 1;
+}
+
+.profile-info h1 {
+  font-size: 28px;
+  margin: 0 0 10px;
+}
+
+.profile-info p {
+  font-size: 16px;
+  margin: 0 0 20px;
+}
+
+.profile-stats {
+  display: flex;
+  gap: 20px;
+  font-size: 16px;
+  margin-bottom: 20px;
+}
+
+.profile-stats span {
+  font-weight: bold;
+}
+
+.listings-section {
+  margin-bottom: 40px;
+}
+
+.listings-section h2 {
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+
+.listings {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.listing-item {
+  display: flex;
+  background-color: #8ba697;
+  padding: 20px;
+  border-radius: 10px;
+}
+
+.listingimage {
+  width: 70px;
+  height: 70px;
+  background-color: grey;
+  border-radius: 5px;
+}
+
+.listinginfobox {
+  margin-left: 20px;
+}
+
+.listingname {
+  font-size: 18px;
+  font-weight: bold;
+  margin: 0 0 5px;
+  color: #0d493b;
+}
+
+.listinginfo {
+  font-size: 16px;
+  margin: 0;
+}

@@ -1,0 +1,141 @@
+body {
+  font-family: Arial, sans-serif;
+  background-color: #fff8e7;
+  margin: 0;
+  padding: 0;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.listing-header h1 {
+  font-size: 28px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.organization {
+  font-size: 18px;
+  margin-bottom: 20px;
+}
+
+.content {
+  display: flex;
+  gap: 20px;
+}
+
+.main-content {
+  flex: 3;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.sidebar {
+  flex: 1;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.main-content h2,
+.sidebar h2 {
+  font-size: 22px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.main-content h3 {
+  font-size: 20px;
+  margin-top: 30px;
+}
+
+.image-placeholder {
+  width: 600px;
+  height: 300px;
+  background-color: #ccc;
+  border-radius: 10px;
+  margin: 20px 0;
+}
+
+.apply-button {
+  display: block;
+  padding: 10px 20px;
+  background-color: #d5a368;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  margin-bottom: 20px;
+}
+
+.apply-button:hover {
+  background-color: #c58a59;
+}
+
+.other-listings {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.listing-item {
+  display: flex;
+  background-color: #8ba697;
+  padding: 20px;
+  border-radius: 10px;
+}
+
+.listingimage {
+  width: 50px;
+  height: 50px;
+  background-color: grey;
+  border-radius: 5px;
+}
+
+.listinginfobox {
+  margin-left: 10px;
+}
+
+.listingname {
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.listinginfo {
+  font-size: 14px;
+}
+
+.cause-area {
+  display: inline-block;
+  padding: 5px 10px;
+  background-color: #d5a368;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-right: 5px;
+  margin-bottom: 10px;
+  font-size: 14px;
+}
+
+.cause-area:hover {
+  background-color: #c58a59;
+}
+
+.sidebar p,
+.sidebar ul {
+  margin-bottom: 20px;
+}
+
+.sidebar ul {
+  padding-left: 20px;
+}
+
+.sidebar li {
+  margin-bottom: 10px;
+}
