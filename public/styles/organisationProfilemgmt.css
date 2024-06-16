@@ -1,0 +1,46 @@
+#profile-photo {
+  margin: 0 0 0 2rem;
+  width: 6rem;
+  height: 6rem;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+#profile-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 50%;
+}
+
+.card-body {
+  width: 50%;
+  margin: 0 0 0 20rem;
+  height: 9rem;
+  display: flex;
+  align-items: center;
+  border-radius: 0.4rem;
+  background-color: rgba(41, 97, 84, 0.85);
+}
+
+.cardnames {
+  margin: 0 0 0 3rem;
+}
+
+.fields > * {
+  margin: 1.2rem 0 0 0;
+}
+
+.addresses {
+  display: flex;
+}
+
+.addresses .address {
+  width: 50%;
+  margin: 0 3rem 0 0;
+}
+
+.addresses .apt-floor-unit {
+  width: 50%;
+  margin: 0 0 0 1.1rem;
+}
