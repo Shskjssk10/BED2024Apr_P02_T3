@@ -31,16 +31,16 @@
   margin: 1.2rem 0 0 0;
 }
 
-.names {
+.addresses {
   display: flex;
 }
 
-.names .name {
+.addresses .address {
   width: 50%;
   margin: 0 3rem 0 0;
 }
 
-.names .username {
+.addresses .apt-floor-unit {
   width: 50%;
   margin: 0 0 0 1.1rem;
 }
