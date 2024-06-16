@@ -31,6 +31,16 @@
   margin: 1.2rem 0 0 0;
 }
 
-.username {
-  margin: 1.2rem 0 0 0;
+.names {
+  display: flex;
+}
+
+.names .name {
+  width: 50%;
+  margin: 0 3rem 0 0;
+}
+
+.names .username {
+  width: 50%;
+  margin: 0 0 0 1.1rem;
 }
