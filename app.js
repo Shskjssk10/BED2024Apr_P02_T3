@@ -1,27 +1,14 @@
 const express = require("express");
 const bodyParser = require("body-parser");
+const userController = require("./controllers/userController");
 const port = 8080;
 const app = express();
 
-let users = [
-  {
-    id: 1,
-    user: "Hendrik",
-    userName: "Hendrikyong",
-    email: "test@gmail.com",
-    phoneNum: "90909090",
-    bio: "test bio",
-    gender: "male",
-    password: "test1234",
-  },
-];
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true })); // For form data handling
+// app.use(staticMiddleware); // Mount the static middleware
 
-app.use(express.json());
-app.use(bodyParser.urlencoded({ extended: true }));
-
-app.get("/users", (req, res) => {
-  res.json(users);
-});
+app.get("/users", userController.getAllUsers);
 
 app.get("/userprofilemgmt/:id", (req, res) => {
   const userId = parseInt(req.params.id);
