@@ -19,11 +19,11 @@ let users = [
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.get("/userProfilemgmt", (req, res) => {
+app.get("/users", (req, res) => {
   res.json(users);
 });
 
-app.get("/userProfilemgmt/:id", (req, res) => {
+app.get("/userprofilemgmt/:id", (req, res) => {
   const userId = parseInt(req.params.id);
   const user = users.find((user) => user.id === userId);
   if (user) {
