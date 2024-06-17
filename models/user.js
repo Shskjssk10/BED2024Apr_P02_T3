@@ -45,6 +45,11 @@ class User {
         )
     );
   }
+
+  static async updateUserProfile() {
+    const connection = await sql.connect(dbConfig);
+    //have to get user by the name and then make amendments
+  }
 }
 
 module.exports = User;

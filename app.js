@@ -1,6 +1,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const userController = require("./controllers/userController");
+const organisationController = require("./controllers/organisationController");
 const port = 8080;
 const app = express();
 
@@ -9,6 +10,7 @@ app.use(bodyParser.urlencoded({ extended: true })); // For form data handling
 // app.use(staticMiddleware); // Mount the static middleware
 
 app.get("/users", userController.getAllUsers);
+app.get("/organisations", organisationController.getAllOrganisations);
 
 app.get("/userprofilemgmt/:id", (req, res) => {
   const userId = parseInt(req.params.id);
