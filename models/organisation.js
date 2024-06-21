@@ -51,6 +51,8 @@ class Organisation {
         )
     );
   }
+
+  static async;
 }
 
 module.exports = Organisation;
