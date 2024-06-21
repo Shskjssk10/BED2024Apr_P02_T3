@@ -12,7 +12,7 @@ app.use(bodyParser.urlencoded({ extended: true })); // For form data handling
 // app.use(staticMiddleware); // Mount the static middleware
 
 app.get("/users", userController.getAllUsers); //get all user
-app.get("/users/:username", userController.getUserByUsername);
+app.get("/users/:username", userController.getUserByUsername); // Get user by ID
 app.get("/organisations", organisationController.getAllOrganisations); //get all organisation
 app.put("/users/:username", userController.updateUserProfile);
 

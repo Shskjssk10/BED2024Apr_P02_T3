@@ -71,36 +71,15 @@ class User {
           result.recordset[0].bio,
           result.recordset[0].password
         )
-      : null;
+      : null; // Handle book not found
   }
 
   static async updateUserProfile(username, updatedUser) {
     const connection = await sql.connect(dbConfig);
-    const sqlQuery = `UPDATE Users 
-    SET 
-    fname = @fname, 
-    lname = @lname, 
-    username = @username 
-    email = @email, 
-    phone_number = @phone_number,
-    bio = @bio
-    WHERE username = @username`; // Parameterized query
-
-    const request = connection.request();
-    request.input("username", username);
-    //handle optional fields
-    request.input("first name", updatedUser.fname || null);
-    request.input("last name", updatedUser.lname || null);
-    request.input("userName", updatedUser.userName || null);
-    request.input("email", updatedUser.email || null);
-    request.input("phone number", updatedUser.phone_number || null);
-    request.input("bio", updatedUser.bio || null);
-
-    await request.query(sqlQuery);
-
-    connection.close();
-
-    return this.getUserByUsername(username);
+    const sqlQuery = `UPDATE
+       
+    
+    `;
   }
 }
 
