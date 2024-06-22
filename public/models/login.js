@@ -1,6 +1,6 @@
 const sql = require("mssql");
-const { poolPromise } = require("../../dbConfig"); 
-const crypto = require("crypto"); 
+const { poolPromise } = require("../../dbConfig");
+const crypto = require("crypto");
 
 const generateSalt = () => {
   return crypto.randomBytes(16).toString("hex");
@@ -30,7 +30,31 @@ const getUserByEmail = async (email) => {
     return user;
   } catch (error) {
     console.error("Error retrieving user from database:", error);
-    throw error; 
+    throw error;
+  }
+};
+
+const getOrganisationByEmail = async (email) => {
+  try {
+    const pool = await poolPromise;
+    const result = await pool
+      .request()
+      .input("email", sql.VarChar, email)
+      .query(
+        "SELECT id, org_name, email, hashedPassword, salt FROM Organisations WHERE email = @email"
+      );
+
+    if (result.recordset.length === 0) {
+      console.log(`No organization found with email ${email}`);
+      return null;
+    }
+
+    const organisation = result.recordset[0];
+    console.log(`Organization found with email ${organisation.email}`);
+    return organisation;
+  } catch (error) {
+    console.error("Error retrieving organization from database:", error);
+    throw error;
   }
 };
 
@@ -44,7 +68,8 @@ const authUser = async (req, res) => {
       return res.status(401).json({ message: "Invalid email or password" });
     }
 
-    const hashedPassword = hashPassword(password, user.salt); // Use retrieved salt
+    const hashedPassword = hashPassword(password, user.salt);
+    console.log(`Hashed password for user ${email}: ${hashedPassword}`);
 
     if (hashedPassword !== user.hashedPassword) {
       console.log(`Incorrect password for user with email ${email}`);
@@ -66,4 +91,41 @@ const authUser = async (req, res) => {
   }
 };
 
-module.exports = { authUser, getUserByEmail };
+const authOrganisation = async (req, res) => {
+  const { email, password } = req.body;
+
+  try {
+    const organisation = await getOrganisationByEmail(email);
+    if (!organisation) {
+      console.log(`Organization with email ${email} not found`);
+      return res.status(401).json({ message: "Invalid email or password" });
+    }
+
+    const hashedPassword = hashPassword(password, organisation.salt);
+    console.log(`Hashed password for organization ${email}: ${hashedPassword}`);
+
+    if (hashedPassword !== organisation.hashedPassword) {
+      console.log(`Incorrect password for organization with email ${email}`);
+      return res.status(401).json({ message: "Invalid email or password" });
+    }
+
+    // Passwords match, authentication successful
+    console.log(`Organization ${email} authenticated successfully`);
+    res.json({
+      id: organisation.id,
+      org_name: organisation.org_name,
+      email: organisation.email,
+      token: generateToken(organisation.id),
+    });
+  } catch (error) {
+    console.error("Error authenticating organization:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+module.exports = {
+  authUser,
+  getUserByEmail,
+  authOrganisation,
+  getOrganisationByEmail,
+};
