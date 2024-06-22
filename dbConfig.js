@@ -8,8 +8,8 @@ const config = {
   database: process.env.DB_DATABASE,
   port: parseInt(process.env.DB_PORT, 10),
   options: {
-    encrypt: false, // Change to true if using encrypted connections
-    trustServerCertificate: true, // Change to false if not using a self-signed certificate
+    encrypt: true, 
+    trustServerCertificate: true,
   },
 };
 

@@ -123,9 +123,85 @@ const authOrganisation = async (req, res) => {
   }
 };
 
+const createUser = async (userData) => {
+  const { fname, lname, username, email, phone_number, gender, bio, password } =
+    userData;
+  const salt = generateSalt();
+  const hashedPassword = hashPassword(password, salt);
+
+  try {
+    const pool = await poolPromise;
+    await pool
+      .request()
+      .input("fname", sql.VarChar, fname)
+      .input("lname", sql.VarChar, lname)
+      .input("username", sql.VarChar, username)
+      .input("email", sql.VarChar, email)
+      .input("phone_number", sql.VarChar, phone_number)
+      .input("gender", sql.VarChar, gender)
+      .input("bio", sql.VarChar, bio)
+      .input("password", sql.VarChar, password)
+      .input("salt", sql.VarChar, salt)
+      .input("hashedPassword", sql.VarChar, hashedPassword).query(`
+        INSERT INTO Users (fname, lname, username, email, phone_number, gender, bio, password, salt, hashedPassword)
+        VALUES (@fname, @lname, @username, @email, @phone_number, @gender, @bio, @password, @salt, @hashedPassword)
+      `);
+
+    console.log(`User created with email ${email}`);
+    return { email, salt, hashedPassword };
+  } catch (error) {
+    console.error("Error creating user:", error);
+    throw error;
+  }
+};
+
+const createOrganisation = async (orgData) => {
+  const {
+    org_name,
+    email,
+    org_phone_number,
+    password,
+    issue_area,
+    mission,
+    description,
+    address,
+    apt_floor_unit,
+  } = orgData;
+  const salt = generateSalt();
+  const hashedPassword = hashPassword(password, salt);
+
+  try {
+    const pool = await poolPromise;
+    await pool
+      .request()
+      .input("org_name", sql.VarChar, org_name)
+      .input("email", sql.VarChar, email)
+      .input("org_phone_number", sql.VarChar, org_phone_number)
+      .input("password", sql.VarChar, password)
+      .input("issue_area", sql.VarChar, issue_area)
+      .input("mission", sql.VarChar, mission)
+      .input("description", sql.Text, description)
+      .input("address", sql.VarChar, address)
+      .input("apt_floor_unit", sql.VarChar, apt_floor_unit)
+      .input("salt", sql.VarChar, salt)
+      .input("hashedPassword", sql.VarChar, hashedPassword).query(`
+        INSERT INTO Organisations (org_name, email, org_phone_number, password, issue_area, mission, description, address, apt_floor_unit, salt, hashedPassword)
+        VALUES (@org_name, @email, @org_phone_number, @password, @issue_area, @mission, @description, @address, @apt_floor_unit, @salt, @hashedPassword)
+      `);
+
+    console.log(`Organization created with email ${email}`);
+    return { email, salt, hashedPassword };
+  } catch (error) {
+    console.error("Error creating organization:", error);
+    throw error;
+  }
+};
+
 module.exports = {
   authUser,
   getUserByEmail,
   authOrganisation,
   getOrganisationByEmail,
+  createUser,
+  createOrganisation,
 };
