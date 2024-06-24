@@ -39,54 +39,20 @@
   </header>
   <div class="bg">
     <div class="card">
-      <ul class="nav nav-tabs">
-        <li class="nav-item">
-          <a class="nav-link active" data-bs-toggle="tab" href="#orgLogin">Organisation Login</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" data-bs-toggle="tab" href="#volunteerLogin">Volunteer Login</a>
-        </li>
-      </ul>
-
-      <!-- Organisation Login -->
-
-      <div class="tab-content">
-        <div class="tab-pane container active" id="orgLogin">
-          <br>
-          <h5 class="card-title">HelpingHearts Organisation Login</h5>
-          <br>
-          <form>
-            <div class="mb-3">
-              <label for="orgEmail" class="form-label">Email Address:</label>
-              <input type="email" class="form-control" id="emailOrg" placeholder="Email Address" />
-            </div>
-            <div class="mb-3">
-              <label for="orgPassword" class="form-label">Password:</label>
-              <input type="password" class="form-control" id="passwordOrg" placeholder="Password" />
-            </div>
-            <button type="submit" class="btn btn-primary">Login</button>
-          </form>
+      <br>
+      <h5 class="card-title text-center">HelpingHearts Login</h5>
+      <br>
+      <form>
+        <div class="mb-3">
+          <label for="email" class="form-label">Email Address:</label>
+          <input type="email" class="form-control" id="email" placeholder="Email Address" />
         </div>
-
-        <!-- Volunteer Login -->
-
-        <div class="tab-pane container fade" id="volunteerLogin">
-          <br>
-          <h5 class="card-title">HelpingHearts Volunteer Login</h5>
-          <br>
-          <form>
-            <div class="mb-3">
-              <label for="volunteerEmail" class="form-label">Email Address:</label>
-              <input type="email" class="form-control" id="emailVolunteer" placeholder="Email Address" />
-            </div>
-            <div class="mb-3">
-              <label for="volunteerPassword" class="form-label">Password:</label>
-              <input type="password" class="form-control" id="passwordVolunteer" placeholder="Password" />
-            </div>
-            <button type="submit" class="btn btn-primary">Login</button>
-          </form>
+        <div class="mb-3">
+          <label for="password" class="form-label">Password:</label>
+          <input type="password" class="form-control" id="password" placeholder="Password" />
         </div>
-      </div>
+        <button type="submit" class="btn btn-primary">Login</button>
+      </form>
       <div class="text-center mt-3">
         <a class="signUpLink" href="#">Don't have an account? Sign Up Here</a>
       </div>
