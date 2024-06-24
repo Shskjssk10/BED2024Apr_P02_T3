@@ -1,7 +1,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const dbConfig = require("./dbConfig");
-const userController = require("./controllers/userController");
+const volunteerController = require("./controllers/volunteerController");
 const organisationController = require("./controllers/organisationController");
 const sql = require("mssql");
 const port = 8080;
@@ -11,10 +11,10 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true })); // For form data handling
 // app.use(staticMiddleware); // Mount the static middleware
 
-app.get("/users", userController.getAllUsers); //get all user
-app.get("/users/:username", userController.getUserByUsername); // Get user by ID
+app.get("/volunteers", volunteerController.getAllVolunteers); //get all user
+app.get("/volunteers/:username", volunteerController.getVolunteerByUsername); // Get user by ID
 app.get("/organisations", organisationController.getAllOrganisations); //get all organisation
-app.put("/users/:username", userController.updateUserProfile);
+app.put("/volunteers/:username", volunteerController.updateVolunteerProfile);
 
 app.listen(port, async () => {
   try {
