@@ -1,14 +1,18 @@
 const sql = require("mssql");
 const { poolPromise } = require("../../dbConfig");
-const crypto = require("crypto");
+const bcrypt = require("bcrypt");
 const generateToken = require("../utils/token.js");
 
-const generateSalt = () => {
-  return crypto.randomBytes(16).toString("hex");
+const saltRounds = 10;
+
+const hashPassword = async (password) => {
+  const salt = await bcrypt.genSalt(saltRounds);
+  const hashedPassword = await bcrypt.hash(password, salt);
+  return { salt, hashedPassword };
 };
 
-const hashPassword = (password, salt) => {
-  return crypto.pbkdf2Sync(password, salt, 10000, 64, "sha512").toString("hex");
+const comparePassword = async (password, hashedPassword) => {
+  return await bcrypt.compare(password, hashedPassword);
 };
 
 const getAccountByEmail = async (email) => {
@@ -91,9 +95,9 @@ const authAccount = async (req, res) => {
     const organisation = await getOrganisationByAccountId(account.AccID);
 
     if (volunteer) {
-      const hashedPassword = hashPassword(password, volunteer.Salt);
-      console.log(`Hashed password for volunteer ${email}: ${hashedPassword}`);
-      if (hashedPassword !== volunteer.HashedPassword) {
+      const passwordMatch = await comparePassword(password, volunteer.HashedPassword);
+      console.log(`Password comparison result for volunteer ${email}: ${passwordMatch}`);
+      if (!passwordMatch) {
         console.log(`Incorrect password for volunteer with email ${email}`);
         return res.status(401).json({ message: "Invalid email or password" });
       }
@@ -107,11 +111,9 @@ const authAccount = async (req, res) => {
     }
 
     if (organisation) {
-      const hashedPassword = hashPassword(password, organisation.Salt);
-      console.log(
-        `Hashed password for organisation ${email}: ${hashedPassword}`
-      );
-      if (hashedPassword !== organisation.HashedPassword) {
+      const passwordMatch = await comparePassword(password, organisation.HashedPassword);
+      console.log(`Password comparison result for organisation ${email}: ${passwordMatch}`);
+      if (!passwordMatch) {
         console.log(`Incorrect password for organisation with email ${email}`);
         return res.status(401).json({ message: "Invalid email or password" });
       }
@@ -124,10 +126,9 @@ const authAccount = async (req, res) => {
       });
     }
 
-    console.log(
-      `No volunteer or organisation found for account with email ${email}`
-    );
+    console.log(`No volunteer or organisation found for account with email ${email}`);
     return res.status(401).json({ message: "Invalid email or password" });
+
   } catch (error) {
     console.error("Error authenticating account:", error);
     res.status(500).json({ message: "Internal server error" });
@@ -135,10 +136,8 @@ const authAccount = async (req, res) => {
 };
 
 const createVolunteer = async (volunteerData) => {
-  const { fname, lname, username, email, phone_number, gender, bio, password } =
-    volunteerData;
-  const salt = generateSalt();
-  const hashedPassword = hashPassword(password, salt);
+  const { fname, lname, username, email, phone_number, gender, bio, password } = volunteerData;
+  const { salt, hashedPassword } = await hashPassword(password);
 
   try {
     const pool = await poolPromise;
@@ -146,7 +145,8 @@ const createVolunteer = async (volunteerData) => {
       .request()
       .input("phoneNo", sql.VarChar, phone_number)
       .input("email", sql.VarChar, email)
-      .input("password", sql.VarChar, password).query(`
+      .input("password", sql.VarChar, password)
+      .query(`
         INSERT INTO Account (PhoneNo, Email, Password)
         VALUES (@phoneNo, @Email, @Password);
         SELECT SCOPE_IDENTITY() AS AccID;
@@ -163,7 +163,8 @@ const createVolunteer = async (volunteerData) => {
       .input("gender", sql.VarChar, gender)
       .input("bio", sql.VarChar, bio)
       .input("salt", sql.VarChar, salt)
-      .input("hashedPassword", sql.VarChar, hashedPassword).query(`
+      .input("hashedPassword", sql.VarChar, hashedPassword)
+      .query(`
         INSERT INTO Volunteer (AccID, FName, LName, Username, Gender, Bio, Salt, HashedPassword)
         VALUES (@accId, @fname, @lname, @username, @gender, @bio, @salt, @hashedPassword)
       `);
@@ -177,19 +178,8 @@ const createVolunteer = async (volunteerData) => {
 };
 
 const createOrganisation = async (orgData) => {
-  const {
-    org_name,
-    email,
-    phone_number,
-    password,
-    issue_area,
-    mission,
-    description,
-    address,
-    apt_floor_unit,
-  } = orgData;
-  const salt = generateSalt();
-  const hashedPassword = hashPassword(password, salt);
+  const { org_name, email, phone_number, password, issue_area, mission, description, address, apt_floor_unit } = orgData;
+  const { salt, hashedPassword } = await hashPassword(password);
 
   try {
     const pool = await poolPromise;
@@ -197,7 +187,8 @@ const createOrganisation = async (orgData) => {
       .request()
       .input("phoneNo", sql.VarChar, phone_number)
       .input("email", sql.VarChar, email)
-      .input("password", sql.VarChar, password).query(`
+      .input("password", sql.VarChar, password)
+      .query(`
         INSERT INTO Account (PhoneNo, Email, Password)
         VALUES (@phoneNo, @Email, @Password);
         SELECT SCOPE_IDENTITY() AS AccID;
@@ -215,7 +206,8 @@ const createOrganisation = async (orgData) => {
       .input("address", sql.VarChar, address)
       .input("aptFloorUnit", sql.VarChar, apt_floor_unit)
       .input("salt", sql.VarChar, salt)
-      .input("hashedPassword", sql.VarChar, hashedPassword).query(`
+      .input("hashedPassword", sql.VarChar, hashedPassword)
+      .query(`
         INSERT INTO Organisation (AccID, OrgName, IssueArea, Mission, Descr, Addr, AptFloorUnit, Salt, HashedPassword)
         VALUES (@accId, @orgName, @issueArea, @mission, @description, @address, @aptFloorUnit, @salt, @hashedPassword)
       `);
