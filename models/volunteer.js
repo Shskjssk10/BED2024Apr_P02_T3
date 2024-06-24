@@ -15,7 +15,7 @@ class Volunteer {
   ) {
     this.AccID = AccID;
     this.FName = FName;
-    this.lname = LName;
+    this.Lname = LName;
     this.Username = Username;
     this.Email = Email;
     this.PhoneNo = PhoneNo;
@@ -51,20 +51,22 @@ class Volunteer {
 
   static async getVolunteerByUsername(username) {
     const connection = await sql.connect(dbConfig);
-
-    const sqlQuery = `SELECT * FROM Volunteer WHERE username = @username`; // Parameterized query
-
+    const sqlQuery = `
+    SELECT V.*, A.Email, A.PhoneNo, A.Password
+    FROM Volunteer V
+    INNER JOIN Account A ON V.Username = A.Username
+    WHERE V.Username = @username;
+  `;
     const request = connection.request();
     request.input("username", username);
     const result = await request.query(sqlQuery);
 
     connection.close();
-
     return result.recordset[0]
       ? new Volunteer(
           result.recordset[0].AccID,
           result.recordset[0].FName,
-          result.recordset[0].lname,
+          result.recordset[0].LName,
           result.recordset[0].Username,
           result.recordset[0].Email,
           result.recordset[0].PhoneNo,
@@ -77,8 +79,6 @@ class Volunteer {
 
   static async updateVolunteerProfile(username, updatedVolunteer) {
     const connection = await sql.connect(dbConfig);
-
-    return this.getVolunteerByUsername(username);
   }
 }
 
