@@ -1,67 +1,175 @@
-const { createVolunteer, createOrganisation, authAccount } = require("../models/login.js");
-const Joi = require("joi");
+const sql = require("mssql");
+const { poolPromise } = require("../../dbConfig");
+const bcrypt = require("bcrypt");
+const generateToken = require("../utils/token.js");
 
-const loginSchema = Joi.object({
-  email: Joi.string().email().required(),
-  password: Joi.string().required(),
-});
+const saltRounds = 10;
 
-const signUpVolunteerSchema = Joi.object({
-  fname: Joi.string().required(),
-  lname: Joi.string().required(),
-  username: Joi.string().required(),
-  email: Joi.string().email().required(),
-  phone_number: Joi.string().required(),
-  gender: Joi.string().required(),
-  bio: Joi.string().required(),
-  password: Joi.string().required(),
-});
+const hashPassword = async (password) => {
+  const salt = await bcrypt.genSalt(saltRounds);
+  const hashedPassword = await bcrypt.hash(password, salt);
+  return { salt, hashedPassword };
+};
 
-const signUpOrganisationSchema = Joi.object({
-  org_name: Joi.string().required(),
-  email: Joi.string().email().required(),
-  phone_number: Joi.string().required(),
-  password: Joi.string().required(),
-  issue_area: Joi.string().required(),
-  mission: Joi.string().required(),
-  description: Joi.string().required(),
-  address: Joi.string().required(),
-  apt_floor_unit: Joi.string().required(),
-});
+const comparePassword = async (password, hashedPassword) => {
+  return await bcrypt.compare(password, hashedPassword);
+};
 
-const authUser = async (req, res) => {
+const getAccountByEmail = async (email) => {
+  try {
+    const pool = await poolPromise;
+    const result = await pool
+      .request()
+      .input("email", sql.VarChar, email)
+      .query("SELECT * FROM Account WHERE Email = @email");
+
+    if (result.recordset.length === 0) {
+      console.log(`No account found with email ${email}`);
+      return null;
+    }
+
+    const account = result.recordset[0];
+    console.log(`Account found with email ${account.Email}`);
+    return account;
+  } catch (error) {
+    console.error("Error retrieving account from database:", error);
+    throw error;
+  }
+};
+
+const getVolunteerByAccountId = async (accountId) => {
+  try {
+    const pool = await poolPromise;
+    const result = await pool
+      .request()
+      .input("accId", sql.SmallInt, accountId)
+      .query("SELECT * FROM Volunteer WHERE AccID = @accId");
+
+    if (result.recordset.length === 0) {
+      console.log(`No volunteer found with account ID ${accountId}`);
+      return null;
+    }
+
+    const volunteer = result.recordset[0];
+    console.log(`Volunteer found with account ID ${accountId}`);
+    return volunteer;
+  } catch (error) {
+    console.error("Error retrieving volunteer from database:", error);
+    throw error;
+  }
+};
+
+const getOrganisationByAccountId = async (accountId) => {
+  try {
+    const pool = await poolPromise;
+    const result = await pool
+      .request()
+      .input("accId", sql.SmallInt, accountId)
+      .query("SELECT * FROM Organisation WHERE AccID = @accId");
+
+    if (result.recordset.length === 0) {
+      console.log(`No organisation found with account ID ${accountId}`);
+      return null;
+    }
+
+    const organisation = result.recordset[0];
+    console.log(`Organisation found with account ID ${accountId}`);
+    return organisation;
+  } catch (error) {
+    console.error("Error retrieving organisation from database:", error);
+    throw error;
+  }
+};
+
+const authAccount = async (req, res) => {
   const { email, password } = req.body;
 
-  console.log("Request received with email:", email, "and password:", password);
-
-  // Validate input using Joi schema
-  const { error } = loginSchema.validate({ email, password });
-  if (error) {
-    console.log("Validation error:", error.details[0].message);
-    return res.status(400).json({ message: error.details[0].message });
-  }
-
   try {
-    await authAccount(req, res);
+    const account = await getAccountByEmail(email);
+    if (!account) {
+      console.log(`Account with email ${email} not found`);
+      return res.status(401).json({ message: "Invalid email or password" });
+    }
+
+    const volunteer = await getVolunteerByAccountId(account.AccID);
+    const organisation = await getOrganisationByAccountId(account.AccID);
+
+    if (volunteer) {
+      const passwordMatch = await comparePassword(password, volunteer.HashedPassword);
+      console.log(`Password comparison result for volunteer ${email}: ${passwordMatch}`);
+      console.log(`Stored hashed password: ${volunteer.HashedPassword}`);
+      if (!passwordMatch) {
+        console.log(`Incorrect password for volunteer with email ${email}`);
+        return res.status(401).json({ message: "Invalid email or password" });
+      }
+      console.log(`Volunteer ${email} authenticated successfully`);
+      return res.json({
+        id: account.AccID,
+        email: account.Email,
+        token: generateToken(account.AccID),
+      });
+    }
+
+    if (organisation) {
+      const passwordMatch = await comparePassword(password, organisation.HashedPassword);
+      console.log(`Password comparison result for organisation ${email}: ${passwordMatch}`);
+      console.log(`Stored hashed password: ${organisation.HashedPassword}`);
+      if (!passwordMatch) {
+        console.log(`Incorrect password for organisation with email ${email}`);
+        return res.status(401).json({ message: "Invalid email or password" });
+      }
+      console.log(`Organisation ${email} authenticated successfully`);
+      return res.json({
+        id: account.AccID,
+        email: account.Email,
+        token: generateToken(account.AccID),
+      });
+    }
+
+    console.log(`No volunteer or organisation found for account with email ${email}`);
+    return res.status(401).json({ message: "Invalid email or password" });
+
   } catch (error) {
-    console.error("Error authenticating user:", error);
+    console.error("Error authenticating account:", error);
     res.status(500).json({ message: "Internal server error" });
   }
 };
 
-const signUpVolunteer = async (req, res) => {
-  const volunteerData = req.body;
-
-  // Validate input using Joi schema
-  const { error } = signUpVolunteerSchema.validate(volunteerData);
-  if (error) {
-    console.log("Validation error:", error.details[0].message);
-    return res.status(400).json({ message: error.details[0].message });
-  }
+const createVolunteer = async (req, res) => {
+  const { fname, lname, username, email, phone_number, gender, bio, password } = req.body;
+  const { salt, hashedPassword } = await hashPassword(password);
 
   try {
-    const { email, salt, hashedPassword } = await createVolunteer(volunteerData);
-    console.log(`New volunteer created with email ${email}, salt ${salt}, and hashed password ${hashedPassword}`);
+    const pool = await poolPromise;
+    const accountResult = await pool
+      .request()
+      .input("phoneNo", sql.VarChar, phone_number)
+      .input("email", sql.VarChar, email)
+      .input("password", sql.VarChar, password)
+      .query(`
+        INSERT INTO Account (PhoneNo, Email, Password)
+        VALUES (@phoneNo, @Email, @Password);
+        SELECT SCOPE_IDENTITY() AS AccID;
+      `);
+
+    const accId = accountResult.recordset[0].AccID;
+
+    await pool
+      .request()
+      .input("accId", sql.SmallInt, accId)
+      .input("fname", sql.VarChar, fname)
+      .input("lname", sql.VarChar, lname)
+      .input("username", sql.VarChar, username)
+      .input("gender", sql.VarChar, gender)
+      .input("bio", sql.VarChar, bio)
+      .input("salt", sql.VarChar, salt)
+      .input("hashedPassword", sql.VarChar, hashedPassword)
+      .query(`
+        INSERT INTO Volunteer (AccID, FName, LName, Username, Gender, Bio, Salt, HashedPassword)
+        VALUES (@accId, @fname, @lname, @username, @gender, @bio, @salt, @hashedPassword)
+      `);
+
+    console.log(`Volunteer created with email ${email}`);
     res.status(201).json({ message: "Volunteer created successfully", email, salt, hashedPassword });
   } catch (error) {
     console.error("Error creating volunteer:", error);
@@ -69,19 +177,42 @@ const signUpVolunteer = async (req, res) => {
   }
 };
 
-const signUpOrganisation = async (req, res) => {
-  const orgData = req.body;
-
-  // Validate input using Joi schema
-  const { error } = signUpOrganisationSchema.validate(orgData);
-  if (error) {
-    console.log("Validation error:", error.details[0].message);
-    return res.status(400).json({ message: error.details[0].message });
-  }
+const createOrganisation = async (req, res) => {
+  const { org_name, email, phone_number, password, issue_area, mission, description, address, apt_floor_unit } = req.body;
+  const { salt, hashedPassword } = await hashPassword(password);
 
   try {
-    const { email, salt, hashedPassword } = await createOrganisation(orgData);
-    console.log(`New organisation created with email ${email}, salt ${salt}, and hashed password ${hashedPassword}`);
+    const pool = await poolPromise;
+    const accountResult = await pool
+      .request()
+      .input("phoneNo", sql.VarChar, phone_number)
+      .input("email", sql.VarChar, email)
+      .input("password", sql.VarChar, password)
+      .query(`
+        INSERT INTO Account (PhoneNo, Email, Password)
+        VALUES (@phoneNo, @Email, @Password);
+        SELECT SCOPE_IDENTITY() AS AccID;
+      `);
+
+    const accId = accountResult.recordset[0].AccID;
+
+    await pool
+      .request()
+      .input("accId", sql.SmallInt, accId)
+      .input("orgName", sql.VarChar, org_name)
+      .input("issueArea", sql.VarChar, issue_area)
+      .input("mission", sql.VarChar, mission)
+      .input("description", sql.Text, description)
+      .input("address", sql.VarChar, address)
+      .input("aptFloorUnit", sql.VarChar, apt_floor_unit)
+      .input("salt", sql.VarChar, salt)
+      .input("hashedPassword", sql.VarChar, hashedPassword)
+      .query(`
+        INSERT INTO Organisation (AccID, OrgName, IssueArea, Mission, Descr, Addr, AptFloorUnit, Salt, HashedPassword)
+        VALUES (@accId, @orgName, @issueArea, @mission, @description, @address, @aptFloorUnit, @salt, @hashedPassword)
+      `);
+
+    console.log(`Organisation created with email ${email}`);
     res.status(201).json({ message: "Organisation created successfully", email, salt, hashedPassword });
   } catch (error) {
     console.error("Error creating organisation:", error);
@@ -89,4 +220,4 @@ const signUpOrganisation = async (req, res) => {
   }
 };
 
-module.exports = { authUser, signUpVolunteer, signUpOrganisation };
+module.exports = { authAccount, createVolunteer, createOrganisation };

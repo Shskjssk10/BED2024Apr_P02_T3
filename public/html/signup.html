@@ -66,13 +66,12 @@
         </ul>
 
         <!-- Organisation Sign Up-->
-
         <div class="tab-content">
           <div class="tab-pane container active" id="orgSignUp">
             <br />
             <h5 class="card-title">HelpingHearts Organisation Sign Up</h5>
             <br />
-            <form>
+            <form id="orgSignUpForm">
               <div class="row">
                 <div class="mb-3">
                   <label for="orgName" class="form-label"
@@ -83,6 +82,7 @@
                     class="form-control"
                     id="orgName"
                     placeholder="Organisation Name"
+                    required
                   />
                 </div>
                 <div class="mb-3 col-md-6">
@@ -92,6 +92,7 @@
                     class="form-control"
                     id="orgAddress"
                     placeholder="Address"
+                    required
                   />
                 </div>
                 <div class="mb-3 col-md-6">
@@ -103,6 +104,7 @@
                     class="form-control"
                     id="orgAddress2"
                     placeholder="Apt/Floor/Unit"
+                    required
                   />
                 </div>
               </div>
@@ -113,6 +115,7 @@
                   class="form-control"
                   id="orgMission"
                   placeholder="Mission"
+                  required
                 />
               </div>
               <div class="mb-3">
@@ -124,18 +127,20 @@
                   id="orgDescription"
                   rows="4"
                   placeholder="Enter your description here"
+                  required
                 ></textarea>
               </div>
               <div class="mb-3">
                 <label for="orgIssueAreas" class="form-label"
                   >Issue Areas:</label
                 >
-                <select class="form-control" id="volunteerGender">
-                  <option value="">Select Issue Area:</option>
-                  <option value="1">Issue 1</option>
-                  <option value="2">Issue 2</option>
-                  <option value="Others">Others</option>
-                </select>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="orgIssueAreas"
+                  placeholder="Issue Areas"
+                  required
+                />
               </div>
               <div class="mb-3">
                 <label for="orgEmail" class="form-label"
@@ -146,6 +151,7 @@
                   class="form-control"
                   id="orgEmail"
                   placeholder="Email Address"
+                  required
                 />
               </div>
               <div class="mb-3">
@@ -157,9 +163,12 @@
                   class="form-control"
                   id="orgPhoneNumber"
                   placeholder="Phone Number"
-                  pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
+                  pattern="[0-9]{8}"
+                  required
                 />
-                <small class="form-text text-muted">Format: 123-456-7890</small>
+                <small class="form-text text-muted"
+                  >Format: 8-digit Singapore phone number</small
+                >
               </div>
               <div class="mb-3">
                 <label for="orgPassword" class="form-label">Password:</label>
@@ -168,6 +177,7 @@
                   class="form-control"
                   id="orgPassword"
                   placeholder="Password"
+                  required
                 />
               </div>
               <div class="mb-3">
@@ -181,12 +191,11 @@
           </div>
 
           <!-- Volunteer Sign Up -->
-
           <div class="tab-pane container fade" id="volunteerSignUp">
             <br />
             <h5 class="card-title">HelpingHearts Volunteer Sign Up</h5>
             <br />
-            <form>
+            <form id="volunteerSignUpForm">
               <div class="row">
                 <div class="mb-3 col-md-6">
                   <label for="volunteerFirstName" class="form-label"
@@ -197,6 +206,7 @@
                     class="form-control"
                     id="volunteerFirstName"
                     placeholder="First Name"
+                    required
                   />
                 </div>
                 <div class="mb-3 col-md-6">
@@ -208,6 +218,7 @@
                     class="form-control"
                     id="volunteerLastName"
                     placeholder="Last Name"
+                    required
                   />
                 </div>
               </div>
@@ -220,6 +231,7 @@
                   class="form-control"
                   id="volunteerUsername"
                   placeholder="Username"
+                  required
                 />
               </div>
               <div class="mb-3">
@@ -231,17 +243,20 @@
                   class="form-control"
                   id="volunteerPhoneNumber"
                   placeholder="Phone Number"
-                  pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
+                  pattern="[0-9]{8}"
+                  required
                 />
-                <small class="form-text text-muted">Format: 123-456-7890</small>
+                <small class="form-text text-muted"
+                  >Format: 8-digit Singapore phone number</small
+                >
               </div>
               <div class="mb-3">
                 <label for="volunteerGender" class="form-label">Gender:</label>
-                <select class="form-control" id="volunteerGender">
+                <select class="form-control" id="volunteerGender" required>
                   <option value="">Select Gender</option>
-                  <option value="male">Male</option>
-                  <option value="female">Female</option>
-                  <option value="prefer_not_to_say">Prefer not to say</option>
+                  <option value="Male">Male</option>
+                  <option value="Female">Female</option>
+                  <option value="Prefer Not To Say">Prefer Not To Say</option>
                 </select>
               </div>
               <div class="mb-3">
@@ -251,8 +266,9 @@
                 <input
                   type="email"
                   class="form-control"
-                  id="emailVolunteer"
+                  id="volunteerEmail"
                   placeholder="Email Address"
+                  required
                 />
               </div>
               <div class="mb-3">
@@ -262,8 +278,9 @@
                 <input
                   type="password"
                   class="form-control"
-                  id="passwordVolunteer"
+                  id="volunteerPassword"
                   placeholder="Password"
+                  required
                 />
               </div>
               <div class="mb-3">
@@ -300,5 +317,6 @@
       integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy"
       crossorigin="anonymous"
     ></script>
+    <script src="../scripts/signup.js"></script>
   </body>
 </html>

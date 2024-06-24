@@ -1,18 +1,16 @@
 const express = require("express");
 const router = express.Router();
 const {
-  authUser,
-  signUpVolunteer,
-  signUpOrganisation,
+  authAccount,
+  createVolunteer,
+  createOrganisation,
 } = require("../controllers/authController.js");
-const {
-  getOrganisationListings,
-} = require("../controllers/listingController.js"); // Ensure correct import
-const { verifyToken } = require("../middlewares/authMiddleware.js"); // Ensure correct import
+const { verifyToken } = require("../middlewares/authMiddleware.js");
+const { getOrganisationListings } = require("../controllers/listingController.js");
 
-router.post("/login", authUser);
-router.post("/signup/volunteer", signUpVolunteer);
-router.post("/signup/organisation", signUpOrganisation);
-router.get("/listings", verifyToken, getOrganisationListings); // Correct route definition
+router.post("/login", authAccount);
+router.post("/signup/volunteer", createVolunteer);
+router.post("/signup/organisation", createOrganisation);
+router.get("/listings", verifyToken, getOrganisationListings);
 
 module.exports = router;
