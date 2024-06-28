@@ -151,5 +151,19 @@ class Volunteer {
 
     return this.getVolunteerByUsername(username);
   }
+
+  static async postFollow(postFollow){
+    //establish database connection
+    const connection = await sql.connect(dbConfig);
+    const sqlQuery = `INSERT INTO Follower (follower, followedBy) VALUES (@follower, @followedBy); SELECT SCOPE_IDENTITY() AS id;`
+    
+    const request = connection.request();
+    request.input("follower", postFollow.follower);
+    request.input("followedBy", postFollow.followedBy);
+
+    const result = await request.query(sqlQuery);
+
+    connection.close()
+  }
 }
 module.exports = Volunteer;

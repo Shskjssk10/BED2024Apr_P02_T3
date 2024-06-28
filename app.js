@@ -3,6 +3,7 @@ const bodyParser = require("body-parser");
 const dbConfig = require("./dbConfig");
 const volunteerController = require("./controllers/volunteerController");
 const organisationController = require("./controllers/organisationController");
+const searchPageController = require("./controllers/userSearchPageController");
 const sql = require("mssql");
 const port = 8080;
 const app = express();
@@ -16,7 +17,9 @@ app.get("/volunteers/:username", volunteerController.getVolunteerByUsername); //
 app.get("/organisations", organisationController.getAllOrganisations); //get all organisation
 app.get("/organisations/:OrgName", organisationController.getOrgByName);
 app.put("/volunteers/:username", volunteerController.updateVolunteerProfile);
-app.put("/organisations/:OrgName", organisationController.updateOrgProfile);
+//app.put("/organisations/:OrgName", organisationController.updateOrgProfile);
+app.get("/searchPage", searchPageController.getAllAccounts);
+app.post("/searchPage", searchPageController.postFollow)
 
 app.listen(port, async () => {
   try {
