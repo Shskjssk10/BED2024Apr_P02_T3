@@ -100,8 +100,8 @@ class Volunteer {
     UPDATE Volunteer SET
     FName = @FName,
     LName = @LName,
-    Bio = @Bio,
-    Username = @Username
+    Username = @Username,
+    Bio = @Bio
     WHERE AccID = ${selectAllResult.recordset[0].AccID}
     `;
 
@@ -115,12 +115,12 @@ class Volunteer {
       updatedVolunteer.LName || selectAllResult.recordset[0].LName
     );
     volunteerReq.input(
-      "Bio",
-      updatedVolunteer.Bio || selectAllResult.recordset[0].Bio
-    );
-    volunteerReq.input(
       "Username",
       updatedVolunteer.Username || selectAllResult.recordset[0].Username
+    );
+    volunteerReq.input(
+      "Bio",
+      updatedVolunteer.Bio || selectAllResult.recordset[0].Bio
     );
     await volunteerReq.query(volunteerQuery);
 

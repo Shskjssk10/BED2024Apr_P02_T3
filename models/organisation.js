@@ -5,25 +5,25 @@ class Organisation {
   constructor(
     id,
     OrgName,
-    Email,
-    PhoneNo,
-    Password,
     IssueArea,
     Mission,
     Descr,
     Addr,
-    AptFloorUnit
+    AptFloorUnit,
+    Email,
+    PhoneNo,
+    Password
   ) {
     this.id = id;
     this.OrgName = OrgName;
-    this.Email = Email;
-    this.PhoneNo = PhoneNo;
-    this.Password = Password;
     this.IssueArea = IssueArea;
     this.Mission = Mission;
     this.Descr = Descr;
     this.Addr = Addr;
     this.AptFloorUnit = AptFloorUnit;
+    this.Email = Email;
+    this.PhoneNo = PhoneNo;
+    this.Password = Password;
   }
 
   static async getAllOrganisations() {
@@ -40,14 +40,14 @@ class Organisation {
         new Organisation(
           row.AccID,
           row.OrgName,
-          row.Email,
-          row.PhoneNo,
-          row.Password,
           row.IssueArea,
           row.Mission,
           row.Descr,
           row.Addr,
-          row.AptFloorUnit
+          row.AptFloorUnit,
+          row.Email,
+          row.PhoneNo,
+          row.Password
         )
     );
   }
@@ -74,9 +74,9 @@ class Organisation {
           result.recordset[0].Descr,
           result.recordset[0].Addr,
           result.recordset[0].AptFloorUnit,
-          result.recordset[0].Password,
+          result.recordset[0].Email,
           result.recordset[0].PhoneNo,
-          result.recordset[0].Email
+          result.recordset[0].Password
         )
       : null; // Handle volunteer not found
   }

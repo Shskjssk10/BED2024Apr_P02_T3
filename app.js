@@ -16,6 +16,7 @@ app.get("/volunteers/:username", volunteerController.getVolunteerByUsername); //
 app.get("/organisations", organisationController.getAllOrganisations); //get all organisation
 app.get("/organisations/:OrgName", organisationController.getOrgByName);
 app.put("/volunteers/:username", volunteerController.updateVolunteerProfile);
+app.put("/organisations/:OrgName", organisationController.updateOrgProfile);
 
 app.listen(port, async () => {
   try {

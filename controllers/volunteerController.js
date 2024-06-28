@@ -28,6 +28,8 @@ const updateVolunteerProfile = async (req, res) => {
   const username = req.params.username;
   const newVolunteerData = req.body;
 
+  console.log(username);
+
   try {
     const updatedVolunteer = await Volunteer.updateVolunteerProfile(
       username,
