@@ -4,32 +4,32 @@ const dbConfig = require("../dbConfig");
 class Organisation {
   constructor(
     id,
-    org_name,
-    email,
-    org_phone_number,
-    password,
-    issue_area,
-    mission,
-    description,
-    address,
-    apt_floor_unit
+    OrgName,
+    Email,
+    PhoneNo,
+    Password,
+    IssueArea,
+    Mission,
+    Descr,
+    Addr,
+    AptFloorUnit
   ) {
     this.id = id;
-    this.org_name = org_name;
-    this.email = email;
-    this.org_phone_number = org_phone_number;
-    this.password = password;
-    this.issue_area = issue_area;
-    this.mission = mission;
-    this.description = description;
-    this.address = address;
-    this.apt_floor_unit = apt_floor_unit;
+    this.OrgName = OrgName;
+    this.Email = Email;
+    this.PhoneNo = PhoneNo;
+    this.Password = Password;
+    this.IssueArea = IssueArea;
+    this.Mission = Mission;
+    this.Descr = Descr;
+    this.Addr = Addr;
+    this.AptFloorUnit = AptFloorUnit;
   }
 
   static async getAllOrganisations() {
     const connection = await sql.connect(dbConfig);
 
-    const sqlQuery = `SELECT * FROM dbo.Organisations`;
+    const sqlQuery = `SELECT * FROM Organisation`;
     const request = connection.request();
     const result = await request.query(sqlQuery);
 
@@ -38,21 +38,48 @@ class Organisation {
     return result.recordset.map(
       (row) =>
         new Organisation(
-          row.id,
-          row.org_name,
-          row.email,
-          row.org_phone_number,
-          row.password,
-          row.issue_area,
-          row.mission,
-          row.description,
-          row.address,
-          row.apt_floor_unit
+          row.AccID,
+          row.OrgName,
+          row.Email,
+          row.PhoneNo,
+          row.Password,
+          row.IssueArea,
+          row.Mission,
+          row.Descr,
+          row.Addr,
+          row.AptFloorUnit
         )
     );
   }
 
-  static async;
+  static async getOrgByName(OrgName) {
+    const connection = await sql.connect(dbConfig);
+    const sqlQuery = `
+    SELECT O.*, A.Email, A.PhoneNo, A.Password
+    FROM Organisation O
+    INNER JOIN Account A ON O.OrgName = A.Username
+    WHERE O.OrgName = @OrgName;
+  `;
+    const request = connection.request();
+    request.input("OrgName", OrgName);
+    const result = await request.query(sqlQuery);
+
+    connection.close();
+    return result.recordset[0]
+      ? new Organisation(
+          result.recordset[0].AccID,
+          result.recordset[0].OrgName,
+          result.recordset[0].IssueArea,
+          result.recordset[0].Mission,
+          result.recordset[0].Descr,
+          result.recordset[0].Addr,
+          result.recordset[0].AptFloorUnit,
+          result.recordset[0].Password,
+          result.recordset[0].PhoneNo,
+          result.recordset[0].Email
+        )
+      : null; // Handle volunteer not found
+  }
 }
 
 module.exports = Organisation;

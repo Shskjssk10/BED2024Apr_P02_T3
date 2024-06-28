@@ -14,6 +14,7 @@ app.use(bodyParser.urlencoded({ extended: true })); // For form data handling
 app.get("/volunteers", volunteerController.getAllVolunteers); //get all user
 app.get("/volunteers/:username", volunteerController.getVolunteerByUsername); // Get user by ID
 app.get("/organisations", organisationController.getAllOrganisations); //get all organisation
+app.get("/organisations/:OrgName", organisationController.getOrgByName);
 app.put("/volunteers/:username", volunteerController.updateVolunteerProfile);
 
 app.listen(port, async () => {

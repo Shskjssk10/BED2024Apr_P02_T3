@@ -26,12 +26,12 @@ const getVolunteerByUsername = async (req, res) => {
 
 const updateVolunteerProfile = async (req, res) => {
   const username = req.params.username;
-  const newUserData = req.body;
+  const newVolunteerData = req.body;
 
   try {
     const updatedVolunteer = await Volunteer.updateVolunteerProfile(
       username,
-      newUserData
+      newVolunteerData
     );
     if (!updatedVolunteer) {
       return res.status(404).send("Volunteer not found");
