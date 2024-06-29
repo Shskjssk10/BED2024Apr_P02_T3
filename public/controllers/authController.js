@@ -95,8 +95,13 @@ const authAccount = async (req, res) => {
     const organisation = await getOrganisationByAccountId(account.AccID);
 
     if (volunteer) {
-      const passwordMatch = await comparePassword(password, volunteer.HashedPassword);
-      console.log(`Password comparison result for volunteer ${email}: ${passwordMatch}`);
+      const passwordMatch = await comparePassword(
+        password,
+        volunteer.HashedPassword
+      );
+      console.log(
+        `Password comparison result for volunteer ${email}: ${passwordMatch}`
+      );
       console.log(`Stored hashed password: ${volunteer.HashedPassword}`);
       if (!passwordMatch) {
         console.log(`Incorrect password for volunteer with email ${email}`);
@@ -111,8 +116,13 @@ const authAccount = async (req, res) => {
     }
 
     if (organisation) {
-      const passwordMatch = await comparePassword(password, organisation.HashedPassword);
-      console.log(`Password comparison result for organisation ${email}: ${passwordMatch}`);
+      const passwordMatch = await comparePassword(
+        password,
+        organisation.HashedPassword
+      );
+      console.log(
+        `Password comparison result for organisation ${email}: ${passwordMatch}`
+      );
       console.log(`Stored hashed password: ${organisation.HashedPassword}`);
       if (!passwordMatch) {
         console.log(`Incorrect password for organisation with email ${email}`);
@@ -126,9 +136,10 @@ const authAccount = async (req, res) => {
       });
     }
 
-    console.log(`No volunteer or organisation found for account with email ${email}`);
+    console.log(
+      `No volunteer or organisation found for account with email ${email}`
+    );
     return res.status(401).json({ message: "Invalid email or password" });
-
   } catch (error) {
     console.error("Error authenticating account:", error);
     res.status(500).json({ message: "Internal server error" });
@@ -136,7 +147,8 @@ const authAccount = async (req, res) => {
 };
 
 const createVolunteer = async (req, res) => {
-  const { fname, lname, username, email, phone_number, gender, bio, password } = req.body;
+  const { fname, lname, username, email, phone_number, gender, bio, password } =
+    req.body;
   const { salt, hashedPassword } = await hashPassword(password);
 
   try {
@@ -145,7 +157,7 @@ const createVolunteer = async (req, res) => {
       .request()
       .input("phoneNo", sql.VarChar, phone_number)
       .input("email", sql.VarChar, email)
-      .input("password", sql.VarChar, password)
+      .input("password", sql.VarChar, password) // Store plain password here
       .query(`
         INSERT INTO Account (PhoneNo, Email, Password)
         VALUES (@phoneNo, @Email, @Password);
@@ -163,14 +175,14 @@ const createVolunteer = async (req, res) => {
       .input("gender", sql.VarChar, gender)
       .input("bio", sql.VarChar, bio)
       .input("salt", sql.VarChar, salt)
-      .input("hashedPassword", sql.VarChar, hashedPassword)
+      .input("hashedPassword", sql.VarChar, hashedPassword) // Store hashed password here
       .query(`
         INSERT INTO Volunteer (AccID, FName, LName, Username, Gender, Bio, Salt, HashedPassword)
         VALUES (@accId, @fname, @lname, @username, @gender, @bio, @salt, @hashedPassword)
       `);
 
     console.log(`Volunteer created with email ${email}`);
-    res.status(201).json({ message: "Volunteer created successfully", email, salt, hashedPassword });
+    res.status(201).json({ message: "Volunteer created successfully", email });
   } catch (error) {
     console.error("Error creating volunteer:", error);
     res.status(500).json({ message: "Internal server error" });
@@ -178,7 +190,17 @@ const createVolunteer = async (req, res) => {
 };
 
 const createOrganisation = async (req, res) => {
-  const { org_name, email, phone_number, password, issue_area, mission, description, address, apt_floor_unit } = req.body;
+  const {
+    org_name,
+    email,
+    phone_number,
+    password,
+    issue_area,
+    mission,
+    description,
+    address,
+    apt_floor_unit,
+  } = req.body;
   const { salt, hashedPassword } = await hashPassword(password);
 
   try {
@@ -187,7 +209,7 @@ const createOrganisation = async (req, res) => {
       .request()
       .input("phoneNo", sql.VarChar, phone_number)
       .input("email", sql.VarChar, email)
-      .input("password", sql.VarChar, password)
+      .input("password", sql.VarChar, password) // Store plain password here
       .query(`
         INSERT INTO Account (PhoneNo, Email, Password)
         VALUES (@phoneNo, @Email, @Password);
@@ -206,14 +228,16 @@ const createOrganisation = async (req, res) => {
       .input("address", sql.VarChar, address)
       .input("aptFloorUnit", sql.VarChar, apt_floor_unit)
       .input("salt", sql.VarChar, salt)
-      .input("hashedPassword", sql.VarChar, hashedPassword)
+      .input("hashedPassword", sql.VarChar, hashedPassword) // Store hashed password here
       .query(`
         INSERT INTO Organisation (AccID, OrgName, IssueArea, Mission, Descr, Addr, AptFloorUnit, Salt, HashedPassword)
         VALUES (@accId, @orgName, @issueArea, @mission, @description, @address, @aptFloorUnit, @salt, @hashedPassword)
       `);
 
     console.log(`Organisation created with email ${email}`);
-    res.status(201).json({ message: "Organisation created successfully", email, salt, hashedPassword });
+    res
+      .status(201)
+      .json({ message: "Organisation created successfully", email });
   } catch (error) {
     console.error("Error creating organisation:", error);
     res.status(500).json({ message: "Internal server error" });
