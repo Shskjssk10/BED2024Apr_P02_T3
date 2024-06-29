@@ -15,7 +15,7 @@ class Volunteer {
   ) {
     this.AccID = AccID;
     this.FName = FName;
-    this.Lname = LName;
+    this.LName = LName;
     this.Username = Username;
     this.Gender = Gender;
     this.Bio = Bio;
@@ -85,7 +85,10 @@ class Volunteer {
     SELECT v.*, a.PhoneNo, a.Email, a.Password
     FROM Volunteer v
     INNER JOIN Account a ON v.Username = a.Username
-    WHERE v.Username = @Username`;
+    WHERE v.Username = @username`;
+
+    // console.log(updatedVolunteer);
+    // console.log(updatedVolunteer[0].LName);
 
     const request = connection.request();
     request.input("Username", username);
@@ -94,7 +97,7 @@ class Volunteer {
     //gets AccId, FName, LName, Username, Gender, Bio, Salt, HashedPassword, PhoneNo, Email, Password
     const selectAllResult = await request.query(selectAllQuery);
     //gets the id of the user to update successfully logs 3 for js
-    // console.log(selectAllResult.recordset[0].AccID);
+    //console.log(selectAllResult.recordset[0]);
 
     const volunteerQuery = `
     UPDATE Volunteer SET
@@ -102,25 +105,26 @@ class Volunteer {
     LName = @LName,
     Username = @Username,
     Bio = @Bio
-    WHERE AccID = ${selectAllResult.recordset[0].AccID}
+    WHERE AccID = @AccId
     `;
 
     const volunteerReq = connection.request();
+    volunteerReq.input("AccId", selectAllResult.recordset[0].AccID);
     volunteerReq.input(
       "FName",
-      updatedVolunteer.FName || selectAllResult.recordset[0].FName
+      updatedVolunteer[0].FName || selectAllResult.recordset[0].FName
     );
     volunteerReq.input(
       "LName",
-      updatedVolunteer.LName || selectAllResult.recordset[0].LName
+      updatedVolunteer[0].LName || selectAllResult.recordset[0].LName
     );
     volunteerReq.input(
       "Username",
-      updatedVolunteer.Username || selectAllResult.recordset[0].Username
+      updatedVolunteer[0].Username || selectAllResult.recordset[0].Username
     );
     volunteerReq.input(
       "Bio",
-      updatedVolunteer.Bio || selectAllResult.recordset[0].Bio
+      updatedVolunteer[0].Bio || selectAllResult.recordset[0].Bio
     );
     await volunteerReq.query(volunteerQuery);
 
@@ -129,21 +133,22 @@ class Volunteer {
     PhoneNo = @PhoneNo,
     Email = @Email,
     Password = @Password
-    WHERE AccID = ${selectAllResult.recordset[0].AccID}
+    WHERE AccID = @AccId
     `;
 
     const accountReq = connection.request();
+    accountReq.input("AccId", selectAllResult.recordset[0].AccID);
     accountReq.input(
       "PhoneNo",
-      updatedVolunteer.PhoneNo || selectAllResult.recordset[0].PhoneNo
+      updatedVolunteer[0].PhoneNo || selectAllResult.recordset[0].PhoneNo
     );
     accountReq.input(
       "Email",
-      updatedVolunteer.Email || selectAllResult.recordset[0].Email
+      updatedVolunteer[0].Email || selectAllResult.recordset[0].Email
     );
     accountReq.input(
       "Password",
-      updatedVolunteer.Password || selectAllResult.recordset[0].Password
+      updatedVolunteer[0].Password || selectAllResult.recordset[0].Password
     );
     await accountReq.query(accountQuery);
 

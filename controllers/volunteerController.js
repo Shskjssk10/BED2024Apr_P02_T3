@@ -26,14 +26,12 @@ const getVolunteerByUsername = async (req, res) => {
 
 const updateVolunteerProfile = async (req, res) => {
   const username = req.params.username;
-  const newVolunteerData = req.body;
-
-  console.log(username);
+  const newUserData = req.body;
 
   try {
     const updatedVolunteer = await Volunteer.updateVolunteerProfile(
       username,
-      newVolunteerData
+      newUserData
     );
     if (!updatedVolunteer) {
       return res.status(404).send("Volunteer not found");
@@ -41,7 +39,7 @@ const updateVolunteerProfile = async (req, res) => {
     res.json(updatedVolunteer);
   } catch (error) {
     console.error(error);
-    res.status(500).send("Error updating volunteer");
+    res.status(500).send("Error updating Volunteer");
   }
 };
 

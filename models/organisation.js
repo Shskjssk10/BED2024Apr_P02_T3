@@ -80,6 +80,94 @@ class Organisation {
         )
       : null; // Handle volunteer not found
   }
+
+  static async updateOrgProfile(OrgName, updatedOrg) {
+    //establish database connection
+    const connection = await sql.connect(dbConfig);
+    //sql query to select everything based on the org name
+    const selectAllQuery = `
+    SELECT o.*, a.PhoneNo, a.Email, a.Password
+    FROM Organisation o
+    INNER JOIN Account a ON o.OrgName = a.Username
+    WHERE o.OrgName = @OrgName   
+    `;
+    //console.log(updatedOrg);
+
+    const request = connection.request();
+    request.input("OrgName", OrgName);
+
+    const selectAllResult = await request.query(selectAllQuery);
+    //console.log(selectAllResult.recordset[0].AccID);
+
+    const orgQuery = `
+    UPDATE Organisation SET
+    OrgName = @OrgName,
+    IssueArea = @IssueArea,
+    Mission = @Mission,
+    Descr = @Descr,
+    Addr = @Addr,
+    AptFloorUnit = @AptFloorUnit
+    WHERE AccID = @AccId
+    `;
+
+    const orgReq = connection.request();
+    orgReq.input("AccID", selectAllResult.recordset[0].AccID);
+    orgReq.input(
+      "OrgName",
+      updatedOrg[0].OrgName || selectAllResult.recordset[0].OrgName
+    );
+    orgReq.input(
+      "IssueArea",
+      updatedOrg[0].IssueArea || selectAllResult.recordset[0].IssueArea
+    );
+    orgReq.input(
+      "Mission",
+      updatedOrg[0].Mission || selectAllResult.recordset[0].Mission
+    );
+    orgReq.input(
+      "Descr",
+      updatedOrg[0].Descr || selectAllResult.recordset[0].Descr
+    );
+    orgReq.input(
+      "Addr",
+      updatedOrg[0].Addr || selectAllResult.recordset[0].Addr
+    );
+
+    orgReq.input(
+      "AptFloorUnit",
+      updatedOrg[0].AptFloorUnit || selectAllResult.recordset[0].AptFloorUnit
+    );
+
+    await orgReq.query(orgQuery);
+
+    const accountQuery = `
+    UPDATE Account SET
+    PhoneNo = @PhoneNo,
+    Email = @Email,
+    Password = @Password
+    WHERE AccID = @AccId
+    `;
+
+    const accountReq = connection.request();
+    accountReq.input("AccId", selectAllResult.recordset[0].AccID);
+    accountReq.input(
+      "PhoneNo",
+      updatedOrg[0].PhoneNo || selectAllResult.recordset[0].PhoneNo
+    );
+    accountReq.input(
+      "Email",
+      updatedOrg[0].Email || selectAllResult.recordset[0].Email
+    );
+    accountReq.input(
+      "Password",
+      updatedOrg[0].Password || selectAllResult.recordset[0].Password
+    );
+    await accountReq.query(accountQuery);
+
+    connection.close();
+
+    return this.getOrgByName(OrgName);
+  }
 }
 
 module.exports = Organisation;
