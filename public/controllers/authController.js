@@ -155,12 +155,13 @@ const createVolunteer = async (req, res) => {
     const pool = await poolPromise;
     const accountResult = await pool
       .request()
+      .input("username",sql.VarChar, username)
       .input("phoneNo", sql.VarChar, phone_number)
       .input("email", sql.VarChar, email)
       .input("password", sql.VarChar, password) // Store plain password here
       .query(`
-        INSERT INTO Account (PhoneNo, Email, Password)
-        VALUES (@phoneNo, @Email, @Password);
+        INSERT INTO Account (Username, PhoneNo, Email, Password)
+        VALUES (@username, @phoneNo, @Email, @Password);
         SELECT SCOPE_IDENTITY() AS AccID;
       `);
 
