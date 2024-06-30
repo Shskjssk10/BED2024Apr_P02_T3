@@ -34,6 +34,7 @@ document
   .getElementById("orgSignUpForm")
   .addEventListener("submit", async (event) => {
     event.preventDefault();
+
     const orgData = {
       org_name: document.getElementById("orgName").value,
       email: document.getElementById("orgEmail").value,
@@ -57,9 +58,14 @@ document
           body: JSON.stringify(orgData),
         }
       );
+
       const result = await response.json();
-      console.log("Organisation Sign Up Result:", result);
+      if (response.ok) {
+        alert("Organisation signed up successfully");
+      } else {
+        alert("Error: " + result.message);
+      }
     } catch (error) {
-      console.error("Error during organisation sign up:", error);
+      console.error("Error during sign-up:", error);
     }
   });
