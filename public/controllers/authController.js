@@ -201,18 +201,20 @@ const createOrganisation = async (req, res) => {
     address,
     apt_floor_unit,
   } = req.body;
+
   const { salt, hashedPassword } = await hashPassword(password);
+  const username = org_name; // Set username to org_name
 
   try {
     const pool = await poolPromise;
     const accountResult = await pool
       .request()
+      .input("username", sql.VarChar, username) // Use org_name as username
       .input("phoneNo", sql.VarChar, phone_number)
       .input("email", sql.VarChar, email)
-      .input("password", sql.VarChar, password) // Store plain password here
-      .query(`
-        INSERT INTO Account (PhoneNo, Email, Password)
-        VALUES (@phoneNo, @Email, @Password);
+      .input("password", sql.VarChar, password).query(`
+        INSERT INTO Account (Username, PhoneNo, Email, Password)
+        VALUES (@username, @phoneNo, @Email, @Password);
         SELECT SCOPE_IDENTITY() AS AccID;
       `);
 
@@ -228,8 +230,7 @@ const createOrganisation = async (req, res) => {
       .input("address", sql.VarChar, address)
       .input("aptFloorUnit", sql.VarChar, apt_floor_unit)
       .input("salt", sql.VarChar, salt)
-      .input("hashedPassword", sql.VarChar, hashedPassword) // Store hashed password here
-      .query(`
+      .input("hashedPassword", sql.VarChar, hashedPassword).query(`
         INSERT INTO Organisation (AccID, OrgName, IssueArea, Mission, Descr, Addr, AptFloorUnit, Salt, HashedPassword)
         VALUES (@accId, @orgName, @issueArea, @mission, @description, @address, @aptFloorUnit, @salt, @hashedPassword)
       `);
