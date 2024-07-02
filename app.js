@@ -3,7 +3,10 @@ const bodyParser = require("body-parser");
 const dbConfig = require("./dbConfig");
 const volunteerController = require("./controllers/volunteerController");
 const organisationController = require("./controllers/organisationController");
+
 const searchPageController = require("./controllers/userSearchPageController");
+const userFeedPageController = require("./controllers/userFeedPageController");
+
 const sql = require("mssql");
 const port = 8080;
 const app = express();
@@ -18,8 +21,13 @@ app.get("/organisations", organisationController.getAllOrganisations); //get all
 app.get("/organisations/:OrgName", organisationController.getOrgByName);
 app.put("/volunteers/:username", volunteerController.updateVolunteerProfile);
 //app.put("/organisations/:OrgName", organisationController.updateOrgProfile);
+
+// Caden's Parts
 app.get("/searchPage", searchPageController.getAllAccounts);
-app.post("/searchPage", searchPageController.postFollow)
+app.post("/searchPage", searchPageController.postFollow);
+app.delete("/searchPage", searchPageController.deleteFollow);
+
+app.post("/userFeedPage", userFeedPageController.postComment);
 
 app.listen(port, async () => {
   try {

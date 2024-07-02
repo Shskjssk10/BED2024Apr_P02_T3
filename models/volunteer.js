@@ -152,14 +152,46 @@ class Volunteer {
     return this.getVolunteerByUsername(username);
   }
 
+  // Caden's Parts //
+
   static async postFollow(postFollow){
     //establish database connection
     const connection = await sql.connect(dbConfig);
-    const sqlQuery = `INSERT INTO Follower (follower, followedBy) VALUES (@follower, @followedBy); SELECT SCOPE_IDENTITY() AS id;`
+    const sqlQuery = `INSERT INTO Follower (follower, followedBy) VALUES (@follower, @followedBy);`
     
     const request = connection.request();
     request.input("follower", postFollow.follower);
     request.input("followedBy", postFollow.followedBy);
+
+    const result = await request.query(sqlQuery);
+
+    connection.close()
+  }
+
+  static async deleteFollow(deleteFollow){
+    const connection = await sql.connect(dbConfig);
+
+    const sqlQuery = `DELETE FROM Follower WHERE follower = @follower AND followedBy = @followedBy`; // Parameterized query
+
+    const request = connection.request();
+    request.input("follower", deleteFollow.follower);
+    request.input("followedBy", deleteFollow.followedBy);
+    const result = await request.query(sqlQuery);
+
+    connection.close();
+
+    return result.rowsAffected > 0; // Indicate success based on affected rows
+  }
+
+  static async postComment(postComment){
+    //establish database connection
+    const connection = await sql.connect(dbConfig);
+    const sqlQuery = `INSERT INTO Comment (AccID, PostID, Comment) VALUES (@AccID, @PostID, @Comment); SELECT SCOPE_IDENTITY() AS id;`
+    
+    const request = connection.request();
+    request.input("AccID", postComment.AccID);
+    request.input("PostID", postComment.PostID);
+    request.input("Comment", postComment.Comment);
 
     const result = await request.query(sqlQuery);
 
