@@ -1,4 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
+  // Clear local storage token (if any) on load
   localStorage.removeItem("authToken");
 
   document.querySelector("form").addEventListener("submit", async (event) => {
@@ -23,7 +24,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
       if (response.ok) {
         alert("Login successful");
-        localStorage.setItem("authToken", result.token);
         window.location.href = "../html/index.html";
       } else {
         alert("Login failed: " + result.message);

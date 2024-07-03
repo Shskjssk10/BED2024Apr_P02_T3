@@ -40,15 +40,31 @@ app.get("/oauth2callback", async (req, res) => {
     const { tokens } = await oauth2Client.getToken(code);
     oauth2Client.setCredentials(tokens);
 
-    // Save tokens in a session or cookie (not implemented here for simplicity)
-    res.cookie("authToken", tokens.id_token, { httpOnly: true });
+    // Log tokens to ensure they are being retrieved correctly
+    console.log("Tokens received:", tokens);
+
+    // Save tokens in a cookie
+    res.cookie("authToken", tokens.id_token, { httpOnly: false }); // Removed httpOnly for client-side access
+
+    // Log the cookies to ensure they are being set correctly
+    console.log("Cookies set:", req.cookies);
 
     // Redirect to the desired page after login
-    res.redirect("http://localhost:5500/public/html/index.html");
+    res.redirect("/store-token");
   } catch (error) {
     console.error("Error during OAuth2 callback", error);
     res.status(500).send("Authentication failed");
   }
+});
+
+// Route to set the authToken in local storage and redirect to index.html
+app.get("/store-token", (req, res) => {
+  res.send(`
+    <script>
+      localStorage.setItem('authToken', '${req.cookies.authToken}');
+      window.location.href = 'http://localhost:5500/public/html/index.html';
+    </script>
+  `);
 });
 
 // Serve static files
