@@ -10,10 +10,10 @@ const getAllVolunteers = async (req, res) => {
   }
 };
 
-const getVolunteerByUsername = async (req, res) => {
-  const username = req.params.username;
+const getVolunteerById = async (req, res) => {
+  const id = parseInt(req.params.id);
   try {
-    const volunteer = await Volunteer.getVolunteerByUsername(username);
+    const volunteer = await Volunteer.getVolunteerById(id);
     if (!volunteer) {
       return res.status(404).send("Volunteer not found");
     }
@@ -25,13 +25,13 @@ const getVolunteerByUsername = async (req, res) => {
 };
 
 const updateVolunteerProfile = async (req, res) => {
-  const username = req.params.username;
-  const newUserData = req.body;
+  const userId = parseInt(req.params.id);
+  const updatedData = req.body;
 
   try {
     const updatedVolunteer = await Volunteer.updateVolunteerProfile(
-      username,
-      newUserData
+      userId,
+      updatedData
     );
     if (!updatedVolunteer) {
       return res.status(404).send("Volunteer not found");
@@ -45,6 +45,6 @@ const updateVolunteerProfile = async (req, res) => {
 
 module.exports = {
   getAllVolunteers,
-  getVolunteerByUsername,
+  getVolunteerById,
   updateVolunteerProfile,
 };
