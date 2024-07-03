@@ -10,8 +10,8 @@ class Organisation {
     Descr,
     Addr,
     AptFloorUnit,
-    Email,
     PhoneNo,
+    Email,
     Password
   ) {
     this.id = id;
@@ -52,16 +52,16 @@ class Organisation {
     );
   }
 
-  static async getOrgByName(OrgName) {
+  static async getOrgById(id) {
     const connection = await sql.connect(dbConfig);
     const sqlQuery = `
     SELECT O.*, A.Email, A.PhoneNo, A.Password
     FROM Organisation O
     INNER JOIN Account A ON O.OrgName = A.Username
-    WHERE O.OrgName = @OrgName;
+    WHERE O.AccId = @id;
   `;
     const request = connection.request();
-    request.input("OrgName", OrgName);
+    request.input("id", id);
     const result = await request.query(sqlQuery);
 
     connection.close();
@@ -74,32 +74,34 @@ class Organisation {
           result.recordset[0].Descr,
           result.recordset[0].Addr,
           result.recordset[0].AptFloorUnit,
-          result.recordset[0].Email,
           result.recordset[0].PhoneNo,
+          result.recordset[0].Email,
           result.recordset[0].Password
         )
-      : null; // Handle volunteer not found
+      : null; // Handle organisation not found
   }
 
-  static async updateOrgProfile(OrgName, updatedOrg) {
-    //establish database connection
-    const connection = await sql.connect(dbConfig);
-    //sql query to select everything based on the org name
-    const selectAllQuery = `
+  static async updateOrgProfile(id, updatedOrg) {
+    try {
+      //establish database connection
+      const connection = await sql.connect(dbConfig);
+      //sql query to select everything based on the org name
+      const selectAllQuery = `
     SELECT o.*, a.PhoneNo, a.Email, a.Password
     FROM Organisation o
     INNER JOIN Account a ON o.OrgName = a.Username
-    WHERE o.OrgName = @OrgName   
+    WHERE o.AccId = @id   
     `;
-    //console.log(updatedOrg);
+      console.log("updatedorg", updatedOrg);
+      console.log(updatedOrg[0].OrgName);
 
-    const request = connection.request();
-    request.input("OrgName", OrgName);
+      const request = connection.request();
+      console.log("id", id); //2
+      request.input("id", id);
+      const selectAllResult = await request.query(selectAllQuery);
+      console.log("here", selectAllResult.recordset[0]);
 
-    const selectAllResult = await request.query(selectAllQuery);
-    //console.log(selectAllResult.recordset[0].AccID);
-
-    const orgQuery = `
+      const orgQuery = `
     UPDATE Organisation SET
     OrgName = @OrgName,
     IssueArea = @IssueArea,
@@ -107,67 +109,74 @@ class Organisation {
     Descr = @Descr,
     Addr = @Addr,
     AptFloorUnit = @AptFloorUnit
-    WHERE AccID = @AccId
+    WHERE AccId = ${selectAllResult.recordset[0].AccID}
     `;
 
-    const orgReq = connection.request();
-    orgReq.input("AccID", selectAllResult.recordset[0].AccID);
-    orgReq.input(
-      "OrgName",
-      updatedOrg[0].OrgName || selectAllResult.recordset[0].OrgName
-    );
-    orgReq.input(
-      "IssueArea",
-      updatedOrg[0].IssueArea || selectAllResult.recordset[0].IssueArea
-    );
-    orgReq.input(
-      "Mission",
-      updatedOrg[0].Mission || selectAllResult.recordset[0].Mission
-    );
-    orgReq.input(
-      "Descr",
-      updatedOrg[0].Descr || selectAllResult.recordset[0].Descr
-    );
-    orgReq.input(
-      "Addr",
-      updatedOrg[0].Addr || selectAllResult.recordset[0].Addr
-    );
+      const orgReq = connection.request();
+      //console.log("L116", selectAllResult.recordset[0].AccID); //2
+      orgReq.input("AccID", selectAllResult.recordset[0].AccID);
+      orgReq.input(
+        "OrgName",
+        updatedOrg[0].OrgName || selectAllResult.recordset[0].OrgName
+      );
+      orgReq.input(
+        "IssueArea",
+        updatedOrg[0].IssueArea || selectAllResult.recordset[0].IssueArea
+      );
+      orgReq.input(
+        "Mission",
+        updatedOrg[0].Mission || selectAllResult.recordset[0].Mission
+      );
+      orgReq.input(
+        "Descr",
+        updatedOrg[0].Descr || selectAllResult.recordset[0].Descr
+      );
+      orgReq.input(
+        "Addr",
+        updatedOrg[0].Addr || selectAllResult.recordset[0].Addr
+      );
 
-    orgReq.input(
-      "AptFloorUnit",
-      updatedOrg[0].AptFloorUnit || selectAllResult.recordset[0].AptFloorUnit
-    );
+      orgReq.input(
+        "AptFloorUnit",
+        updatedOrg[0].AptFloorUnit || selectAllResult.recordset[0].AptFloorUnit
+      );
 
-    await orgReq.query(orgQuery);
+      await orgReq.query(orgQuery);
 
-    const accountQuery = `
-    UPDATE Account SET
-    PhoneNo = @PhoneNo,
-    Email = @Email,
-    Password = @Password
-    WHERE AccID = @AccId
-    `;
+      const accountQuery = `UPDATE Account SET
+      Username = @Username,
+      PhoneNo = @PhoneNo,
+      Email = @Email,
+      Password = @Password
+      WHERE AccID = ${selectAllResult.recordset[0].AccID}
+      `;
 
-    const accountReq = connection.request();
-    accountReq.input("AccId", selectAllResult.recordset[0].AccID);
-    accountReq.input(
-      "PhoneNo",
-      updatedOrg[0].PhoneNo || selectAllResult.recordset[0].PhoneNo
-    );
-    accountReq.input(
-      "Email",
-      updatedOrg[0].Email || selectAllResult.recordset[0].Email
-    );
-    accountReq.input(
-      "Password",
-      updatedOrg[0].Password || selectAllResult.recordset[0].Password
-    );
-    await accountReq.query(accountQuery);
+      const accountReq = connection.request();
+      accountReq.input("AccID", selectAllResult.recordset[0].AccID);
+      accountReq.input(
+        "Username",
+        updatedOrg[0].Username || selectAllResult.recordset[0].Username
+      );
+      accountReq.input(
+        "PhoneNo",
+        updatedOrg[0].PhoneNo || selectAllResult.recordset[0].PhoneNo
+      );
+      accountReq.input(
+        "Email",
+        updatedOrg[0].Email || selectAllResult.recordset[0].Email
+      );
+      accountReq.input(
+        "Password",
+        updatedOrg[0].Password || selectAllResult.recordset[0].Password
+      );
 
-    connection.close();
+      await accountReq.query(accountQuery);
 
-    return this.getOrgByName(OrgName);
+      connection.close();
+      return this.getOrgById(id);
+    } catch (err) {
+      console.error(err);
+    }
   }
 }
-
 module.exports = Organisation;
