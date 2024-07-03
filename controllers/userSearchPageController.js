@@ -4,6 +4,7 @@ const Organisation = require("../models/organisation");
 const getAllAccounts = async (req, res) => {
     try {
         const volunteers = await Volunteer.getAllVolunteer();
+        console.log(volunteers);
         const organisations = await Organisation.getAllOrganisations();
         const accounts = [...volunteers, ...organisations];
         res.json(accounts);
@@ -12,31 +13,24 @@ const getAllAccounts = async (req, res) => {
         res.status(500).send("Error retrieving accounts");
     }
 } 
-const postFollow = async (req, res) => {
-    const postFollow = req.body;
-    try {
-        const newFollow = await Volunteer.postFollow(postFollow);
-        res.status(201).json(newFollow); 
-        console.log("Successfully posted Follow")
-    } catch (error) {
-        console.error(error);
-        res.status(500).send("Error posting follow");
-    }
-}
-const deleteFollow = async (req, res) => {
-    const deleteFollow = req.body;
-    try {
-        const deletedFollow = await Volunteer.deleteFollow(deleteFollow);
-        res.status(201).json(deletedFollow); 
-        console.log("Successfully deleted Follow")
-    } catch (error) {
-        console.error(error);
-        res.status(500).send("Error deleting follow");
-    }
-}
 
+const getAccountByUsername = async (req, res) => {
+    try {
+        const volunteer = await Volunteer.getVolunteerByUsername(username);
+        const organisation = await Organisation.getOrgByName(OrgName);
+
+        if (volunteer) {
+            res.json(volunteer);
+        }
+        else if (organisation) {
+            res.json(organisation);
+        }
+    } catch (error) {
+        console.error(error);
+        res.status(500).send("Error retrieving account");
+    }
+}
 module.exports = {
     getAllAccounts,
-    postFollow,
-    deleteFollow
+    getAccountByUsername
 };

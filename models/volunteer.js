@@ -51,11 +51,15 @@ class Volunteer {
 
   static async getVolunteerByUsername(username) {
     const connection = await sql.connect(dbConfig);
+    // Sql query that returns account similar to the one entered
     const sqlQuery = `
-    SELECT V.*, A.Email, A.PhoneNo, A.Password
+    SELECT V.*, A.Email, A.PhoneNo
     FROM Volunteer V
     INNER JOIN Account A ON V.Username = A.Username
-    WHERE V.Username = @username;
+    WHERE V.Username LIKE '%' + @username + '%'
+      OR SOUNDEX(V.Username) = SOUNDEX(@username)
+      OR DIFFERENCE(V.Username, @username) > 2 
+    ORDER BY DIFFERENCE(V.Username, @username) DESC;
   `;
     const request = connection.request();
     request.input("username", username);
@@ -153,7 +157,27 @@ class Volunteer {
   }
 
   // Caden's Parts //
+  static async getAllFollowersAndFollowing(id){
+    const connection = await sql.connect(dbConfig);
 
+    const sqlQuery = `
+    SELECT COUNT(Follower) AS 'No of Followers', 
+    COUNT(FollowedBy) AS 'No of Following'
+    FROM Follower
+    WHERE Follower = @id`;
+
+    const request = connection.request();
+    request.input("id", id)
+
+    const result = await request.query(sqlQuery);
+    connection.close();
+    return [
+      {
+        'No of Followers': result.recordset[0]['No of Followers'],
+        'No of Following': result.recordset[0]['No of Following']
+      }
+    ];
+  }
   static async postFollow(postFollow){
     //establish database connection
     const connection = await sql.connect(dbConfig);
