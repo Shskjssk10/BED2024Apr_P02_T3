@@ -4,6 +4,7 @@ const dbConfig = require("./dbConfig");
 const volunteerController = require("./controllers/volunteerController");
 const organisationController = require("./controllers/organisationController");
 const postController = require("./controllers/postController")
+const listingController = require("./controllers/listingController")
 
 const searchPageController = require("./controllers/userSearchPageController");
 const userFeedPageController = require("./controllers/userFeedPageController");
@@ -35,6 +36,7 @@ app.post("/userFeedPage", userFeedPageController.postComment);
 // app.get("/userProfile/:id", postController.getAllPostsByAccID)
 // app.get("/userProfile/:id", volunteerController.getAllFollowersAndFollowing)
 app.get("/userProfile/:id", userProfileController.getAccountInfo)
+app.get("/testing", listingController.getAllListings);
 
 app.listen(port, async () => {
   try {
