@@ -1,5 +1,5 @@
 const sql = require("mssql");
-const { poolPromise } = require("../../dbConfig");
+const { poolPromise } = require("../dbConfig.js");
 const bcrypt = require("bcrypt");
 const generateToken = require("../utils/token.js");
 
@@ -155,7 +155,7 @@ const createVolunteer = async (req, res) => {
     const pool = await poolPromise;
     const accountResult = await pool
       .request()
-      .input("username",sql.VarChar, username)
+      .input("username", sql.VarChar, username)
       .input("phoneNo", sql.VarChar, phone_number)
       .input("email", sql.VarChar, email)
       .input("password", sql.VarChar, password) // Store plain password here

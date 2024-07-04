@@ -1,5 +1,5 @@
 const sql = require("mssql");
-const { poolPromise } = require("../../dbConfig");
+const { poolPromise } = require("../dbConfig");
 
 const getOrganisationListings = async (req, res) => {
   const accountId = req.accountId;

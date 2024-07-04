@@ -37,7 +37,7 @@ app.listen(port, async () => {
   app.use(express.urlencoded({ extended: true }));
 
   // Routes
-  const authRoutes = require("./public/routes/authRoutes");
+  const authRoutes = require("./routes/authRoutes");
   app.use("/auth", authRoutes);
 
   process.on("SIGINT", async () => {

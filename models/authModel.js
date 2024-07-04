@@ -1,5 +1,5 @@
 const sql = require("mssql");
-const { poolPromise } = require("../../dbConfig.js");
+const { poolPromise } = require("../dbConfig.js");
 const bcrypt = require("bcrypt");
 const generateToken = require("../utils/token.js");
 
