@@ -4,8 +4,9 @@ const dbConfig = require("./dbConfig");
 const volunteerController = require("./controllers/volunteerController");
 const organisationController = require("./controllers/organisationController");
 const sql = require("mssql");
-const port = 8080;
+const cors = require('cors');
 const app = express();
+const port = process.env.PORT || 8080;
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true })); // For form data handling
@@ -30,7 +31,15 @@ app.listen(port, async () => {
   }
 
   console.log(`Server listening on port ${port}`);
-});
+// Middleware
+app.use(cors());
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+// Routes
+const authRoutes = require('./public/routes/authRoutes');
+app.use('/auth', authRoutes);
+
 
 process.on("SIGINT", async () => {
   console.log("Server is gracefully shutting down");
