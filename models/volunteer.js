@@ -51,11 +51,15 @@ class Volunteer {
 
   static async getVolunteerById(id) {
     const connection = await sql.connect(dbConfig);
+    // Sql query that returns account similar to the one entered
     const sqlQuery = `
-    SELECT V.*, A.Email, A.PhoneNo, A.Password
+    SELECT V.*, A.Email, A.PhoneNo
     FROM Volunteer V
     INNER JOIN Account A ON V.Username = A.Username
-    WHERE V.AccId = @id;
+    WHERE V.Username LIKE '%' + @username + '%'
+      OR SOUNDEX(V.Username) = SOUNDEX(@username)
+      OR DIFFERENCE(V.Username, @username) > 2 
+    ORDER BY DIFFERENCE(V.Username, @username) DESC;
   `;
     const request = connection.request();
     request.input("id", id);
@@ -160,6 +164,72 @@ class Volunteer {
     } catch (err) {
       console.error(err);
     }
+  }
+
+  // Caden's Parts //
+  static async getAllFollowersAndFollowing(id){
+    const connection = await sql.connect(dbConfig);
+
+    const sqlQuery = `
+    SELECT COUNT(Follower) AS 'No of Followers', 
+    COUNT(FollowedBy) AS 'No of Following'
+    FROM Follower
+    WHERE Follower = @id`;
+
+    const request = connection.request();
+    request.input("id", id)
+
+    const result = await request.query(sqlQuery);
+    connection.close();
+    return [
+      {
+        'No of Followers': result.recordset[0]['No of Followers'],
+        'No of Following': result.recordset[0]['No of Following']
+      }
+    ];
+  }
+  static async postFollow(postFollow){
+    //establish database connection
+    const connection = await sql.connect(dbConfig);
+    const sqlQuery = `INSERT INTO Follower (follower, followedBy) VALUES (@follower, @followedBy);`
+    
+    const request = connection.request();
+    request.input("follower", postFollow.follower);
+    request.input("followedBy", postFollow.followedBy);
+
+    const result = await request.query(sqlQuery);
+
+    connection.close()
+  }
+
+  static async deleteFollow(deleteFollow){
+    const connection = await sql.connect(dbConfig);
+
+    const sqlQuery = `DELETE FROM Follower WHERE follower = @follower AND followedBy = @followedBy`; // Parameterized query
+
+    const request = connection.request();
+    request.input("follower", deleteFollow.follower);
+    request.input("followedBy", deleteFollow.followedBy);
+    const result = await request.query(sqlQuery);
+
+    connection.close();
+
+    return result.rowsAffected > 0; // Indicate success based on affected rows
+  }
+
+  static async postComment(postComment){
+    //establish database connection
+    const connection = await sql.connect(dbConfig);
+    const sqlQuery = `INSERT INTO Comment (AccID, PostID, Comment) VALUES (@AccID, @PostID, @Comment); SELECT SCOPE_IDENTITY() AS id;`
+    
+    const request = connection.request();
+    request.input("AccID", postComment.AccID);
+    request.input("PostID", postComment.PostID);
+    request.input("Comment", postComment.Comment);
+
+    const result = await request.query(sqlQuery);
+
+    connection.close()
   }
 }
 module.exports = Volunteer;

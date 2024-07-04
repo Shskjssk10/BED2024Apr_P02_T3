@@ -54,11 +54,15 @@ class Organisation {
 
   static async getOrgById(id) {
     const connection = await sql.connect(dbConfig);
+    // Sql query that returns account similar to the one entered
     const sqlQuery = `
-    SELECT O.*, A.Email, A.PhoneNo, A.Password
+    SELECT O.*, A.Email, A.PhoneNo 
     FROM Organisation O
     INNER JOIN Account A ON O.OrgName = A.Username
-    WHERE O.AccId = @id;
+    WHERE O.OrgName LIKE '%' + @OrgName + '%'
+      OR SOUNDEX(O.OrgName) = SOUNDEX(@OrgName)
+      OR DIFFERENCE(O.OrgName, @OrgName) > 2
+    ORDER BY DIFFERENCE(O.OrgName, @OrgName) DESC;
   `;
     const request = connection.request();
     request.input("id", id);
