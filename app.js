@@ -24,7 +24,7 @@ app.get("/volunteers", volunteerController.getAllVolunteers); //get all user
 app.get("/volunteers/:id", volunteerController.getVolunteerById); // Get user by ID
 app.get("/organisations", organisationController.getAllOrganisations); //get all organisation
 
-// app.get("/organisations/:id", organisationController.getOrgById);
+app.get("/organisations/:id", organisationController.getOrgById);
 app.put("/volunteers/:id", volunteerController.updateVolunteerProfile);
 app.put("/organisations/:id", organisationController.updateOrgProfile);
 

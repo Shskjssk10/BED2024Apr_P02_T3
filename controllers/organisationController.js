@@ -10,8 +10,22 @@ const getAllOrganisations = async (req, res) => {
   }
 };
 
+const getOrgById = async (req, res) => {
+  const id = parseInt(req.params.id);
+  try {
+    const org = await Organisation.getOrgById(id);
+    if (!org) {
+      return res.status(404).send("Organisation not found");
+    }
+    res.json(org);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Error retrieving Organisation");
+  }
+}
+
 const getOrgByName = async (req, res) => {
-  const orgName = parseInt(req.params.orgName);
+  const orgName = req.params.orgName;
   try {
     const org = await Organisation.getOrgByName(orgName);
     if (!org) {
@@ -42,6 +56,7 @@ const updateOrgProfile = async (req, res) => {
 
 module.exports = {
   getAllOrganisations,
+  getOrgById,
   getOrgByName,
   updateOrgProfile,
 };
