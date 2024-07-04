@@ -86,7 +86,7 @@ class Volunteer {
     FROM Volunteer V
     INNER JOIN Account A ON V.AccID = A.AccID
     WHERE V.AccID = @id;
-`;
+    `;
 
       console.log("here", updatedVolunteer); //gets tommy
       console.log(updatedVolunteer[0].FName); //only get those put into json

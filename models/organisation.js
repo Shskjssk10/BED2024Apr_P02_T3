@@ -113,7 +113,7 @@ class Organisation {
     `;
 
       const orgReq = connection.request();
-      //console.log("L116", selectAllResult.recordset[0].AccID); //2
+      console.log("L116", selectAllResult.recordset[0].AccID); //2
       orgReq.input("AccID", selectAllResult.recordset[0].AccID);
       orgReq.input(
         "OrgName",
@@ -155,7 +155,7 @@ class Organisation {
       accountReq.input("AccID", selectAllResult.recordset[0].AccID);
       accountReq.input(
         "Username",
-        updatedOrg[0].Username || selectAllResult.recordset[0].Username
+        updatedOrg[0].OrgName || selectAllResult.recordset[0].Username
       );
       accountReq.input(
         "PhoneNo",
