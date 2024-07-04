@@ -1,5 +1,5 @@
 const sql = require("mssql");
-const dbConfig = require("../dbConfig");
+const { poolPromise } = require("../dbConfig.js");
 const bcrypt = require("bcrypt");
 const generateToken = require("../utils/token.js");
 
@@ -17,8 +17,8 @@ const comparePassword = async (password, hashedPassword) => {
 
 const getAccountByEmail = async (email) => {
   try {
-    const connection = await sql
-      .connect(dbConfig)
+    const pool = await poolPromise;
+    const result = await pool
       .request()
       .input("email", sql.VarChar, email)
       .query("SELECT * FROM Account WHERE Email = @email");
@@ -39,8 +39,8 @@ const getAccountByEmail = async (email) => {
 
 const getVolunteerByAccountId = async (accountId) => {
   try {
-    const connection = await sql
-      .connect(dbConfig)
+    const pool = await poolPromise;
+    const result = await pool
       .request()
       .input("accId", sql.SmallInt, accountId)
       .query("SELECT * FROM Volunteer WHERE AccID = @accId");
@@ -61,8 +61,8 @@ const getVolunteerByAccountId = async (accountId) => {
 
 const getOrganisationByAccountId = async (accountId) => {
   try {
-    const connection = await sql
-      .connect(dbConfig)
+    const pool = await poolPromise;
+    const result = await pool
       .request()
       .input("accId", sql.SmallInt, accountId)
       .query("SELECT * FROM Organisation WHERE AccID = @accId");
@@ -152,35 +152,36 @@ const createVolunteer = async (req, res) => {
   const { salt, hashedPassword } = await hashPassword(password);
 
   try {
-    const connection = await sql.connect(dbConfig);
-    const accountSqlQuery = `
+    const pool = await poolPromise;
+    const accountResult = await pool
+      .request()
+      .input("username", sql.VarChar, username)
+      .input("phoneNo", sql.VarChar, phone_number)
+      .input("email", sql.VarChar, email)
+      .input("password", sql.VarChar, password) // Store plain password here
+      .query(`
         INSERT INTO Account (Username, PhoneNo, Email, Password)
         VALUES (@username, @phoneNo, @Email, @Password);
         SELECT SCOPE_IDENTITY() AS AccID;
-      `;
-    const request = connection.request();
-    request.input("username", sql.VarChar, username);
-    request.input("phoneNo", sql.VarChar, phone_number);
-    request.input("email", sql.VarChar, email);
-    request.input("password", sql.VarChar, password); // Store plain password here
-    const accountResult = await request.query(accountSqlQuery);
+      `);
+
     const accId = accountResult.recordset[0].AccID;
-    console.log(accId);
-    const volunteerSqlQuery = `
+
+    await pool
+      .request()
+      .input("accId", sql.SmallInt, accId)
+      .input("fname", sql.VarChar, fname)
+      .input("lname", sql.VarChar, lname)
+      .input("username", sql.VarChar, username)
+      .input("gender", sql.VarChar, gender)
+      .input("bio", sql.VarChar, bio)
+      .input("salt", sql.VarChar, salt)
+      .input("hashedPassword", sql.VarChar, hashedPassword) // Store hashed password here
+      .query(`
         INSERT INTO Volunteer (AccID, FName, LName, Username, Gender, Bio, Salt, HashedPassword)
         VALUES (@accId, @fname, @lname, @username, @gender, @bio, @salt, @hashedPassword)
-      `;
-    const volunteerReq = connection.request();
-    volunteerReq.input("accId", sql.SmallInt, accId);
-    volunteerReq.input("fname", sql.VarChar, fname);
-    volunteerReq.input("lname", sql.VarChar, lname);
-    volunteerReq.input("username", sql.VarChar, username);
-    volunteerReq.input("gender", sql.VarChar, gender);
-    volunteerReq.input("bio", sql.VarChar, bio);
-    volunteerReq.input("salt", sql.VarChar, salt);
-    volunteerReq.input("hashedPassword", sql.VarChar, hashedPassword); // Store hashed password here
+      `);
 
-    await volunteerReq.query(volunteerSqlQuery);
     console.log(`Volunteer created with email ${email}`);
     res.status(201).json({ message: "Volunteer created successfully", email });
   } catch (error) {
@@ -206,37 +207,34 @@ const createOrganisation = async (req, res) => {
   const username = org_name; // Set username to org_name
 
   try {
-    const connection = await sql.connect(dbConfig);
-    const request = connection.request();
-    request.input("username", sql.VarChar, username); // Use org_name as username
-    request.input("phoneNo", sql.VarChar, phone_number);
-    request.input("email", sql.VarChar, email);
-    request.input("password", sql.VarChar, hashedPassword); // Use hashed password, not plain
+    const pool = await poolPromise;
+    const accountResult = await pool
+      .request()
+      .input("username", sql.VarChar, username) // Use org_name as username
+      .input("phoneNo", sql.VarChar, phone_number)
+      .input("email", sql.VarChar, email)
+      .input("password", sql.VarChar, password).query(`
+        INSERT INTO Account (Username, PhoneNo, Email, Password)
+        VALUES (@username, @phoneNo, @Email, @Password);
+        SELECT SCOPE_IDENTITY() AS AccID;
+      `);
 
-    const accountSqlQuery = `
-      INSERT INTO Account (Username, PhoneNo, Email, Password)
-      VALUES (@username, @phoneNo, @Email, @Password);
-      SELECT SCOPE_IDENTITY() AS AccID;
-    `;
-    const accountResult = await request.query(accountSqlQuery);
     const accId = accountResult.recordset[0].AccID;
 
-    const organisationReq = connection.request(); // Correct variable name
-    organisationReq.input("accId", sql.SmallInt, accId);
-    organisationReq.input("orgName", sql.VarChar, org_name);
-    organisationReq.input("issueArea", sql.VarChar, issue_area);
-    organisationReq.input("mission", sql.VarChar, mission);
-    organisationReq.input("description", sql.Text, description);
-    organisationReq.input("address", sql.VarChar, address);
-    organisationReq.input("aptFloorUnit", sql.VarChar, apt_floor_unit);
-    organisationReq.input("salt", sql.VarChar, salt);
-    organisationReq.input("hashedPassword", sql.VarChar, hashedPassword); // Use hashed password
-
-    const organisationSqlQuery = `
-      INSERT INTO Organisation (AccID, OrgName, IssueArea, Mission, Descr, Addr, AptFloorUnit, Salt, HashedPassword)
-      VALUES (@accId, @orgName, @issueArea, @mission, @description, @address, @aptFloorUnit, @salt, @hashedPassword)
-    `;
-    await organisationReq.query(organisationSqlQuery);
+    await pool
+      .request()
+      .input("accId", sql.SmallInt, accId)
+      .input("orgName", sql.VarChar, org_name)
+      .input("issueArea", sql.VarChar, issue_area)
+      .input("mission", sql.VarChar, mission)
+      .input("description", sql.Text, description)
+      .input("address", sql.VarChar, address)
+      .input("aptFloorUnit", sql.VarChar, apt_floor_unit)
+      .input("salt", sql.VarChar, salt)
+      .input("hashedPassword", sql.VarChar, hashedPassword).query(`
+        INSERT INTO Organisation (AccID, OrgName, IssueArea, Mission, Descr, Addr, AptFloorUnit, Salt, HashedPassword)
+        VALUES (@accId, @orgName, @issueArea, @mission, @description, @address, @aptFloorUnit, @salt, @hashedPassword)
+      `);
 
     console.log(`Organisation created with email ${email}`);
     res
