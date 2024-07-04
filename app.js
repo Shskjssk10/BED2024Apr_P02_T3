@@ -3,13 +3,13 @@ const bodyParser = require("body-parser");
 const dbConfig = require("./dbConfig");
 const volunteerController = require("./controllers/volunteerController");
 const organisationController = require("./controllers/organisationController");
-const postController = require("./controllers/postController")
-const listingController = require("./controllers/listingController")
-const likesController = require("./controllers/likesController")
+const postController = require("./controllers/postController");
+const listingController = require("./controllers/listingController");
+const likesController = require("./controllers/likesController");
 
 const searchPageController = require("./controllers/userSearchPageController");
 const userFeedPageController = require("./controllers/userFeedPageController");
-const userProfileController = require("./controllers/userProfileController")
+const userProfileController = require("./controllers/userProfileController");
 
 const sql = require("mssql");
 const cors = require("cors");
@@ -46,7 +46,7 @@ app.post("/userFeedPage", userFeedPageController.postComment);
 
 // app.get("/userProfile/:id", postController.getAllPostsByAccID)
 // app.get("/userProfile/:id", volunteerController.getAllFollowersAndFollowing)
-app.get("/userProfile/:id", userProfileController.getAccountInfo)
+app.get("/userProfile/:id", userProfileController.getAccountInfo);
 
 app.listen(port, async () => {
   try {

@@ -7,7 +7,7 @@ module.exports = {
   trustServerCertificate: true,
   options: {
     port: parseInt(process.env.DB_PORT, 10),
-    encrypt: true, 
-    connectionTimeout: 60000
+    encrypt: true,
+    connectionTimeout: 60000,
   },
 };

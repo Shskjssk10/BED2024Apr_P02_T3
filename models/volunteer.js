@@ -24,6 +24,7 @@ class Volunteer {
     this.Password = Password;
   }
 
+  //Hendrik's Pasts//
   static async getAllVolunteer() {
     const connection = await sql.connect(dbConfig);
 
@@ -192,7 +193,7 @@ class Volunteer {
   }
 
   // Caden's Parts //
-  static async getAllFollowersAndFollowing(id){
+  static async getAllFollowersAndFollowing(id) {
     const connection = await sql.connect(dbConfig);
 
     const sqlQuery = `
@@ -202,32 +203,33 @@ class Volunteer {
     WHERE Follower = @id`;
 
     const request = connection.request();
-    request.input("id", id)
+    request.input("id", id);
 
     const result = await request.query(sqlQuery);
     connection.close();
     return [
       {
-        'No of Followers': result.recordset[0]['No of Followers'],
-        'No of Following': result.recordset[0]['No of Following']
-      }
+        "No of Followers": result.recordset[0]["No of Followers"],
+        "No of Following": result.recordset[0]["No of Following"],
+      },
     ];
   }
-  static async postFollow(postFollow){
+
+  static async postFollow(postFollow) {
     //establish database connection
     const connection = await sql.connect(dbConfig);
-    const sqlQuery = `INSERT INTO Follower (follower, followedBy) VALUES (@follower, @followedBy);`
-    
+    const sqlQuery = `INSERT INTO Follower (follower, followedBy) VALUES (@follower, @followedBy);`;
+
     const request = connection.request();
     request.input("follower", postFollow.follower);
     request.input("followedBy", postFollow.followedBy);
 
     const result = await request.query(sqlQuery);
 
-    connection.close()
+    connection.close();
   }
 
-  static async deleteFollow(deleteFollow){
+  static async deleteFollow(deleteFollow) {
     const connection = await sql.connect(dbConfig);
 
     const sqlQuery = `DELETE FROM Follower WHERE follower = @follower AND followedBy = @followedBy`; // Parameterized query
@@ -242,11 +244,11 @@ class Volunteer {
     return result.rowsAffected > 0; // Indicate success based on affected rows
   }
 
-  static async postComment(postComment){
+  static async postComment(postComment) {
     //establish database connection
     const connection = await sql.connect(dbConfig);
-    const sqlQuery = `INSERT INTO Comment (AccID, PostID, Comment) VALUES (@AccID, @PostID, @Comment); SELECT SCOPE_IDENTITY() AS id;`
-    
+    const sqlQuery = `INSERT INTO Comment (AccID, PostID, Comment) VALUES (@AccID, @PostID, @Comment); SELECT SCOPE_IDENTITY() AS id;`;
+
     const request = connection.request();
     request.input("AccID", postComment.AccID);
     request.input("PostID", postComment.PostID);
@@ -254,7 +256,7 @@ class Volunteer {
 
     const result = await request.query(sqlQuery);
 
-    connection.close()
+    connection.close();
   }
 }
 module.exports = Volunteer;
