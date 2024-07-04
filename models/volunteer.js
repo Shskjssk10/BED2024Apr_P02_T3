@@ -49,8 +49,34 @@ class Volunteer {
         )
     );
   }
-
   static async getVolunteerById(id) {
+    const connection = await sql.connect(dbConfig);
+    const sqlQuery = `
+    SELECT V.*, A.Email, A.PhoneNo, A.Password
+    FROM Volunteer V INNER JOIN Account A ON V.Username = A.Username
+    WHERE A.AccID = @id`;
+
+    const request = connection.request();
+    request.input("id", id);
+    const result = await request.query(sqlQuery);
+
+    connection.close();
+
+    return result.recordset[0]
+      ? new Volunteer(
+          result.recordset[0].AccID,
+          result.recordset[0].FName,
+          result.recordset[0].LName,
+          result.recordset[0].Username,
+          result.recordset[0].Gender,
+          result.recordset[0].Bio,
+          result.recordset[0].PhoneNo,
+          result.recordset[0].Email,
+          result.recordset[0].Password
+        )
+      : null; // Handle volunteer not found
+  }
+  static async getVolunteerByUsername(username) {
     const connection = await sql.connect(dbConfig);
     // Sql query that returns account similar to the one entered
     const sqlQuery = `
@@ -63,7 +89,7 @@ class Volunteer {
     ORDER BY DIFFERENCE(V.Username, @username) DESC;
   `;
     const request = connection.request();
-    request.input("id", id);
+    request.input("username", username);
     const result = await request.query(sqlQuery);
 
     connection.close();
@@ -81,7 +107,6 @@ class Volunteer {
         )
       : null; // Handle volunteer not found
   }
-
   static async updateVolunteerProfile(id, updatedVolunteer) {
     //establish database connection
     try {
