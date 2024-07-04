@@ -26,6 +26,7 @@ class Organisation {
     this.Password = Password;
   }
 
+  //Hendrik's Parts//
   static async getAllOrganisations() {
     const connection = await sql.connect(dbConfig);
 
@@ -51,17 +52,48 @@ class Organisation {
         )
     );
   }
-
   static async getOrgById(id) {
     const connection = await sql.connect(dbConfig);
     const sqlQuery = `
     SELECT O.*, A.Email, A.PhoneNo, A.Password
-    FROM Organisation O
-    INNER JOIN Account A ON O.OrgName = A.Username
-    WHERE O.AccId = @id;
-  `;
+    FROM Organisation O INNER JOIN Account A ON O.OrgName = A.Username
+    WHERE A.AccID = @id`;
+
     const request = connection.request();
     request.input("id", id);
+    const result = await request.query(sqlQuery);
+
+    connection.close();
+
+    return result.recordset[0]
+    ? new Organisation(
+        result.recordset[0].AccID,
+        result.recordset[0].OrgName,
+        result.recordset[0].IssueArea,
+        result.recordset[0].Mission,
+        result.recordset[0].Descr,
+        result.recordset[0].Addr,
+        result.recordset[0].AptFloorUnit,
+        result.recordset[0].PhoneNo,
+        result.recordset[0].Email,
+        result.recordset[0].Password
+      )
+    : null; // Handle organisation not found
+  }
+  static async getOrgByName(OrgName) {
+    const connection = await sql.connect(dbConfig);
+    // Sql query that returns account similar to the one entered
+    const sqlQuery = `
+    SELECT O.*, A.Email, A.PhoneNo 
+    FROM Organisation O
+    INNER JOIN Account A ON O.OrgName = A.Username
+    WHERE O.OrgName LIKE '%' + @OrgName + '%'
+      OR SOUNDEX(O.OrgName) = SOUNDEX(@OrgName)
+      OR DIFFERENCE(O.OrgName, @OrgName) > 2
+    ORDER BY DIFFERENCE(O.OrgName, @OrgName) DESC;
+  `;
+    const request = connection.request();
+    request.input("OrgName", OrgName);
     const result = await request.query(sqlQuery);
 
     connection.close();
