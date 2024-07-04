@@ -4,7 +4,7 @@ const dbConfig = require("./dbConfig");
 const volunteerController = require("./controllers/volunteerController");
 const organisationController = require("./controllers/organisationController");
 const sql = require("mssql");
-const cors = require('cors');
+const cors = require("cors");
 const app = express();
 const port = process.env.PORT || 8080;
 
@@ -31,20 +31,20 @@ app.listen(port, async () => {
   }
 
   console.log(`Server listening on port ${port}`);
-// Middleware
-app.use(cors());
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+  // Middleware
+  app.use(cors());
+  app.use(express.json());
+  app.use(express.urlencoded({ extended: true }));
 
-// Routes
-const authRoutes = require('./public/routes/authRoutes');
-app.use('/auth', authRoutes);
+  // Routes
+  const authRoutes = require("./public/routes/authRoutes");
+  app.use("/auth", authRoutes);
 
-
-process.on("SIGINT", async () => {
-  console.log("Server is gracefully shutting down");
-  // Perform cleanup tasks (e.g., close database connections)
-  await sql.close();
-  console.log("Database connection closed");
-  process.exit(0); // Exit with code 0 indicating successful shutdown
+  process.on("SIGINT", async () => {
+    console.log("Server is gracefully shutting down");
+    // Perform cleanup tasks (e.g., close database connections)
+    await sql.close();
+    console.log("Database connection closed");
+    process.exit(0); // Exit with code 0 indicating successful shutdown
+  });
 });
