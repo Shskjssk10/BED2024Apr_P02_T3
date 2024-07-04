@@ -15,9 +15,10 @@ const getAllAccounts = async (req, res) => {
 } 
 
 const getAccountByUsername = async (req, res) => {
+    const username = req.params.username;
     try {
         const volunteer = await Volunteer.getVolunteerByUsername(username);
-        const organisation = await Organisation.getOrgByName(OrgName);
+        const organisation = await Organisation.getOrgByName(username);
 
         if (volunteer) {
             res.json(volunteer);

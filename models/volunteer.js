@@ -49,7 +49,7 @@ class Volunteer {
     );
   }
 
-  static async getVolunteerById(id) {
+  static async getVolunteerByUsername(username) {
     const connection = await sql.connect(dbConfig);
     // Sql query that returns account similar to the one entered
     const sqlQuery = `
@@ -62,7 +62,7 @@ class Volunteer {
     ORDER BY DIFFERENCE(V.Username, @username) DESC;
   `;
     const request = connection.request();
-    request.input("id", id);
+    request.input("username", username);
     const result = await request.query(sqlQuery);
 
     connection.close();
@@ -80,7 +80,6 @@ class Volunteer {
         )
       : null; // Handle volunteer not found
   }
-
   static async updateVolunteerProfile(id, updatedVolunteer) {
     //establish database connection
     try {

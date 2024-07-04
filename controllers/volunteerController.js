@@ -10,10 +10,10 @@ const getAllVolunteers = async (req, res) => {
   }
 };
 
-const getVolunteerById = async (req, res) => {
-  const id = parseInt(req.params.id);
+const getVolunteerByUsername = async (req, res) => {
+  const username = parseInt(req.params.username);
   try {
-    const volunteer = await Volunteer.getVolunteerById(id);
+    const volunteer = await Volunteer.getVolunteerByUsername(username);
     if (!volunteer) {
       return res.status(404).send("Volunteer not found");
     }
@@ -90,7 +90,7 @@ const postComment = async (req, res) => {
 }
 module.exports = {
   getAllVolunteers,
-  getVolunteerById,
+  getVolunteerByUsername,
   updateVolunteerProfile,
   getAllFollowersAndFollowing,
   postFollow,

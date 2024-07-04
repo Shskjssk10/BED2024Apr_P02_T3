@@ -52,7 +52,7 @@ class Organisation {
     );
   }
 
-  static async getOrgById(id) {
+  static async getOrgByName(OrgName) {
     const connection = await sql.connect(dbConfig);
     // Sql query that returns account similar to the one entered
     const sqlQuery = `
@@ -65,7 +65,7 @@ class Organisation {
     ORDER BY DIFFERENCE(O.OrgName, @OrgName) DESC;
   `;
     const request = connection.request();
-    request.input("id", id);
+    request.input("OrgName", OrgName);
     const result = await request.query(sqlQuery);
 
     connection.close();
