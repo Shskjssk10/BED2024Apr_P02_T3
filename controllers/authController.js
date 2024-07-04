@@ -17,12 +17,11 @@ const comparePassword = async (password, hashedPassword) => {
 
 const getAccountByEmail = async (email) => {
   try {
-    const connection = await sql
-      .connect(dbConfig)
-      .request()
-      .input("email", sql.VarChar, email)
-      .query("SELECT * FROM Account WHERE Email = @email");
-
+    const connection = await sql.connect(dbConfig);
+    const accountSqlQuery = `SELECT * FROM Account WHERE Email = @email`;
+    const request = connection.request();
+    request.input("email", sql.VarChar, email);
+    const result = await request.query(accountSqlQuery);
     if (result.recordset.length === 0) {
       console.log(`No account found with email ${email}`);
       return null;
@@ -39,11 +38,11 @@ const getAccountByEmail = async (email) => {
 
 const getVolunteerByAccountId = async (accountId) => {
   try {
-    const connection = await sql
-      .connect(dbConfig)
-      .request()
-      .input("accId", sql.SmallInt, accountId)
-      .query("SELECT * FROM Volunteer WHERE AccID = @accId");
+    const connection = await sql.connect(dbConfig);
+    const accountSqlQuery = `SELECT * FROM Volunteer WHERE AccID = @accId`;
+    const request = connection.request();
+    request.input("accId", sql.SmallInt, accountId);
+    const result = await request.query(accountSqlQuery);
 
     if (result.recordset.length === 0) {
       console.log(`No volunteer found with account ID ${accountId}`);
@@ -61,11 +60,10 @@ const getVolunteerByAccountId = async (accountId) => {
 
 const getOrganisationByAccountId = async (accountId) => {
   try {
-    const connection = await sql
-      .connect(dbConfig)
-      .request()
-      .input("accId", sql.SmallInt, accountId)
-      .query("SELECT * FROM Organisation WHERE AccID = @accId");
+    const connection = await sql.connect(dbConfig);
+    const result = await connection.query`SELECT * FROM Organisation WHERE AccID = ${accountId}`;
+    const request = connection.request();
+    request.input("accId", sql.SmallInt, accountId);
 
     if (result.recordset.length === 0) {
       console.log(`No organisation found with account ID ${accountId}`);
