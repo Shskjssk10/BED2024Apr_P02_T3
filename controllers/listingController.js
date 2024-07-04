@@ -1,17 +1,17 @@
 
 const Listing = require("../models/listing");
 const sql = require("mssql");
-const dbConfig = require("../dbConfig");
+const { poolPromise } = require("../dbConfig");
 
 const getOrganisationListings = async (req, res) => {
   const accountId = req.accountId;
 
   try {
-    const connection = await sql.connect(dbConfig);
-    const listingSqlQuery = `SELECT * FROM Listing WHERE PostedBy = @accountId`;
-    const request = connection.request();
-    request.input("accountId", sql.SmallInt, accountId);
-    const result = await request.query(listingSqlQuery);
+    const pool = await poolPromise;
+    const result = await pool
+      .request()
+      .input("accountId", sql.SmallInt, accountId)
+      .query("SELECT * FROM Listing WHERE PostedBy = @accountId");
 
     const listings = result.recordset;
     res.json(listings);
