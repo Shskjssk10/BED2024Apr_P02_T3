@@ -26,6 +26,7 @@ class Organisation {
     this.Password = Password;
   }
 
+  //Hendrik's Parts//
   static async getAllOrganisations() {
     const connection = await sql.connect(dbConfig);
 
