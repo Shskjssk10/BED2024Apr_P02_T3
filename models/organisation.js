@@ -92,14 +92,14 @@ class Organisation {
     INNER JOIN Account a ON o.OrgName = a.Username
     WHERE o.AccId = @id   
     `;
-      console.log("updatedorg", updatedOrg);
-      console.log(updatedOrg[0].OrgName);
+      // console.log("updatedorg", updatedOrg);
+      // console.log(updatedOrg[0].OrgName);
 
       const request = connection.request();
-      console.log("id", id); //2
+      // console.log("id", id); //2
       request.input("id", id);
       const selectAllResult = await request.query(selectAllQuery);
-      console.log("here", selectAllResult.recordset[0]);
+      // console.log("here", selectAllResult.recordset[0]);
 
       const orgQuery = `
     UPDATE Organisation SET
@@ -113,7 +113,7 @@ class Organisation {
     `;
 
       const orgReq = connection.request();
-      console.log("L116", selectAllResult.recordset[0].AccID); //2
+      //console.log("L116", selectAllResult.recordset[0].AccID); //2
       orgReq.input("AccID", selectAllResult.recordset[0].AccID);
       orgReq.input(
         "OrgName",

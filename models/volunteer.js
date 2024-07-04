@@ -88,14 +88,14 @@ class Volunteer {
     WHERE V.AccID = @id;
     `;
 
-      console.log("here", updatedVolunteer); //gets tommy
-      console.log(updatedVolunteer[0].FName); //only get those put into json
+      // console.log("here", updatedVolunteer); //gets tommy
+      // console.log(updatedVolunteer[0].FName); //only get those put into json
 
       const request = connection.request();
-      console.log("id", id);
+      // console.log("id", id);
       request.input("id", id);
       const selectAllResult = await request.query(selectAllQuery);
-      console.log("select res", selectAllResult.recordset[0]);
+      // console.log("select res", selectAllResult.recordset[0]);
 
       const volunteerQuery = `UPDATE Volunteer SET
       FName = @FName,
