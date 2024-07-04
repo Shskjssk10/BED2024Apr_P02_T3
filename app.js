@@ -5,6 +5,7 @@ const volunteerController = require("./controllers/volunteerController");
 const organisationController = require("./controllers/organisationController");
 const postController = require("./controllers/postController")
 const listingController = require("./controllers/listingController")
+const likesController = require("./controllers/likesController")
 
 const searchPageController = require("./controllers/userSearchPageController");
 const userFeedPageController = require("./controllers/userFeedPageController");
@@ -32,6 +33,7 @@ app.delete("/searchPage", volunteerController.deleteFollow);
 app.get("/searchPage/:username", searchPageController.getAccountByUsername);
 
 app.post("/userFeedPage", userFeedPageController.postComment);
+app.delete("/testing", likesController.getAllLikesById)
 
 // app.get("/userProfile/:id", postController.getAllPostsByAccID)
 // app.get("/userProfile/:id", volunteerController.getAllFollowersAndFollowing)
