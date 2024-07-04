@@ -9,9 +9,22 @@ const getAllVolunteers = async (req, res) => {
     res.status(500).send("Error retrieving volunteer");
   }
 };
+const getVolunteerById = async (req, res) => {
+  const id = parseInt(req.params.id);
+  try {
+    const volunteer = await Volunteer.getVolunteerById(id);
+    if (!volunteer) {
+      return res.status(404).send("Volunteer not found");
+    }
+    res.json(volunteer);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Error retrieving Volunteer");
+  }
+}
 
 const getVolunteerByUsername = async (req, res) => {
-  const username = parseInt(req.params.username);
+  const username = req.params.username;
   try {
     const volunteer = await Volunteer.getVolunteerByUsername(username);
     if (!volunteer) {
@@ -90,6 +103,7 @@ const postComment = async (req, res) => {
 }
 module.exports = {
   getAllVolunteers,
+  getVolunteerById,
   getVolunteerByUsername,
   updateVolunteerProfile,
   getAllFollowersAndFollowing,
