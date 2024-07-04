@@ -209,7 +209,7 @@ const createOrganisation = async (req, res) => {
     request.input("username", sql.VarChar, username); // Use org_name as username
     request.input("phoneNo", sql.VarChar, phone_number);
     request.input("email", sql.VarChar, email);
-    request.input("password", sql.VarChar, password);
+    request.input("password", sql.VarChar, hashedPassword); // Use hashed password, not plain
 
     const accountSqlQuery = `
       INSERT INTO Account (Username, PhoneNo, Email, Password)
