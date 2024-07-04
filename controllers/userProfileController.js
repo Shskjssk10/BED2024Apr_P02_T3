@@ -1,3 +1,4 @@
+const Listing = require("../models/listing");
 const Post = require("../models/post");
 const Volunteer = require("../models/volunteer");
 
@@ -6,11 +7,14 @@ const getAccountInfo = async (req, res) => {
     try {
         const allPosts = await Post.getAllPostsByAccID(id);
         const followersAndFollowing = await Volunteer.getAllFollowersAndFollowing(id);
-        const info = [
-            ...(Array.isArray(allPosts) ? allPosts : [allPosts]),
-            ...followersAndFollowing 
-        ];
-        res.json(info);
+        const signUpListings = await Listing.getSignUpListingsById(id);
+        const savedListings = await Listing.getSavedListingsById(id);
+        res.json({
+            posts: allPosts,
+            followersAndFollowing: followersAndFollowing[0], // Extract object from array
+            signUpListings: signUpListings,
+            savedListings: savedListings,
+        });
     } catch (error){
         console.error(error);
         res.status(500).send("Error Retrieving Information");
