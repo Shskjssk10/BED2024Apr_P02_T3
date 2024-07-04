@@ -12,18 +12,23 @@ const userFeedPageController = require("./controllers/userFeedPageController");
 const userProfileController = require("./controllers/userProfileController")
 
 const sql = require("mssql");
-const port = 8080;
+const cors = require("cors");
 const app = express();
+const port = process.env.PORT || 8080;
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true })); // For form data handling
 // app.use(staticMiddleware); // Mount the static middleware
 
 app.get("/volunteers", volunteerController.getAllVolunteers); //get all user
-app.get("/volunteers/:username", volunteerController.getVolunteerByUsername); // Get user by ID
+app.get("/volunteers/:id", volunteerController.getVolunteerById); // Get user by ID
 app.get("/organisations", organisationController.getAllOrganisations); //get all organisation
+
+app.get("/organisations/:id", organisationController.getOrgById);
+app.put("/volunteers/:id", volunteerController.updateVolunteerProfile);
+app.put("/organisations/:id", organisationController.updateOrgProfile);
+
 app.get("/organisations/:OrgName", organisationController.getOrgByName);
-app.put("/volunteers/:username", volunteerController.updateVolunteerProfile);
 //app.put("/organisations/:OrgName", organisationController.updateOrgProfile);
 
 // Caden's Parts
@@ -55,12 +60,20 @@ app.listen(port, async () => {
   }
 
   console.log(`Server listening on port ${port}`);
-});
+  // Middleware
+  app.use(cors());
+  app.use(express.json());
+  app.use(express.urlencoded({ extended: true }));
 
-process.on("SIGINT", async () => {
-  console.log("Server is gracefully shutting down");
-  // Perform cleanup tasks (e.g., close database connections)
-  await sql.close();
-  console.log("Database connection closed");
-  process.exit(0); // Exit with code 0 indicating successful shutdown
+  // Routes
+  const authRoutes = require("./routes/authRoutes");
+  app.use("/auth", authRoutes);
+
+  process.on("SIGINT", async () => {
+    console.log("Server is gracefully shutting down");
+    // Perform cleanup tasks (e.g., close database connections)
+    await sql.close();
+    console.log("Database connection closed");
+    process.exit(0); // Exit with code 0 indicating successful shutdown
+  });
 });

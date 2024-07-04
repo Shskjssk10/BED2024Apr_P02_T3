@@ -1,11 +1,13 @@
+require("dotenv").config();
 module.exports = {
-  user: "BED_Assignment", // Replace with your SQL Server login username
-  password: "BED123", // Replace with your SQL Server login password
-  server: "localhost",
-  database: "BED_database", //replace with database name
+  user: process.env.DB_USER, // Replace with your SQL Server login username
+  password: process.env.DB_PASSWORD, // Replace with your SQL Server login password
+  server: process.env.DB_SERVER,
+  database: process.env.DB_DATABASE, //replace with database name
   trustServerCertificate: true,
   options: {
-    port: 1433, // Default SQL Server port
-    connectionTimeout: 60000, // Connection timeout in milliseconds
+    port: parseInt(process.env.DB_PORT, 10),
+    encrypt: true, 
+    connectionTimeout: 60000
   },
 };
