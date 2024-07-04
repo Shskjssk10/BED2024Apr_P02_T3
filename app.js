@@ -32,8 +32,12 @@ app.post("/searchPage", volunteerController.postFollow);
 app.delete("/searchPage", volunteerController.deleteFollow);
 app.get("/searchPage/:username", searchPageController.getAccountByUsername);
 
+// Likes' end points
+app.get("/likes/:id", likesController.getAllLikesById);
+app.post("likes", likesController.postLikeById);
+app.delete("likes", likesController.deleteLikesById);
+
 app.post("/userFeedPage", userFeedPageController.postComment);
-app.delete("/testing", likesController.getAllLikesById)
 
 // app.get("/userProfile/:id", postController.getAllPostsByAccID)
 // app.get("/userProfile/:id", volunteerController.getAllFollowersAndFollowing)
