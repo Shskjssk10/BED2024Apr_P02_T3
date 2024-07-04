@@ -39,8 +39,8 @@ app.get("/searchPage/:username", searchPageController.getAccountByUsername);
 
 // Likes' end points
 app.get("/likes/:id", likesController.getAllLikesById);
-app.post("likes", likesController.postLikeById);
-app.delete("likes", likesController.deleteLikesById);
+app.post("/likes", likesController.postLikeById);
+app.delete("/likes", likesController.deleteLikesById);
 
 app.post("/userFeedPage", userFeedPageController.postComment);
 

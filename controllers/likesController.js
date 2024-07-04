@@ -29,7 +29,7 @@ const postLikeById = async (req, res) => {
 const deleteLikesById = async (req, res) => {
   const deleteLike = req.body;
   try {
-    const deletedLike = await Likes.postLikeById(deleteLike);
+    const deletedLike = await Likes.deleteLikesById(deleteLike);
     res.status(201).json(deletedLike);
     console.log("Successfully deleted like");
   } catch (error) {
