@@ -13,11 +13,11 @@ app.use(bodyParser.urlencoded({ extended: true })); // For form data handling
 // app.use(staticMiddleware); // Mount the static middleware
 
 app.get("/volunteers", volunteerController.getAllVolunteers); //get all user
-app.get("/volunteers/:username", volunteerController.getVolunteerByUsername); // Get user by ID
+app.get("/volunteers/:id", volunteerController.getVolunteerById); // Get user by ID
 app.get("/organisations", organisationController.getAllOrganisations); //get all organisation
-app.get("/organisations/:OrgName", organisationController.getOrgByName);
-app.put("/volunteers/:username", volunteerController.updateVolunteerProfile);
-app.put("/organisations/:OrgName", organisationController.updateOrgProfile);
+app.get("/organisations/:id", organisationController.getOrgById);
+app.put("/volunteers/:id", volunteerController.updateVolunteerProfile);
+app.put("/organisations/:id", organisationController.updateOrgProfile);
 
 app.listen(port, async () => {
   try {
