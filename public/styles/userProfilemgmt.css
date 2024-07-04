@@ -35,12 +35,12 @@
   display: flex;
 }
 
-.names .name {
+.names .fname {
   width: 50%;
   margin: 0 3rem 0 0;
 }
 
-.names .username {
+.names .lname {
   width: 50%;
   margin: 0 0 0 1.1rem;
 }
