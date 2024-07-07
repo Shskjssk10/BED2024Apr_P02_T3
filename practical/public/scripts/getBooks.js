@@ -13,6 +13,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
     // Regardless of initial browser rendering, parse the JSON data
     const data = await response.json();
+    console.log(data);
 
     const bookList = document.getElementById("book-list");
 
