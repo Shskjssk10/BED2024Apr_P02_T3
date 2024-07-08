@@ -8,6 +8,7 @@ const { OAuth2Client } = require("google-auth-library");
 const app = express();
 const port = process.env.PORT || 8080;
 
+// Google Authentication
 const CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
 const CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
 const REDIRECT_URI = process.env.GOOGLE_REDIRECT_URI;
@@ -21,7 +22,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
 // Routes
-const authRoutes = require("./public/routes/authRoutes");
+const authRoutes = require("./routes/authRoutes");
 app.use("/auth", authRoutes);
 
 // Route to start OAuth flow
@@ -74,16 +75,6 @@ app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "public/html/index.html"));
 });
 
-// Database connection
-const { poolPromise } = require("./dbConfig");
-poolPromise
-  .then((pool) => {
-    console.log("Database connected successfully.");
-  })
-  .catch((err) => {
-    console.error("Database connection failed:", err);
-  });
-const express = require("express");
 const bodyParser = require("body-parser");
 const dbConfig = require("./dbConfig");
 const volunteerController = require("./controllers/volunteerController");
@@ -97,7 +88,6 @@ const userFeedPageController = require("./controllers/userFeedPageController");
 const userProfileController = require("./controllers/userProfileController");
 
 const sql = require("mssql");
-const cors = require("cors");
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true })); // For form data handling
