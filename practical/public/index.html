@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BED-Polytechnic-Library</title>
+    <link rel="stylesheet" href="./styles/styles.css">
+    <script src="./scripts/script.js" defer></script>
+</head>
+
+<body>
+    <h1>Polytechnic Library</h1>
+    <form action="http://localhost:8080/login" method="post">
+        <div class="container">
+            <label for="uname"><b>Username</b></label>
+            <input type="text" placeholder="Enter Username" name="username" id="username" required>
+
+            <label for="psw"><b>Password</b></label>
+            <input type="password" placeholder="Enter Password" name="password" id="password" required>
+
+            <div class="login-register">
+                <button type="submit" id="login">Login</button>
+                <button type="submit" id="register">Register</button>
+            </div>
+        </div>
+    </form>
+    <script src="./scripts/script.js"></script>
+</body>
+
+</html>

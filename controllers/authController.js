@@ -61,7 +61,8 @@ const getVolunteerByAccountId = async (accountId) => {
 const getOrganisationByAccountId = async (accountId) => {
   try {
     const connection = await sql.connect(dbConfig);
-    const result = await connection.query`SELECT * FROM Organisation WHERE AccID = ${accountId}`;
+    const result =
+      await connection.query`SELECT * FROM Organisation WHERE AccID = ${accountId}`;
     const request = connection.request();
     request.input("accId", sql.SmallInt, accountId);
 
