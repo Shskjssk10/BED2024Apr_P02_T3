@@ -52,7 +52,21 @@
     </header>
     <div class="bg">
       <div class="card wide-card">
+        <ul class="nav nav-tabs">
+          <li class="nav-item">
+            <a class="nav-link active" data-bs-toggle="tab" href="#orgSignUp"
+              >Organisation Google Login</a
+            >
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" data-bs-toggle="tab" href="#volunteerSignUp"
+              >Volunteer Google Login</a
+            >
+          </li>
+        </ul>
+
         <div class="tab-content">
+          <!-- Organisation Google Login -->
           <div class="tab-pane container active" id="orgSignUp">
             <br />
             <h5 class="card-title">HelpingHearts Organisation Google Login</h5>
@@ -153,6 +167,99 @@
               <button type="submit" class="btn btn-primary">Sign Up</button>
             </form>
           </div>
+
+          <!-- Volunteer Google Login -->
+          <div class="tab-pane container fade" id="volunteerSignUp">
+            <br />
+            <h5 class="card-title">HelpingHearts Volunteer Google Login</h5>
+            <br />
+            <form id="volunteerSignUpForm">
+              <div class="row">
+                <div class="mb-3 col-md-6">
+                  <label for="volunteerFirstName" class="form-label"
+                    >First Name:</label
+                  >
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="volunteerFirstName"
+                    placeholder="First Name"
+                    required
+                  />
+                </div>
+                <div class="mb-3 col-md-6">
+                  <label for="volunteerLastName" class="form-label"
+                    >Last Name:</label
+                  >
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="volunteerLastName"
+                    placeholder="Last Name"
+                    required
+                  />
+                </div>
+              </div>
+              <div class="mb-3">
+                <label for="volunteerUsername" class="form-label"
+                  >Username:</label
+                >
+                <input
+                  type="text"
+                  class="form-control"
+                  id="volunteerUsername"
+                  placeholder="Username"
+                  required
+                />
+              </div>
+              <div class="mb-3">
+                <label for="volunteerBio" class="form-label">Bio:</label>
+                <textarea
+                  class="form-control"
+                  id="volunteerBio"
+                  rows="4"
+                  placeholder="Enter your bio here (Max: 150 words)"
+                  required
+                ></textarea>
+              </div>
+              <div class="mb-3">
+                <label for="volunteerPhoneNumber" class="form-label"
+                  >Phone Number:</label
+                >
+                <input
+                  type="tel"
+                  class="form-control"
+                  id="volunteerPhoneNumber"
+                  placeholder="Phone Number"
+                  pattern="[0-9]{8}"
+                  required
+                />
+                <small class="form-text text-muted"
+                  >Format: 8-digit Singapore phone number</small
+                >
+              </div>
+              <div class="mb-3">
+                <label for="volunteerGender" class="form-label">Gender:</label>
+                <select class="form-control" id="volunteerGender" required>
+                  <option value="">Select Gender</option>
+                  <option value="Male">Male</option>
+                  <option value="Female">Female</option>
+                  <option value="Prefer Not To Say">Prefer Not To Say</option>
+                </select>
+              </div>
+              <div class="mb-3">
+                <label for="volunteerProfilePic" class="form-label"
+                  >Profile Picture:</label
+                >
+                <input
+                  type="file"
+                  class="form-control"
+                  id="volunteerProfilePic"
+                />
+              </div>
+              <button type="submit" class="btn btn-primary">Sign Up</button>
+            </form>
+          </div>
         </div>
         <div class="text-center mt-3">
           <a class="loginLink" href="./login.html"
@@ -176,7 +283,7 @@
       integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy"
       crossorigin="anonymous"
     ></script>
-    <script src="../scripts/orgGoogleLogin.js"></script>
+    <script src="../scripts/googleLogin.js"></script>
     <script>
       // Clear the authToken cookie when this page loads
       document.cookie =
