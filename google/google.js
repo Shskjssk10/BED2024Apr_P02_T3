@@ -4,6 +4,7 @@ require('dotenv').config();
  */
 // The ID of your GCS bucket
 const bucketName = process.env.BUCKET_NAME;
+const keyFile = process.env.KEYFILENAME
 
 // The ID of your GCS file
 const fileName = 'image.jpg';
@@ -12,7 +13,7 @@ const fileName = 'image.jpg';
 const {Storage} = require('@google-cloud/storage');
 
 // Creates a client
-const storage = new Storage({keyFilename: process.env.KEYFILENAME});
+const storage = new Storage({keyFilename: keyFile});
 
 async function downloadIntoMemory() {
   // Downloads the file into a buffer in memory.
