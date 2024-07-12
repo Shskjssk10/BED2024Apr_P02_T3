@@ -48,6 +48,7 @@ class Volunteer {
           row.Bio,
           row.Email,
           row.PhoneNo,
+
           row.Password
         )
     );
