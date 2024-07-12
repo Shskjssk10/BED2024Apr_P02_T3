@@ -36,12 +36,15 @@ const bodyParser = require("body-parser");
 const dbConfig = require("./dbConfig");
 const verifyJWT = require("./middlewares/authValidate");
 const staticMiddleware = express.static("public");
+const swaggerUi = require("swagger-ui-express");
+const swaggerDocument = require("./swagger-output.json"); // Import generated spec
 const app = express();
-const port = 8080;
+const port = 3000;
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(staticMiddleware);
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 app.get("/books", bookController.getAllBooks);
 app.get("/books/:id", bookController.getBookById);
