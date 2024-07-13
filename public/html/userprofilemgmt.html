@@ -54,8 +54,8 @@
             <div id="profile-photo"><img src="../images/github-icon.png" alt="User profile photo"
                     onerror="this.src='../images/default-pfp.png'"></div>
             <div class="cardnames">
-                <h4>hendrikyong</h4>
-                <p class="card-text">Hendrik</p>
+                <h4 id="username"></h4>
+                <p class="card-text" id="FName"></p>
             </div>
             <a href="#" class="btn btn-primary"
                 style="margin: 0 0 0 5rem; background-color: #D4A373; border: none;">Change Picture</a>
@@ -63,7 +63,7 @@
     </div>
 
     <!--need to add action to link to database for put-->
-    <form method="post" action="/userProfilemgmt/:id/">
+    <form method="post" action="http://localhost:8080/volunteers/:id">
         <input type="hidden" name="_method" value="PUT">
         <div class="fields" style="max-width: 50%; margin: 2rem 0 0 20rem;">
             <div class="names">
@@ -78,37 +78,37 @@
             </div>
             <div class="username">
                 <div class="mb-3">
-                    <label for="username" class="form-label">Username:</label>
-                    <input type="text" class="form-control" id="username">
+                    <label for="form-username" class="form-label">Username:</label>
+                    <input type="text" class="form-control" id="form-username">
                 </div>
             </div>
             <div class="email">
                 <div class="mb-3">
-                    <label for="exampleFormControlInput1" class="form-label">Email address:</label>
-                    <input type="email" class="form-control" id="exampleFormControlInput1">
+                    <label for="email" class="form-label">Email address:</label>
+                    <input type="email" class="form-control" id="email">
                 </div>
             </div>
             <div class="phone">
                 <label for="phonenum" class="form-label">Phone Number:</label>
-                <input type="tel" id="phonenum" class="form-control" maxlength="8" pattern="[0-9]{4} [0-9]{4}">
+                <input type="tel" id="phonenum" class="form-control" maxlength="8" pattern="[0-9]{8}">
             </div>
             <div class="bio">
                 <div class="mb-3">
-                    <label for="exampleFormControlTextarea1" class="form-label">Bio:</label>
-                    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+                    <label for="bio" class="form-label">Bio:</label>
+                    <textarea class="form-control" id="bio" rows="3"></textarea>
                 </div>
             </div>
             <div class="password">
                 <label for="inputPassword5" class="form-label">Password</label>
-                <input type="password" id="inputPassword5" class="form-control" aria-describedby="passwordHelpBlock">
-                <div id="passwordHelpBlock" class="form-text">
+                <input type="password" id="password" class="form-control" aria-describedby="passwordHelpBlock">
+                <div id="password" class="form-text">
                     Your password must be 8-20 characters long, contain letters and numbers, and must not contain
                     spaces,
                     special characters, or emoji.
                 </div>
             </div>
             <br>
-            <input type="submit" class="btn btn-primary" value="Save Changes">
+            <input type="submit" class="btn btn-primary" value="Save Changes" id="submitButton">
 
         </div>
     </form>

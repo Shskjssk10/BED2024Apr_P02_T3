@@ -6,7 +6,6 @@ const organisationController = require("./controllers/organisationController");
 const postController = require("./controllers/postController");
 const listingController = require("./controllers/listingController");
 const likesController = require("./controllers/likesController");
-
 const searchPageController = require("./controllers/userSearchPageController");
 const userFeedPageController = require("./controllers/userFeedPageController");
 const userProfileController = require("./controllers/userProfileController");
@@ -19,6 +18,12 @@ const port = process.env.PORT || 8080;
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true })); // For form data handling
 // app.use(staticMiddleware); // Mount the static middleware
+app.use((req, res, next) => {
+  res.setHeader("Access-Control-Allow-Origin", "http://127.0.0.1:3000"); // Replace with your client origin
+  res.setHeader("Access-Control-Allow-Methods", "GET"); // Add other methods if needed
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type"); // Add other allowed headers
+  next();
+});
 
 app.get("/volunteers", volunteerController.getAllVolunteers); //get all user
 app.get("/volunteers/:id", volunteerController.getVolunteerById); // Get user by ID

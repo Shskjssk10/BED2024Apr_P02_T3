@@ -5,6 +5,7 @@ class Organisation {
   constructor(
     id,
     OrgName,
+    Website,
     IssueArea,
     Mission,
     Descr,
@@ -16,6 +17,7 @@ class Organisation {
   ) {
     this.id = id;
     this.OrgName = OrgName;
+    this.Website = Website;
     this.IssueArea = IssueArea;
     this.Mission = Mission;
     this.Descr = Descr;
@@ -30,7 +32,10 @@ class Organisation {
   static async getAllOrganisations() {
     const connection = await sql.connect(dbConfig);
 
-    const sqlQuery = `SELECT * FROM Organisation`;
+    const sqlQuery = `SELECT o.*, a.PhoneNo, a.Email, a.Password
+    FROM Organisation o
+    INNER JOIN Account a 
+    ON a.Username = o.OrgName`;
     const request = connection.request();
     const result = await request.query(sqlQuery);
 
@@ -41,13 +46,14 @@ class Organisation {
         new Organisation(
           row.AccID,
           row.OrgName,
+          row.Website,
           row.IssueArea,
           row.Mission,
           row.Descr,
           row.Addr,
           row.AptFloorUnit,
-          row.Email,
           row.PhoneNo,
+          row.Email,
           row.Password
         )
     );
@@ -66,19 +72,19 @@ class Organisation {
     connection.close();
 
     return result.recordset[0]
-    ? new Organisation(
-        result.recordset[0].AccID,
-        result.recordset[0].OrgName,
-        result.recordset[0].IssueArea,
-        result.recordset[0].Mission,
-        result.recordset[0].Descr,
-        result.recordset[0].Addr,
-        result.recordset[0].AptFloorUnit,
-        result.recordset[0].PhoneNo,
-        result.recordset[0].Email,
-        result.recordset[0].Password
-      )
-    : null; // Handle organisation not found
+      ? new Organisation(
+          result.recordset[0].AccID,
+          result.recordset[0].OrgName,
+          result.recordset[0].IssueArea,
+          result.recordset[0].Mission,
+          result.recordset[0].Descr,
+          result.recordset[0].Addr,
+          result.recordset[0].AptFloorUnit,
+          result.recordset[0].PhoneNo,
+          result.recordset[0].Email,
+          result.recordset[0].Password
+        )
+      : null; // Handle organisation not found
   }
   static async getOrgByName(OrgName) {
     const connection = await sql.connect(dbConfig);
@@ -112,7 +118,6 @@ class Organisation {
         )
       : null; // Handle organisation not found
   }
-
   static async updateOrgProfile(id, updatedOrg) {
     try {
       //establish database connection
