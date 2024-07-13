@@ -96,6 +96,7 @@ class Volunteer {
     request.input("username", username);
     const result = await request.query(sqlQuery);
 
+    console.log("hello");
     connection.close();
     return result.recordset[0]
       ? new Volunteer(
