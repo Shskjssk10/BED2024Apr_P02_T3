@@ -104,8 +104,8 @@ const login = async (req, res) => {
 
     // console.log(token);
 
-    //return res.status(200).json({ token });
-    return res.redirect("/getBooks.html");
+    return res.status(200).json({ token });
+    //return res.redirect("/getBooks.html");
   } catch (err) {
     console.error(err);
     return res.status(500).json({ message: "Internal server error" });

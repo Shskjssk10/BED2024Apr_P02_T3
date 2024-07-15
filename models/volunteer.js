@@ -24,11 +24,14 @@ class Volunteer {
     this.Password = Password;
   }
 
-  //Hendrik's Pasts//
+  //Hendrik's Parts//
   static async getAllVolunteer() {
     const connection = await sql.connect(dbConfig);
 
-    const sqlQuery = `SELECT * FROM Volunteer`;
+    const sqlQuery = `SELECT v.*, a.PhoneNo, a.Email, a.Password
+    FROM Volunteer v
+    INNER JOIN Account a 
+    ON a.Username = v.Username`;
     const request = connection.request();
     const result = await request.query(sqlQuery);
 
@@ -41,11 +44,12 @@ class Volunteer {
           row.FName,
           row.LName,
           row.Username,
+          row.Gender,
+          row.Bio,
           row.Email,
           row.PhoneNo,
-          row.Bio,
-          row.Password,
-          row.Gender
+
+          row.Password
         )
     );
   }

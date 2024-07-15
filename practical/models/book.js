@@ -21,7 +21,7 @@ class Book {
         (row) => new Book(row.book_id, row.title, row.author, row.availability)
       );
     } catch (err) {
-      console.log("Error retrieving books", err);
+      throw err;
     }
   }
 

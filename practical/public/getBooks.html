@@ -5,19 +5,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./styles/getBooks.css">
-    <script src="./scripts/getBooks.js"></script>
+    <script src="./scripts/getBooks.js" defer></script>
     <title>Student</title>
 </head>
 
 <body>
-    <form action="http://localhost:8080/books" method="get">
-        <div class="container">
-            <div class="login-register">
-                <button type="submit" id="books">Get Books</button>
-            </div>
+    <div class="container">
+        <div class="login-register">
+            <button type="submit" id="books">Get Books</button>
         </div>
-        <section id="book-list"></section>
-    </form>
+    </div>
+    <section id="book-list"></section>
 </body>
 
 </html>
