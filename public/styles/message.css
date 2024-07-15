@@ -128,3 +128,8 @@
   justify-content: end;
   width: 100%;
 }
+
+#message {
+  overflow-y: auto;
+  height: 450px; /* Adjust the height as needed */
+}

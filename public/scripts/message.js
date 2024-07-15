@@ -124,5 +124,25 @@ function enableSendMessage() {
     messageBubble.className = "message-bubble";
     messageBubble.innerText = message;
     messageList.appendChild(messageBubble);
+
+    function formatTimestamp(date) {
+      const hours = date.getHours().toString().padStart(2, "0");
+      const minutes = date.getMinutes().toString().padStart(2, "0");
+      return `${hours}:${minutes}`;
+    }
+
+    const timestamp = document.createElement("span");
+    timestamp.style.fontSize = "0.8rem"; // Adjust font size as needed
+    timestamp.style.color = "#aaa"; // Adjust timestamp color
+    timestamp.style.marginLeft = "10px"; // Adjust margin as needed
+    const currentDate = new Date();
+    timestamp.innerText = formatTimestamp(currentDate);
+    messageBubble.appendChild(timestamp);
+
+    function scrollToBottom() {
+      const messageList = document.getElementById("message");
+      messageList.scrollTop = messageList.scrollHeight;
+    }
+    scrollToBottom();
   }
 }
