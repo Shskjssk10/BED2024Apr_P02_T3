@@ -90,23 +90,39 @@ function enableSendMessage() {
 
   messageInput.addEventListener("keypress", function (event) {
     if (event.keyCode === 13) {
-      const message = messageInput.value;
-      if (document.querySelector(".selected-chat")) {
-        console.log("Message to selected chat:", message);
-        messageInput.value = "";
-      } else {
-        alert("Please select a chat box to send a message.");
-      }
+      sendMessage();
     }
   });
 
   sendButton.addEventListener("click", function () {
+    sendMessage();
+  });
+
+  function sendMessage() {
     const message = messageInput.value;
     if (document.querySelector(".selected-chat")) {
-      console.log("Message to selected chat:", message);
-      messageInput.value = "";
+      if (message.trim() !== "") {
+        createMessageBubble(message);
+        messageInput.value = "";
+      }
     } else {
       alert("Please select a chat box to send a message.");
     }
-  });
+  }
+
+  function createMessageBubble(message) {
+    const messageList = document.getElementById("message");
+    const messageBubble = document.createElement("li");
+    messageBubble.style.listStyle = "none";
+    messageBubble.style.width = "fit-content";
+    messageBubble.style.backgroundColor = "white";
+    messageBubble.style.padding = "4px";
+    messageBubble.style.borderRadius = "4px";
+    messageBubble.style.marginTop = "1rem";
+    messageBubble.style.marginLeft = "auto";
+    messageBubble.style.marginRight = "1.2rem";
+    messageBubble.className = "message-bubble";
+    messageBubble.innerText = message;
+    messageList.appendChild(messageBubble);
+  }
 }
