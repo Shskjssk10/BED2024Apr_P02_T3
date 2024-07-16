@@ -1,6 +1,8 @@
 document.addEventListener("DOMContentLoaded", async function () {
   console.log("DOM loaded");
   var searchField = document.getElementById("inputBox");
+  const token = localStorage.getItem("authToken");
+  console.log(token);
 
   var response = await fetch("http://localhost:8080/volunteers");
   var data = await response.json();
@@ -25,24 +27,6 @@ document.addEventListener("DOMContentLoaded", async function () {
   } else {
     console.error("Element with ID 'inputBox' not found!");
   }
-
-  // const socket = io("http://localhost:3002");
-  // const message = document.getElementById("messageBox");
-  // const messageInput = document.getElementById("messageInput");
-
-  // const name = data[0].Username;
-  // console.log(name, "joined");
-  // socket.emit("new-user", name);
-
-  // message.addEventListener("submit", (e) => {
-  //   e.preventDefault();
-  //   const message = messageInput.value;
-  //   appendMessage(`${message}`);
-  //   socket.emit("send-chat-message", message);
-  //   messageInput.value = "";
-  // });
-
-  // enableSendMessage();
 });
 
 const chatBoxes = {};
