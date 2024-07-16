@@ -1,17 +1,17 @@
 document.addEventListener("DOMContentLoaded", async function () {
-  console.log("DOM loaded");
+  //console.log("DOM loaded");
 
   //need to read the user cant use data[0]
   //using data[0] now just to display
 
   const userID = parseInt(localStorage.getItem("userID"));
-  console.log(userID);
+  //console.log(userID);
   const response = await fetch(`http://localhost:8080/volunteers/${userID}`);
   const data = await response.json();
-  console.log(data);
+  //console.log(data);
 
   const token = localStorage.getItem("authToken");
-  console.log(token);
+  //console.log(token);
 
   //for the top card
   var username = document.getElementById("username");
