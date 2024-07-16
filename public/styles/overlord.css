@@ -21,3 +21,36 @@ html {
 #navbarNav {
   padding-right: 1.8rem;
 }
+
+footer {
+  background-color: #296154;
+  height: 6rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.brand {
+  margin: 0 0 0 4rem;
+}
+
+.site-map {
+  margin: 0 0 0 6rem;
+}
+
+.site-map ul {
+  list-style-type: none;
+  display: flex;
+  flex-direction: row;
+}
+
+.site-map li a {
+  margin-right: 2rem;
+  color: white;
+}
+
+.footer-wrapper {
+  display: flex; /* Make it a flex container */
+  justify-content: space-between; /* Distribute space evenly */
+  align-items: center; /* Align content vertically */
+}

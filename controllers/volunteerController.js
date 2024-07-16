@@ -25,6 +25,7 @@ const getVolunteerById = async (req, res) => {
 };
 const getVolunteerByUsername = async (req, res) => {
   const username = req.params.username;
+  console.log(username);
   try {
     const volunteer = await Volunteer.getVolunteerByUsername(username);
     if (!volunteer) {
