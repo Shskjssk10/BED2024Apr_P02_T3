@@ -51,10 +51,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     //should send put req to db to update
     console.log("submit button clicked");
 
-    // const response = await fetch(`http://localhost:8080/volunteers/${userID}`);
-    // const data = await response.json();
-    // console.log("l50", data);
-
+    //PUT update works now
     const updatedUser = [
       {
         FName: fname.value,
