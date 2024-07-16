@@ -25,6 +25,24 @@ document.addEventListener("DOMContentLoaded", async function () {
   } else {
     console.error("Element with ID 'inputBox' not found!");
   }
+
+  // const socket = io("http://localhost:3002");
+  // const message = document.getElementById("messageBox");
+  // const messageInput = document.getElementById("messageInput");
+
+  // const name = data[0].Username;
+  // console.log(name, "joined");
+  // socket.emit("new-user", name);
+
+  // message.addEventListener("submit", (e) => {
+  //   e.preventDefault();
+  //   const message = messageInput.value;
+  //   appendMessage(`${message}`);
+  //   socket.emit("send-chat-message", message);
+  //   messageInput.value = "";
+  // });
+
+  // enableSendMessage();
 });
 
 const chatBoxes = {};
@@ -122,6 +140,7 @@ function enableSendMessage() {
     messageBubble.style.marginLeft = "auto";
     messageBubble.style.marginRight = "1.2rem";
     messageBubble.className = "message-bubble";
+    messageBubble.setAttribute("id", "messageBubble");
     messageBubble.innerText = message;
     messageList.appendChild(messageBubble);
 
