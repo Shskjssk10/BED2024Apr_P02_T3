@@ -47,10 +47,48 @@ document.addEventListener("DOMContentLoaded", async function () {
 
   submitButton.addEventListener("click", async function (e) {
     e.preventDefault();
+    //when submit button clicked
+    //should send put req to db to update
     console.log("submit button clicked");
 
-    const response = await fetch("http://localhost:8080/volunteers");
-    const data = await response.json();
-    console.log("l50", data);
+    // const response = await fetch(`http://localhost:8080/volunteers/${userID}`);
+    // const data = await response.json();
+    // console.log("l50", data);
+
+    const updatedUser = [
+      {
+        FName: fname.value,
+        LName: lname.value,
+        Username: username.value,
+        Email: email.value,
+        PhoneNo: phoneNo.value,
+        Bio: bio.value,
+        Password: password.value,
+      },
+    ];
+    console.log("Updated User Data: ", updatedUser);
+    try {
+      const updateResponse = await fetch(
+        `http://localhost:8080/volunteers/${userID}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(updatedUser),
+        }
+      );
+
+      if (!updateResponse.ok) {
+        throw new Error("Failed to update user data");
+      }
+
+      const updatedData = await updateResponse.json();
+      console.log(updatedData);
+      console.log("User updated successfully:", updatedData);
+    } catch (error) {
+      console.error("Error updating user data:", error);
+    }
   });
 });
