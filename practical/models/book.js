@@ -65,6 +65,7 @@ class Book {
       return this.getBookById(id);
     } catch (err) {
       console.log("Error updating book availability", err);
+      throw err;
     }
   }
 }

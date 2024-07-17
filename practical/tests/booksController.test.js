@@ -101,15 +101,59 @@ describe("booksController.getAllBooks", () => {
   });
 });
 
-describe("booksController.updateBook", () => {
-  /*
-    Now that you've seen how to test getAllBooks, it's your turn to apply the same principles to the updateBookAvailability function. Remember, you'll be mocking the Book model and simulating different request/response scenarios.
+const { updateBook } = require("../controllers/booksController"); // Adjust the path to your actual controller
 
-Remember:
+describe("updateBook", () => {
+  let req, res, next;
 
-Use jest.fn() and .mockResolvedValue() or .mockRejectedValue() to set up your mocks.
-Structure your tests using describe and it blocks to organize your test cases.
-Write clear and concise assertions using Jest's expect function.
-Aim for comprehensive test coverage to ensure your controller functions behave as expected in all scenarios.
-    */
+  beforeEach(() => {
+    req = {
+      params: { id: "1" },
+      body: { available: true },
+    };
+
+    res = {
+      status: jest.fn().mockReturnThis(),
+      send: jest.fn(),
+      json: jest.fn(),
+    };
+
+    next = jest.fn();
+  });
+
+  it("should update the book and return the updated book", async () => {
+    const updatedBook = { id: 1, title: "Sample Book", available: true };
+
+    Book.updateBook.mockResolvedValue(updatedBook);
+
+    await updateBook(req, res, next);
+
+    expect(Book.updateBook).toHaveBeenCalledWith(1, req.body);
+    expect(res.json).toHaveBeenCalledWith(updatedBook);
+    expect(res.status).not.toHaveBeenCalledWith(404);
+    expect(res.send).not.toHaveBeenCalledWith("Book not found");
+  });
+
+  it("should return 404 if the book is not found", async () => {
+    Book.updateBook.mockResolvedValue(null);
+
+    await updateBook(req, res, next);
+
+    expect(Book.updateBook).toHaveBeenCalledWith(1, req.body);
+    expect(res.status).toHaveBeenCalledWith(404);
+    expect(res.send).toHaveBeenCalledWith("Book not found");
+  });
+
+  it("should return 500 if an error occurs", async () => {
+    const errorMessage = "Error updating book";
+    Book.updateBook.mockRejectedValue(new Error(errorMessage));
+    jest.spyOn(console, "error").mockImplementation(() => {}); // Mock console.error
+
+    await updateBook(req, res, next);
+
+    expect(Book.updateBook).toHaveBeenCalledWith(1, req.body);
+    expect(res.status).toHaveBeenCalledWith(500);
+    expect(res.send).toHaveBeenCalledWith("Error updating book");
+    expect(console.error).toHaveBeenCalledWith(expect.any(Error));
+  });
 });
