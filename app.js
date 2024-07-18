@@ -19,7 +19,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true })); // For form data handling
 // app.use(staticMiddleware); // Mount the static middleware
 app.use((req, res, next) => {
-  res.setHeader("Access-Control-Allow-Origin", "http://127.0.0.1:5500"); // Replace with your client origin
+  res.setHeader("Access-Control-Allow-Origin", "null"); // Replace with your client origin
   res.setHeader("Access-Control-Allow-Methods", "GET"); // Add other methods if needed
   res.setHeader("Access-Control-Allow-Headers", "Content-Type"); // Add other allowed headers
   next();
@@ -38,6 +38,8 @@ app.get("/organisations/:OrgName", organisationController.getOrgByName);
 //app.put("/organisations/:OrgName", organisationController.updateOrgProfile);
 
 app.get("/listing", listingController.getAllListings);
+app.get("/listing/byOrgId/:orgID", listingController.getListingsByOrgId);
+app.get("/listing/byListingID/:id", listingController.getListingsByListingId)
 
 // Caden's Parts
 app.get("/searchPage", searchPageController.getAllAccounts);

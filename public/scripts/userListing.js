@@ -3,9 +3,9 @@ document.addEventListener("DOMContentLoaded", async () => {
     console.log("Retrieved token:", token);
 
     if (!token) {
-    alert("Please log in to access this page.");
-    window.location.href = "../html/login.html";
-    return;
+        alert("Please log in to access this page.");
+        window.location.href = "../html/login.html";
+        return;
     }
     try {
         // Get all Listings
@@ -35,12 +35,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         if (!organisationResponse.ok) {
             throw new Error(organisations.message || "Failed to load organisations");
         }
-
-        const targetId = 2;
-        const orgName = organisations.find(org => org.id === targetId)?.OrgName ?? null; 
-
-        console.log(orgName); // Output: "Helping Hands"
-
+        
         // Apending data into page
         const listingsContainer = document.querySelector(".userlistings");
         listingsContainer.innerHTML = ""; // Clear existing content
