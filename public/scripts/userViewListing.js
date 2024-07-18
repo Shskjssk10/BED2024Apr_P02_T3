@@ -15,7 +15,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             "Content-Type": "application/json",
             },
         });
-        console.log("Response status:", listingsResponse.status);
+        console.log("Response status on LISTING:", listingsResponse.status);
         const temp = await listingsResponse.json();
         console.log("Listings received:", temp);
         if (!listingsResponse.ok) {
@@ -30,9 +30,9 @@ document.addEventListener("DOMContentLoaded", async () => {
             "Content-Type": "application/json",
             },
         });
-        console.log("Response status:", organisationResponse.status);
+        console.log("Response status on ORGANISATION:", organisationResponse.status);
         const organisation = await organisationResponse.json();
-        console.log("Listings received:", organisation);
+        console.log("Organisation received:", organisation);
         if (!organisationResponse.ok) {
             throw new Error(organisation.message || "Failed to load listing");
         }
@@ -40,10 +40,6 @@ document.addEventListener("DOMContentLoaded", async () => {
         const listingHeader = document.querySelector(".listing-header");
         const descriptionContainer = document.querySelector(".main-content");
         const sideBarContainer = document.querySelector(".sidebar");
-
-        console.log(listing.ListingName);
-        console.log(organisation);
-        console.log(organisation.orgName);
 
         listingHeader.innerHTML = `
             <h1>${listing.ListingName}</h1>
