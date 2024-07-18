@@ -68,6 +68,19 @@ const getListingsByOrgId = async (req, res) => {
     res.status(500).send("Error retrieving listings");
   }
 };
+const getListingsByListingId = async (req, res) => {
+  const id = req.params.id;
+  try {
+    const listing = await Listing.getListingsByListingId(id);
+    if (!listing) {
+      return res.status(404).send("There is no such listing");
+    }
+    res.json(listing);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Error retrieving listing");
+  }
+};
 const postListing = async (req, res) => {
   const listingDetails = req.body;
   try {
@@ -105,4 +118,5 @@ module.exports = {
   getListingsByOrgId,
   postListing,
   updateListing,
+  getListingsByListingId
 };
