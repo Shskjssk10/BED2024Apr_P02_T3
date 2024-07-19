@@ -150,13 +150,14 @@ const googleSignupOrganisationController = async (req, res) => {
       apt_floor_unit,
       website,
     });
-    res.status(201).json({ message: "Organisation created successfully", email });
+    res
+      .status(201)
+      .json({ message: "Organisation created successfully", email });
   } catch (error) {
     console.error("Error during Google organisation sign-up:", error);
     res.status(500).json({ message: "Internal server error" });
   }
 };
-
 
 module.exports = {
   authAccount,
