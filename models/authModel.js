@@ -135,8 +135,7 @@ const createOrganisation = async (req, res) => {
     address,
     apt_floor_unit,
     website,
-  } = req.body;
-
+  } = orgData;
   const { salt, hashedPassword } = await hashPassword(password);
   const username = org_name; // Set username to org_name
 
@@ -156,23 +155,21 @@ const createOrganisation = async (req, res) => {
     const accountResult = await request.query(accountSqlQuery);
     const accId = accountResult.recordset[0].AccID;
 
-    const organisationReq = connection.request(); // Correct variable name
-    organisationReq.input("accId", sql.SmallInt, accId);
-    organisationReq.input("orgName", sql.VarChar, org_name);
-    organisationReq.input("issueArea", sql.VarChar, issue_area);
-    organisationReq.input("mission", sql.VarChar, mission);
-    organisationReq.input("description", sql.Text, description);
-    organisationReq.input("address", sql.VarChar, address);
-    organisationReq.input("aptFloorUnit", sql.VarChar, apt_floor_unit);
-    organisationReq.input("website", sql.VarChar, website);
-    organisationReq.input("salt", sql.VarChar, salt);
-    organisationReq.input("hashedPassword", sql.VarChar, hashedPassword); // Use hashed password
-
-    const organisationSqlQuery = `
-      INSERT INTO Organisation (AccID, OrgName, IssueArea, Mission, Descr, Addr, AptFloorUnit, Website, Salt, HashedPassword)
-      VALUES (@accId, @orgName, @issueArea, @mission, @description, @address, @aptFloorUnit, @website, @salt, @hashedPassword)
-    `;
-    await organisationReq.query(organisationSqlQuery);
+    await pool
+      .request()
+      .input("accId", sql.SmallInt, accId)
+      .input("orgName", sql.VarChar, org_name)
+      .input("issueArea", sql.VarChar, issue_area)
+      .input("mission", sql.VarChar, mission)
+      .input("description", sql.Text, description)
+      .input("address", sql.VarChar, address)
+      .input("aptFloorUnit", sql.VarChar, apt_floor_unit)
+      .input("website", sql.VarChar, website)
+      .input("salt", sql.VarChar, salt)
+      .input("hashedPassword", sql.VarChar, hashedPassword).query(`
+        INSERT INTO Organisation (AccID, OrgName, IssueArea, Mission, Descr, Addr, AptFloorUnit, Salt, HashedPassword)
+        VALUES (@accId, @orgName, @issueArea, @mission, @description, @address, @aptFloorUnit, @website, @salt, @hashedPassword)
+      `);
 
     console.log(`Organisation created with email ${email}`);
     res
