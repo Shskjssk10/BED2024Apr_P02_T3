@@ -1,5 +1,6 @@
 // book.test.js
 const Book = require("../models/book");
+const dbConfig = require("../dbConfig");
 const sql = require("mssql");
 
 jest.mock("mssql"); // Mock the mssql library
@@ -96,43 +97,4 @@ describe("Book.getAllBooks", () => {
     sql.connect.mockRejectedValue(new Error(errorMessage));
     await expect(Book.getAllBooks()).rejects.toThrow(errorMessage);
   });
-});
-
-// book.test.js (continue in the same file)
-
-// Write Test Cases: Implement the following test cases within the describe block:
-
-// Test Case 1: Successful Update:
-// Set up mock data for the book to update and the updated availability status.
-// Mock the database connection, request, and query to simulate a successful update.
-// Call updateBookAvailability and verify that:
-// The correct SQL query and parameters were passed.
-// The updated book object is returned.
-// Test Case 2: Book Not Found:
-// Mock the database interactions to simulate a scenario where the book with the given ID doesn't exist.
-// Call updateBookAvailability and verify that it returns null.
-// Test Case 3: Database Error:
-// Mock the database interactions to throw an error.
-// Call updateBookAvailability and verify that it throws the appropriate error.
-// Remember:
-
-// Use beforeEach to reset your mocks before each test case to keep your tests independent.
-// Leverage Jest's assertion methods (e.g., expect, toBe, toHaveBeenCalledWith, etc.) to verify the expected behavior.
-// Aim for comprehensive test coverage to build confidence in the reliability of your model's functionality.
-describe("Book.updateBookAvailability", () => {
-  // ... mock mssql and other necessary components
-
-  it("should update the availability of a book", async () => {
-    // ... arrange: set up mock book data and mock database interaction
-    // ... act: call updateBookAvailability with the test data
-    // ... assert: check if the database was updated correctly and the updated book is returned
-  });
-
-  it("should return null if book with the given id does not exist", async () => {
-    // ... arrange: set up mocks for a non-existent book id
-    // ... act: call updateBookAvailability
-    // ... assert: expect the function to return null
-  });
-
-  // Add more tests for error scenarios (e.g., database error)
 });

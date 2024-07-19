@@ -75,6 +75,7 @@ class Organisation {
       ? new Organisation(
           result.recordset[0].AccID,
           result.recordset[0].OrgName,
+          result.recordset[0].Website,
           result.recordset[0].IssueArea,
           result.recordset[0].Mission,
           result.recordset[0].Descr,

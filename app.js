@@ -108,6 +108,7 @@ app.use((req, res, next) => {
 
 app.get("/volunteers", volunteerController.getAllVolunteers); //get all user
 app.get("/volunteers/:id", volunteerController.getVolunteerById); // Get user by ID
+app.get("/volunteers/:username", volunteerController.getVolunteerByUsername);
 app.put("/volunteers/:id", volunteerController.updateVolunteerProfile);
 
 app.get("/organisations", organisationController.getAllOrganisations); //get all organisation

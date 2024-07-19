@@ -130,3 +130,6 @@ dist
 .pnp.*
 models/notes.js
 models/test.js
+
+# Google Bucket Key
+.shskjssk10.json
