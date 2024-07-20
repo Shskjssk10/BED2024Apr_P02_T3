@@ -4,8 +4,7 @@ document.addEventListener("DOMContentLoaded", async function () {
   //need to read the user cant use data[0]
   //using data[0] now just to display
 
-  // const userID = parseInt(localStorage.getItem("userID"));
-  const userID = 2;
+  const userID = parseInt(localStorage.getItem("userID"));
   //console.log(userID);
   const response = await fetch(`http://localhost:8080/organisations/${userID}`);
   const data = await response.json();

@@ -25,4 +25,6 @@ document.addEventListener("DOMContentLoaded", () => {
       window.location.href = "login.html";
     });
   }
+
+  const profileLink = document.getElementById("profile-link");
 });
