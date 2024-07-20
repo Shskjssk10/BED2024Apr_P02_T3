@@ -57,6 +57,7 @@ app.post("/userFeedPage", userFeedPageController.postComment);
 // app.get("/userProfile/:id", postController.getAllPostsByAccID)
 // app.get("/userProfile/:id", volunteerController.getAllFollowersAndFollowing)
 app.get("/volunteerProfile/:id", userProfileController.getAccountInfo);
+app.get("/organisationProfile/:id", userProfileController.getOrganisationInfo);
 
 
 app.listen(port, async () => {
