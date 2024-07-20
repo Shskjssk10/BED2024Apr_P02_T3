@@ -214,8 +214,8 @@ class Volunteer {
     connection.close();
     return [
       {
-        "No of Followers": result.recordset[0]["No of Followers"],
-        "No of Following": result.recordset[0]["No of Following"],
+        "Followers": result.recordset[0]["No of Followers"],
+        "Following": result.recordset[0]["No of Following"],
       },
     ];
   }
