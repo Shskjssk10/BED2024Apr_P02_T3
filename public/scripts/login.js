@@ -19,6 +19,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const result = await response.json();
       console.log("Login result:", result);
       const userID = localStorage.setItem("userID", result.id);
+      const token = localStorage.setItem("authToken", result.token);
 
       if (response.ok) {
         document.cookie = `authToken=${result.token}; path=/;`;

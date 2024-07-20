@@ -2,7 +2,7 @@ document.addEventListener("DOMContentLoaded", async function () {
   console.log("DOM loaded");
   var searchField = document.getElementById("inputBox");
   const token = localStorage.getItem("authToken");
-  //console.log(token);
+  console.log(token);
 
   //can try to implement for org later
   //this gets all the volunteer data
@@ -165,5 +165,12 @@ document.addEventListener("DOMContentLoaded", async function () {
     }
   }
 
-  const socket = io("http://localhost:8080");
+  const socket = io("http://localhost:3000");
+  socket.on("connect", () => {
+    console.log(`You connected with ${socket.id}`);
+  });
+
+  socket.emit("message", () => {
+    sendMessage();
+  });
 });
