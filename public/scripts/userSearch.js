@@ -22,6 +22,20 @@ document.addEventListener("DOMContentLoaded", async () => {
       throw new Error(account.message || "Failed to load Account");
     }
 
+    // // Get Account Based on query
+    // const filteredQueryResponse = await fetch("http://localhost:8080/searchPage/:username", {
+    //   method: "GET",
+    //   headers: {
+    //   "Content-Type": "application/json",
+    //   },
+    // });
+    // console.log("Response status:", filteredQueryResponse.status);
+    // const searchedAccount = await filteredQueryResponse.json();
+    // console.log(" Searrched Account received:", searchedAccount);
+    // if (!filteredQueryResponse.ok) {
+    //   throw new Error(searchedAccount.message || "Failed to load Searched Account");
+    // }
+
     // Getting All Follower Relations
     const followerRelationsResponse = await fetch(`http://localhost:8080/searchPage/allFollower`, {
       method: "GET",
@@ -40,14 +54,17 @@ document.addEventListener("DOMContentLoaded", async () => {
     const userListSection = document.querySelector(".user-list");
     userListSection.innerHTML = "";
 
+    // '6' will be the current logged in user AccID
+    const currentAccountID = 6;
+
     // Filters all accounts User has followed or is followed by 
     const listOfFollowedBy = []; // Accounts that follow the User
     const listOfFollowing = []; // Accounts that the user followed
         for (const relation of allFollowerRelations){
-      if (relation.Follower === 6){
+      if (relation.Follower === currentAccountID){
         listOfFollowedBy.push(relation.FollowedBy);
       }
-      else if (relation.FollowedBy === 6){
+      else if (relation.FollowedBy === currentAccountID){
         listOfFollowing.push(relation.Follower);
       }
     }
@@ -59,10 +76,9 @@ document.addEventListener("DOMContentLoaded", async () => {
     for (const user of account){
       const userProfileContainer = document.createElement("a");
       userProfileContainer.classList.add("no-underline");
-      // '6' will be the current logged in user AccID
 
       //True if the user is a volunteer
-      if (user.OrgName === undefined && user.AccID !== 6 ){
+      if (user.OrgName === undefined && user.AccID !== currentAccountID ){
         if (listOfFollowing.includes(user.AccID)){
           userProfileContainer.innerHTML = `
             <div class="user">
@@ -100,7 +116,7 @@ document.addEventListener("DOMContentLoaded", async () => {
           `;
         }
       // True if the user is an organisation
-      } else if (user.AccID !== 6){
+      } else if (user.AccID !== currentAccountID){
         if (listOfFollowing.includes(user.AccID)){
           userProfileContainer.innerHTML = `
             <div class="user">
@@ -119,7 +135,7 @@ document.addEventListener("DOMContentLoaded", async () => {
               <img src="path/to/shskjsk10-profile.jpg" alt="${user.OrgName} profile picture" />
               <div class="user-details">
                 <span class="username">${user.OrgName}</span>
-                <span class="fullname">${user.Website}}</span>
+                <span class="fullname">${user.Website}</span>
               </div>
               <button class="follow-btn" id="${user.AccID}">Follow Back</button>
             </div>
@@ -131,7 +147,7 @@ document.addEventListener("DOMContentLoaded", async () => {
               <img src="path/to/shskjsk10-profile.jpg" alt="${user.OrgName} profile picture" />
               <div class="user-details">
                 <span class="username">${user.OrgName}</span>
-                <span class="fullname">${user.Website}}</span>
+                <span class="fullname">${user.Website}</span>
               </div>
               <button class="follow-btn" id="${user.AccID}">Follow</button>
             </div>
@@ -141,6 +157,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       userListSection.appendChild(userProfileContainer);
     }
     
+    // Code for unfollowing and following
     allFollowButtons = document.querySelectorAll(".follow-btn");
     console.log("🚀 ~ allFollowButtons:", allFollowButtons)
     allFollowButtons.forEach((button) => {
@@ -150,7 +167,7 @@ document.addEventListener("DOMContentLoaded", async () => {
           try {
             const postFollow = {
               "follower" : follower,
-              "followedBy" : 6
+              "followedBy" : currentAccountID
             }
             console.log(postFollow);
             const postFollowResponse = await fetch(
@@ -179,7 +196,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         else {
           const deleteFollow = {
             "follower" : follower,
-            "followedBy" : 6
+            "followedBy" : currentAccountID
           }
           console.log(deleteFollow);
           const deleteFollowResponse = await fetch(
@@ -211,6 +228,13 @@ document.addEventListener("DOMContentLoaded", async () => {
           console.log("Follow deleted successfully:", updatedData);
         }
       });
+    });
+
+    //Code for searching account
+    const searchBar = document.querySelector('.search-bar');
+
+    searchBar.addEventListener('input', function(event) {
+      
     });
   } catch (error) {
     console.error("Error deleting follow:", error);

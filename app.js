@@ -96,6 +96,7 @@ const likesController = require("./controllers/likesController");
 const searchPageController = require("./controllers/userSearchPageController");
 const userFeedPageController = require("./controllers/userFeedPageController");
 const userProfileController = require("./controllers/userProfileController");
+const followController = require("./controllers/followController")
 
 const sql = require("mssql");
 
@@ -125,11 +126,9 @@ app.get("/listing/byListingID/:id", listingController.getListingsByListingId);
 // Caden's Parts
 app.get("/searchPage/allFollower/:id", searchPageController.getFollowersByID);
 app.get("/searchPage/allFollower", searchPageController.getAllFollowerRelations);
-app.post("/searchPage/postFollow", volunteerController.postFollow);
-app.delete("/searchPage/deleteFollow", volunteerController.deleteFollow)
+app.post("/searchPage/postFollow", followController.postFollow);
+app.delete("/searchPage/deleteFollow", followController.deleteFollow);
 app.get("/searchPage", searchPageController.getAllAccounts);
-app.post("/searchPage", volunteerController.postFollow);
-app.delete("/searchPage", volunteerController.deleteFollow);
 app.get("/searchPage/:username", searchPageController.getAccountByUsername);
 
 // Likes' end points
