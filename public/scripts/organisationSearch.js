@@ -18,21 +18,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     console.log("Response status:", accountResponse.status);
     const account = await accountResponse.json();
     console.log("Account received:", account);
-
-    // Getting Search Query
-    const searchResponse = await fetch("http://localhost:8080/searchPage", {
-      method: "GET",
-      headers: {
-      "Content-Type": "application/json",
-      },
-    });
-    console.log("Response status:", searchResponse.status);
-    const searchedAccount = await searchResponse.json();
-    console.log("Account received:", searchedAccount);
-
-    if (!searchResponse.ok) {
-      throw new Error(searchedAccount.message || "Failed to load Searched Account");
-    }
+    
     const userListSection = document.querySelector(".user-list");
     userListSection.innerHTML = "";
 

@@ -123,6 +123,7 @@ app.get("/listing/byOrgId/:orgID", listingController.getListingsByOrgId);
 app.get("/listing/byListingID/:id", listingController.getListingsByListingId)
 
 // Caden's Parts
+app.get("/searchPage/allFollower/:id", searchPageController.getFollowersByID)
 app.get("/searchPage/allFollower", searchPageController.getAllFollowerRelations)
 app.get("/searchPage", searchPageController.getAllAccounts);
 app.post("/searchPage", volunteerController.postFollow);
