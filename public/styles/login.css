@@ -45,3 +45,10 @@ html {
 .signUpLink {
   color: black !important;
 }
+
+.btn.btn-danger {
+  background-color: #d4a373;
+  color: white;
+  border-color: #d4a373;
+  width: 100%;
+}

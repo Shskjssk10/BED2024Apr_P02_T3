@@ -1,6 +1,4 @@
 document.addEventListener("DOMContentLoaded", () => {
-  localStorage.removeItem("authToken");
-
   document.querySelector("form").addEventListener("submit", async (event) => {
     event.preventDefault();
 
@@ -21,10 +19,11 @@ document.addEventListener("DOMContentLoaded", () => {
       const result = await response.json();
       console.log("Login result:", result);
       const userID = localStorage.setItem("userID", result.id);
+      const token = localStorage.setItem("authToken", result.token);
 
       if (response.ok) {
+        document.cookie = `authToken=${result.token}; path=/;`;
         alert("Login successful");
-        localStorage.setItem("authToken", result.token);
         window.location.href = "../html/index.html";
       } else {
         alert("Login failed: " + result.message);

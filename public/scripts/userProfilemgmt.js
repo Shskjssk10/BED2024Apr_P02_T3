@@ -31,11 +31,11 @@ document.addEventListener("DOMContentLoaded", async function () {
   var username = document.getElementById("form-username");
   username.value = data.Username;
 
-  var email = document.getElementById("email");
-  email.value = data.Email;
-
   var phoneNo = document.getElementById("phonenum");
   phoneNo.value = data.PhoneNo;
+
+  var email = document.getElementById("email");
+  email.value = data.Email;
 
   var bio = document.getElementById("bio");
   bio.value = data.Bio;
