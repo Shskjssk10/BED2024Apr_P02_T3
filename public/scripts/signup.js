@@ -9,6 +9,7 @@ document
       email: document.getElementById("volunteerEmail").value,
       phone_number: document.getElementById("volunteerPhoneNumber").value,
       gender: document.getElementById("volunteerGender").value,
+      bio: document.getElementById("volunteerBio").value,
       password: document.getElementById("volunteerPassword").value,
     };
 
@@ -45,6 +46,7 @@ document
       description: document.getElementById("orgDescription").value,
       address: document.getElementById("orgAddress").value,
       apt_floor_unit: document.getElementById("orgAddress2").value,
+      website: document.getElementById("orgWebsite").value,
     };
 
     try {
