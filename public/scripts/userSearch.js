@@ -27,7 +27,8 @@ document.addEventListener("DOMContentLoaded", async () => {
   for (const user of account){
     const userProfileContainer = document.createElement("a");
     userProfileContainer.classList.add("no-underline");
-    if (user.OrgName === undefined) {
+    // '0' will be the current logged in user AccID
+    if (user.OrgName === undefined && user.AccID !== 0) {
       userProfileContainer.innerHTML = `
       <div class="user">
         <img src="path/to/shskjsk10-profile.jpg" alt="${user.Username} profile picture" />
@@ -38,7 +39,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         <button class="follow-btn">Follow</button>
       </div>
     `;
-    } else {
+    } else if (user.AccID !== user.AccID !== 0){
       userProfileContainer.innerHTML = `
       <div class="user">
         <img src="path/to/shskjsk10-profile.jpg" alt="${user.Username} profile picture" />
