@@ -1,16 +1,17 @@
-// book.test.js
+// booksController.test.js
+
+const booksController = require("../controllers/booksController");
 const Book = require("../models/book");
-const dbConfig = require("../dbConfig");
-const sql = require("mssql");
 
-jest.mock("mssql"); // Mock the mssql library
+// Mock the Book model
+jest.mock("../models/book"); // Replace with the actual path to your Book model
 
-describe("Book.getAllBooks", () => {
+describe("booksController.getAllBooks", () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    jest.clearAllMocks(); // Clear mock calls before each test
   });
 
-  it("should retrieve all books from the database", async () => {
+  it("should fetch all books and return a JSON response", async () => {
     const mockBooks = [
       {
         book_id: 1,
@@ -69,32 +70,94 @@ describe("Book.getAllBooks", () => {
       },
     ];
 
-    const mockRequest = {
-      query: jest.fn().mockResolvedValue({ recordset: mockBooks }),
+    // Mock the Book.getAllBooks function to return the mock data
+    Book.getAllBooks.mockResolvedValue(mockBooks);
+
+    const req = {};
+    const res = {
+      json: jest.fn(), // Mock the res.json function
     };
-    const mockConnection = {
-      request: jest.fn().mockReturnValue(mockRequest),
-      close: jest.fn().mockResolvedValue(undefined),
-    };
 
-    sql.connect.mockResolvedValue(mockConnection); // Return the mock connection
+    await booksController.getAllBooks(req, res);
 
-    const books = await Book.getAllBooks();
-
-    expect(sql.connect).toHaveBeenCalledWith(expect.any(Object));
-    expect(mockConnection.close).toHaveBeenCalledTimes(1);
-    expect(books).toHaveLength(10);
-    expect(books[0]).toBeInstanceOf(Book);
-    expect(books[0].book_id).toBe(1);
-    expect(books[0].title).toBe("To Kill a Mockingbird");
-    expect(books[0].author).toBe("Harper Lee");
-    expect(books[0].availability).toBe("Y");
-    // ... Add assertions for the second book
+    expect(Book.getAllBooks).toHaveBeenCalledTimes(1); // Check if getAllBooks was called
+    expect(res.json).toHaveBeenCalledWith(mockBooks); // Check the response body
   });
 
-  it("should handle errors when retrieving books", async () => {
-    const errorMessage = "Database Error";
-    sql.connect.mockRejectedValue(new Error(errorMessage));
-    await expect(Book.getAllBooks()).rejects.toThrow(errorMessage);
+  it("should handle errors and return a 500 status with error message", async () => {
+    const errorMessage = "Database error";
+    Book.getAllBooks.mockRejectedValue(new Error(errorMessage)); // Simulate an error
+
+    const req = {};
+    const res = {
+      status: jest.fn().mockReturnThis(),
+      send: jest.fn(),
+    };
+
+    await booksController.getAllBooks(req, res);
+
+    expect(res.status).toHaveBeenCalledWith(500);
+    expect(res.send).toHaveBeenCalledWith("Error retrieving books");
+  });
+});
+
+describe("booksController.updateBook", () => {
+  let req, res, next;
+
+  beforeEach(() => {
+    req = {
+      params: { id: "1" },
+      body: { availability: "Y" },
+    };
+
+    res = {
+      status: jest.fn().mockReturnThis(),
+      send: jest.fn(),
+      json: jest.fn(),
+    };
+
+    next = jest.fn();
+    jest.clearAllMocks(); // Clear mock calls before each test
+  });
+
+  it("should update the book and return the updated book", async () => {
+    const updatedBook = {
+      book_id: 1,
+      title: "Sample Book",
+      author: "Sample Author",
+      availability: "Y",
+    };
+
+    Book.updateBook.mockResolvedValue(updatedBook);
+
+    await booksController.updateBook(req, res, next);
+
+    expect(Book.updateBook).toHaveBeenCalledWith(1, { availability: "Y" });
+    expect(res.json).toHaveBeenCalledWith(updatedBook);
+    expect(res.status).not.toHaveBeenCalledWith(404);
+    expect(res.send).not.toHaveBeenCalledWith("Book not found");
+  });
+
+  it("should return 404 if the book is not found", async () => {
+    Book.updateBook.mockResolvedValue(null);
+
+    await booksController.updateBook(req, res, next);
+
+    expect(Book.updateBook).toHaveBeenCalledWith(1, { availability: "Y" });
+    expect(res.status).toHaveBeenCalledWith(404);
+    expect(res.send).toHaveBeenCalledWith("Book not found");
+  });
+
+  it("should return 500 if an error occurs", async () => {
+    const errorMessage = "Error updating book";
+    Book.updateBook.mockRejectedValue(new Error(errorMessage));
+    jest.spyOn(console, "error").mockImplementation(() => {}); // Mock console.error
+
+    await booksController.updateBook(req, res, next);
+
+    expect(Book.updateBook).toHaveBeenCalledWith(1, { availability: "Y" });
+    expect(res.status).toHaveBeenCalledWith(500);
+    expect(res.send).toHaveBeenCalledWith("Error updating book");
+    expect(console.error).toHaveBeenCalledWith(expect.any(Error));
   });
 });
