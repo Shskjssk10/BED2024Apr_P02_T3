@@ -100,7 +100,7 @@ const userProfileController = require("./controllers/userProfileController");
 const sql = require("mssql");
 
 app.use((req, res, next) => {
-  res.setHeader("Access-Control-Allow-Origin", "http://127.0.0.1:3000"); // Replace with your client origin
+  res.setHeader("Access-Control-Allow-Origin", "null"); // Replace with your client origin
   res.setHeader("Access-Control-Allow-Methods", "GET"); // Add other methods if needed
   res.setHeader("Access-Control-Allow-Headers", "Content-Type"); // Add other allowed headers
   next();
@@ -118,6 +118,10 @@ app.put("/organisations/:id", organisationController.updateOrgProfile);
 app.get("/organisations/:OrgName", organisationController.getOrgByName);
 //app.put("/organisations/:OrgName", organisationController.updateOrgProfile);
 
+app.get("/listing", listingController.getAllListings);
+app.get("/listing/byOrgId/:orgID", listingController.getListingsByOrgId);
+app.get("/listing/byListingID/:id", listingController.getListingsByListingId)
+
 // Caden's Parts
 app.get("/searchPage", searchPageController.getAllAccounts);
 app.post("/searchPage", volunteerController.postFollow);
@@ -133,7 +137,9 @@ app.post("/userFeedPage", userFeedPageController.postComment);
 
 // app.get("/userProfile/:id", postController.getAllPostsByAccID)
 // app.get("/userProfile/:id", volunteerController.getAllFollowersAndFollowing)
-app.get("/userProfile/:id", userProfileController.getAccountInfo);
+app.get("/volunteerProfile/:id", userProfileController.getAccountInfo);
+app.get("/organisationProfile/:id", userProfileController.getOrganisationInfo);
+
 
 app.listen(port, async () => {
   try {
