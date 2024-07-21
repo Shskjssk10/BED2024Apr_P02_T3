@@ -3,7 +3,7 @@ const dbConfig = require("../dbConfig");
 
 class Organisation {
   constructor(
-    id,
+    AccID,
     OrgName,
     Website,
     IssueArea,
@@ -15,7 +15,7 @@ class Organisation {
     Email,
     Password
   ) {
-    this.id = id;
+    this.AccID = AccID;
     this.OrgName = OrgName;
     this.Website = Website;
     this.IssueArea = IssueArea;

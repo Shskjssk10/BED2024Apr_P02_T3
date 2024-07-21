@@ -120,11 +120,13 @@ app.get("/organisations/:OrgName", organisationController.getOrgByName);
 
 app.get("/listing", listingController.getAllListings);
 app.get("/listing/byOrgId/:orgID", listingController.getListingsByOrgId);
-app.get("/listing/byListingID/:id", listingController.getListingsByListingId)
+app.get("/listing/byListingID/:id", listingController.getListingsByListingId);
 
 // Caden's Parts
-app.get("/searchPage/allFollower/:id", searchPageController.getFollowersByID)
-app.get("/searchPage/allFollower", searchPageController.getAllFollowerRelations)
+app.get("/searchPage/allFollower/:id", searchPageController.getFollowersByID);
+app.get("/searchPage/allFollower", searchPageController.getAllFollowerRelations);
+app.post("/searchPage/postFollow", volunteerController.postFollow);
+app.delete("/searchPage/deleteFollow", volunteerController.deleteFollow)
 app.get("/searchPage", searchPageController.getAllAccounts);
 app.post("/searchPage", volunteerController.postFollow);
 app.delete("/searchPage", volunteerController.deleteFollow);
