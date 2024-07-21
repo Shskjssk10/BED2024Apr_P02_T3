@@ -74,8 +74,8 @@ class Volunteer {
           result.recordset[0].Username,
           result.recordset[0].Gender,
           result.recordset[0].Bio,
-          result.recordset[0].PhoneNo,
           result.recordset[0].Email,
+          result.recordset[0].PhoneNo,
           result.recordset[0].Password
         )
       : null; // Handle volunteer not found

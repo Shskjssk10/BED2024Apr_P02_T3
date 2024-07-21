@@ -1,84 +1,89 @@
 body {
   font-family: Arial, sans-serif;
-  background-color: #fff8e7;
   margin: 0;
   padding: 0;
+  background-color: #fff8e7;
+}
+
+header,
+footer {
+  background-color: #296154;
+  color: #ffffff;
+  padding: 10px 0;
+  text-align: center;
 }
 
 .search-container {
+  max-width: 600px;
+  margin: 0 auto;
   padding: 20px;
 }
 
-h2 {
-  color: #000;
+.search-container h2 {
+  color: #296154;
+  font-size: 24px;
+  margin-bottom: 20px;
 }
 
-.search-bar {
-  display: flex;
-  margin-bottom: 10px;
+.search-container .search-bar {
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+  margin-bottom: 20px;
+  border: 1px solid #cccccc;
+  border-radius: 5px;
 }
 
-.search-bar input {
-  flex: 1;
-  padding: 8px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  margin-right: 10px;
-}
-
-.search-bar button {
-  padding: 8px;
-  border: none;
-  background-color: #ccc;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-.user-list {
+.search-container .user-list {
   display: flex;
   flex-direction: column;
 }
 
-.user-item {
+.search-container .user {
   display: flex;
   align-items: center;
   padding: 10px;
-  border-bottom: 1px solid #ccc;
+  border-radius: 5px;
+  margin-bottom: 10px;
+  background-color: #fff8e7;
 }
 
-.profile-pic {
-  width: 40px;
-  height: 40px;
+.search-container .user img {
   border-radius: 50%;
-  margin-right: 10px;
+  width: 50px;
+  height: 50px;
+  margin-right: 20px;
 }
 
-.user-info {
-  flex: 1;
+.search-container .user-details {
+  flex-grow: 1;
 }
 
-.username {
+.search-container .username {
   font-weight: bold;
+  display: block;
 }
 
-.verified-icon {
-  color: blue;
+.search-container .fullname {
+  color: #777777;
 }
 
-.name {
-  color: #666;
-}
-
-.follow-button {
-  padding: 5px 10px;
-  background-color: #d5a27c;
+.search-container .follow-btn {
+  padding: 8px 15px;
+  background-color: #d8a46f;
+  color: #ffffff;
   border: none;
-  border-radius: 4px;
+  border-radius: 5px;
   cursor: pointer;
-  color: white;
-  transition: background-color 0.3s ease;
+  font-size: 14px;
 }
 
-.follow-button:hover {
-  background-color: #c4956d;
+.search-container .follow-btn:hover {
+  background-color: #bf7e3e;
+}
+
+.no-underline {
+  text-decoration: none;
+  color: inherit;
+  display: block;
 }
