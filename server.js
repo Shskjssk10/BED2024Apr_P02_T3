@@ -6,4 +6,7 @@ const io = require("socket.io")(3000, {
 
 io.on("connection", (socket) => {
   console.log("you are", socket.id);
+  socket.on("message", (string) => {
+    console.log("message", string);
+  });
 });
