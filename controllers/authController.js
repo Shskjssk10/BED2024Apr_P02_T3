@@ -101,6 +101,41 @@ const checkGoogleAccount = async (req, res) => {
 };
 
 const googleSignupVolunteerController = async (req, res) => {
+  try {
+    const volunteerData = req.body;
+    volunteerData.email = req.body.email || req.query.email; // Ensure email is included from the URL or body
+    console.log("Starting volunteer sign-up with Google");
+    console.log("Request body:", volunteerData);
+
+    const result = await googleSignupVolunteer(volunteerData);
+    res.status(201).json({ message: "Volunteer created successfully", email: result.email });
+  } catch (error) {
+    console.error("Error during Google volunteer sign-up:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+const googleSignupOrganisationController = async (req, res) => {
+  try {
+    const organisationData = req.body;
+    console.log("Starting organisation sign-up with Google");
+    console.log("Request body:", organisationData);
+
+    const result = await googleSignupOrganisation(organisationData);
+    res.status(201).json({ message: "Organisation created successfully", email: result.email });
+  } catch (error) {
+    console.error("Error during Google organisation sign-up:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+module.exports = {
+  googleSignupVolunteerController,
+  googleSignupOrganisationController,
+};
+
+
+/*const googleSignupVolunteerController = async (req, res) => {
   const { fname, lname, username, phone_number, gender, bio } = req.body;
   const email = req.query.email; // Get email from URL parameters
   console.log("Starting volunteer sign-up with Google");
@@ -134,7 +169,7 @@ const googleSignupOrganisationController = async (req, res) => {
     apt_floor_unit,
     website,
   } = req.body;
-  const email = req.query.email; // Get email from URL parameters
+  const email = req.body.email; // Get email from body
   console.log("Starting organisation sign-up with Google");
   console.log("Request body:", req.body);
 
@@ -157,7 +192,9 @@ const googleSignupOrganisationController = async (req, res) => {
     console.error("Error during Google organisation sign-up:", error);
     res.status(500).json({ message: "Internal server error" });
   }
-};
+}; */
+
+
 
 module.exports = {
   authAccount,

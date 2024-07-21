@@ -185,6 +185,119 @@ const createOrganisation = async (req, res) => {
 };
 
 const googleSignupVolunteer = async (volunteerData) => {
+  const {
+    fname,
+    lname,
+    username,
+    email, // Ensure email is included here
+    phone_number,
+    gender,
+    bio
+  } = volunteerData;
+  const password = null; // Password is null for Google sign-up
+  const salt = null; // No salt needed as no password
+  const hashedPassword = null; // No hashed password needed
+
+  try {
+    const connection = await sql.connect(dbConfig);
+    const request = connection.request();
+    request.input("username", sql.VarChar, username);
+    request.input("phoneNo", sql.VarChar, phone_number);
+    request.input("email", sql.VarChar, email); // Include email here
+    request.input("password", sql.VarChar, password);
+
+    const accountSqlQuery = `
+      INSERT INTO Account (Username, PhoneNo, Email, Password)
+      VALUES (@username, @phoneNo, @Email, @Password);
+      SELECT SCOPE_IDENTITY() AS AccID;
+    `;
+    const accountResult = await request.query(accountSqlQuery);
+    const accId = accountResult.recordset[0].AccID;
+
+    const volunteerReq = connection.request();
+    volunteerReq.input("accId", sql.SmallInt, accId);
+    volunteerReq.input("fname", sql.VarChar, fname);
+    volunteerReq.input("lname", sql.VarChar, lname);
+    volunteerReq.input("username", sql.VarChar, username);
+    volunteerReq.input("gender", sql.VarChar, gender);
+    volunteerReq.input("bio", sql.VarChar, bio);
+    volunteerReq.input("salt", sql.VarChar, salt);
+    volunteerReq.input("hashedPassword", sql.VarChar, hashedPassword);
+
+    const volunteerSqlQuery = `
+      INSERT INTO Volunteer (AccID, FName, LName, Username, Gender, Bio, Salt, HashedPassword)
+      VALUES (@accId, @fname, @lname, @username, @gender, @bio, @salt, @hashedPassword)
+    `;
+    await volunteerReq.query(volunteerSqlQuery);
+
+    console.log(`Volunteer created with email ${email}`);
+    return { email };
+  } catch (error) {
+    console.error("Error creating volunteer:", error);
+    throw error;
+  }
+};
+
+const googleSignupOrganisation = async (orgData) => {
+  const {
+    org_name,
+    email,
+    phone_number,
+    issue_area,
+    mission,
+    description,
+    address,
+    apt_floor_unit,
+    website
+  } = orgData;
+  const password = null; // Password is null for Google sign-up
+  const salt = null; // No salt needed as no password
+  const hashedPassword = null; // No hashed password needed
+  const username = org_name; // Use org_name as username
+
+  try {
+    const connection = await sql.connect(dbConfig);
+    const request = connection.request();
+    request.input("username", sql.VarChar, username);
+    request.input("phoneNo", sql.VarChar, phone_number);
+    request.input("email", sql.VarChar, email);
+    request.input("password", sql.VarChar, password);
+
+    const accountSqlQuery = `
+      INSERT INTO Account (Username, PhoneNo, Email, Password)
+      VALUES (@username, @phoneNo, @Email, @Password);
+      SELECT SCOPE_IDENTITY() AS AccID;
+    `;
+    const accountResult = await request.query(accountSqlQuery);
+    const accId = accountResult.recordset[0].AccID;
+
+    const organisationReq = connection.request();
+    organisationReq.input("accId", sql.SmallInt, accId);
+    organisationReq.input("orgName", sql.VarChar, org_name);
+    organisationReq.input("issueArea", sql.VarChar, issue_area);
+    organisationReq.input("mission", sql.VarChar, mission);
+    organisationReq.input("description", sql.Text, description);
+    organisationReq.input("address", sql.VarChar, address);
+    organisationReq.input("aptFloorUnit", sql.VarChar, apt_floor_unit);
+    organisationReq.input("website", sql.VarChar, website);
+    organisationReq.input("salt", sql.VarChar, salt);
+    organisationReq.input("hashedPassword", sql.VarChar, hashedPassword);
+
+    const organisationSqlQuery = `
+      INSERT INTO Organisation (AccID, OrgName, IssueArea, Mission, Descr, Addr, AptFloorUnit, Website, Salt, HashedPassword)
+      VALUES (@accId, @orgName, @issueArea, @mission, @description, @address, @aptFloorUnit, @website, @salt, @hashedPassword)
+    `;
+    await organisationReq.query(organisationSqlQuery);
+
+    console.log(`Organisation created with email ${email}`);
+    return { email };
+  } catch (error) {
+    console.error("Error creating organisation:", error);
+    throw error;
+  }
+};
+
+/*const googleSignupVolunteer = async (volunteerData) => {
   const { fname, lname, username, email, phone_number, gender, bio } =
     volunteerData;
   const password = null; // Password is null for Google sign-up
@@ -288,7 +401,7 @@ const googleSignupOrganisation = async (orgData) => {
     console.error("Error creating organisation:", error);
     throw error;
   }
-};
+}; */
 
 module.exports = {
   hashPassword,

@@ -27,7 +27,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     if (result.exists) {
       localStorage.setItem("authToken", result.token);
-      window.location.href = "http://localhost:8080/public/html/index.html";
+      window.location.href = "http://localhost:5500/public/html/index.html";
     } else {
       document.getElementById("orgSignUpForm").style.display = "block";
       document.getElementById("volunteerSignUpForm").style.display = "block";
@@ -43,6 +43,10 @@ document
     event.preventDefault();
     const formData = new FormData(event.target);
     const data = Object.fromEntries(formData.entries());
+    data.email = new URLSearchParams(window.location.search).get("email"); // Add email to data
+
+    console.log("Volunteer sign-up data:", data); // Log form data to verify
+
     try {
       const response = await fetch(
         "http://localhost:8080/auth/signup/google-volunteer",
@@ -61,7 +65,7 @@ document
 
       const result = await response.json();
       alert("Volunteer sign-up successful!");
-      window.location.href = "http://localhost:8080/public/html/index.html";
+      window.location.href = "http://localhost:5500/public/html/index.html";
     } catch (error) {
       console.error("Error during volunteer sign-up:", error);
       alert("Error: " + error.message);
@@ -74,6 +78,10 @@ document
     event.preventDefault();
     const formData = new FormData(event.target);
     const data = Object.fromEntries(formData.entries());
+    data.email = new URLSearchParams(window.location.search).get("email"); // Add email to data
+
+    console.log("Organisation sign-up data:", data); // Log form data to verify
+
     try {
       const response = await fetch(
         "http://localhost:8080/auth/signup/google-organisation",
@@ -92,7 +100,7 @@ document
 
       const result = await response.json();
       alert("Organisation sign-up successful!");
-      window.location.href = "http://localhost:8080/public/html/index.html";
+      window.location.href = "http://localhost:5500/public/html/index.html";
     } catch (error) {
       console.error("Error during organisation sign-up:", error);
       alert("Error: " + error.message);

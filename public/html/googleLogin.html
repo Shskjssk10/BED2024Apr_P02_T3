@@ -81,6 +81,124 @@
                     type="text"
                     class="form-control"
                     id="orgName"
+                    name="org_name"
+                    placeholder="Organisation Name"
+                    required
+                  />
+                </div>
+                <div class="mb-3 col-md-6">
+                  <label for="orgAddress" class="form-label">Address:</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="orgAddress"
+                    name="address"
+                    placeholder="Address"
+                    required
+                  />
+                </div>
+                <div class="mb-3 col-md-6">
+                  <label for="orgAddress2" class="form-label"
+                    >Apt/Floor/Unit:</label
+                  >
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="orgAddress2"
+                    name="apt_floor_unit"
+                    placeholder="Apt/Floor/Unit"
+                    required
+                  />
+                </div>
+              </div>
+              <div class="mb-3">
+                <label for="orgMission" class="form-label">Mission:</label>
+                <textarea
+                  class="form-control"
+                  id="orgMission"
+                  name="mission"
+                  rows="4"
+                  placeholder="Enter your mission here (Max: 255 words)"
+                  required
+                ></textarea>
+              </div>
+              <div class="mb-3">
+                <label for="orgDescription" class="form-label"
+                  >Description:</label
+                >
+                <textarea
+                  class="form-control"
+                  id="orgDescription"
+                  name="description"
+                  rows="4"
+                  placeholder="Enter your description here"
+                  required
+                ></textarea>
+              </div>
+              <div class="mb-3">
+                <label for="orgIssueAreas" class="form-label"
+                  >Issue Areas:</label
+                >
+                <input
+                  type="text"
+                  class="form-control"
+                  id="orgIssueAreas"
+                  name="issue_area"
+                  placeholder="Issue Areas"
+                  required
+                />
+              </div>
+              <div class="mb-3">
+                <label for="orgPhoneNumber" class="form-label"
+                  >Organisation Phone Number:</label
+                >
+                <input
+                  type="tel"
+                  class="form-control"
+                  id="orgPhoneNumber"
+                  name="phone_number"
+                  placeholder="Phone Number"
+                  pattern="[0-9]{8}"
+                  required
+                />
+                <small class="form-text text-muted"
+                  >Format: 8-digit Singapore phone number</small
+                >
+              </div>
+              <div class="mb-3">
+                <label for="orgWebsite" class="form-label">Website:</label>
+                <input
+                  type="url"
+                  class="form-control"
+                  id="orgWebsite"
+                  name="website"
+                  placeholder="Website"
+                  required
+                />
+              </div>
+              <div class="mb-3">
+                <label for="orgProfilePic" class="form-label"
+                  >Profile Picture:</label
+                >
+                <input
+                  type="file"
+                  class="form-control"
+                  id="orgProfilePic"
+                  name="profile_pic"
+                />
+              </div>
+              <button type="submit" class="btn btn-primary">Sign Up</button>
+            </form>
+            <!-- <form id="orgSignUpForm">
+              <div class="row">
+                <div class="mb-3">
+                  <label for="orgName" class="form-label"
+                    >Organisation Name:</label
+                  >
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="orgName"
                     placeholder="Organisation Name"
                     required
                   />
@@ -175,7 +293,7 @@
                 <input type="file" class="form-control" id="orgProfilePic" />
               </div>
               <button type="submit" class="btn btn-primary">Sign Up</button>
-            </form>
+            </form> -->
           </div>
 
           <!-- Volunteer Google Login -->
@@ -184,6 +302,103 @@
             <h5 class="card-title">HelpingHearts Volunteer Google Login</h5>
             <br />
             <form id="volunteerSignUpForm">
+              <div class="row">
+                <div class="mb-3 col-md-6">
+                  <label for="volunteerFirstName" class="form-label"
+                    >First Name:</label
+                  >
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="volunteerFirstName"
+                    name="fname"
+                    placeholder="First Name"
+                    required
+                  />
+                </div>
+                <div class="mb-3 col-md-6">
+                  <label for="volunteerLastName" class="form-label"
+                    >Last Name:</label
+                  >
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="volunteerLastName"
+                    name="lname"
+                    placeholder="Last Name"
+                    required
+                  />
+                </div>
+              </div>
+              <div class="mb-3">
+                <label for="volunteerUsername" class="form-label"
+                  >Username:</label
+                >
+                <input
+                  type="text"
+                  class="form-control"
+                  id="volunteerUsername"
+                  name="username"
+                  placeholder="Username"
+                  required
+                />
+              </div>
+              <div class="mb-3">
+                <label for="volunteerBio" class="form-label">Bio:</label>
+                <textarea
+                  class="form-control"
+                  id="volunteerBio"
+                  name="bio"
+                  rows="4"
+                  placeholder="Enter your bio here (Max: 150 words)"
+                  required
+                ></textarea>
+              </div>
+              <div class="mb-3">
+                <label for="volunteerPhoneNumber" class="form-label"
+                  >Phone Number:</label
+                >
+                <input
+                  type="tel"
+                  class="form-control"
+                  id="volunteerPhoneNumber"
+                  name="phone_number"
+                  placeholder="Phone Number"
+                  pattern="[0-9]{8}"
+                  required
+                />
+                <small class="form-text text-muted"
+                  >Format: 8-digit Singapore phone number</small
+                >
+              </div>
+              <div class="mb-3">
+                <label for="volunteerGender" class="form-label">Gender:</label>
+                <select
+                  class="form-control"
+                  id="volunteerGender"
+                  name="gender"
+                  required
+                >
+                  <option value="">Select Gender</option>
+                  <option value="Male">Male</option>
+                  <option value="Female">Female</option>
+                  <option value="Prefer Not To Say">Prefer Not To Say</option>
+                </select>
+              </div>
+              <div class="mb-3">
+                <label for="volunteerProfilePic" class="form-label"
+                  >Profile Picture:</label
+                >
+                <input
+                  type="file"
+                  class="form-control"
+                  id="volunteerProfilePic"
+                  name="profile_pic"
+                />
+              </div>
+              <button type="submit" class="btn btn-primary">Sign Up</button>
+            </form>
+            <!-- <form id="volunteerSignUpForm">
               <div class="row">
                 <div class="mb-3 col-md-6">
                   <label for="volunteerFirstName" class="form-label"
@@ -268,7 +483,7 @@
                 />
               </div>
               <button type="submit" class="btn btn-primary">Sign Up</button>
-            </form>
+            </form> -->
           </div>
         </div>
         <div class="text-center mt-3">

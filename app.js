@@ -65,7 +65,7 @@ app.get("/oauth2callback", async (req, res) => {
     console.log("Cookies set:", req.cookies);
 
     // Redirect to googleLogin.html with email as URL parameter
-    res.redirect(`/public/html/googleLogin.html?email=${email}`);
+    res.redirect(`http://localhost:5500/public/html/googleLogin.html?email=${email}`);
   } catch (error) {
     console.error("Error during OAuth2 callback", error);
     res.status(500).send("Authentication failed");
