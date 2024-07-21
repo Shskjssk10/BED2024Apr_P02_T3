@@ -84,3 +84,9 @@
 .pages {
   color: white;
 }
+
+.no-underline {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}

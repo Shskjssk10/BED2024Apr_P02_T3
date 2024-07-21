@@ -152,3 +152,9 @@ body {
   flex-direction: row;
   justify-content: space-between;
 }
+
+.no-underline {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}

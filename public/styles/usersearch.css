@@ -81,3 +81,9 @@ footer {
 .search-container .follow-btn:hover {
   background-color: #bf7e3e;
 }
+
+.no-underline {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
