@@ -196,6 +196,32 @@ class Volunteer {
       console.error(err);
     }
   }
+  static async deleteVolunteer(id) {
+    try {
+      const connection = await sql.connect(dbConfig);
+
+      // Define the parameter type when setting it
+      const volunteerQuery = `DELETE FROM Volunteer
+      WHERE AccID = @id`;
+
+      const request = connection.request();
+      request.input("id", sql.Int, id); // Specify the parameter type
+      const vResult = await request.query(volunteerQuery);
+
+      const accountQuery = `DELETE FROM Account 
+      WHERE AccID = @id`;
+
+      // Use the same connection object for the second query
+      const accountReq = connection.request();
+      accountReq.input("id", sql.Int, id); // Specify the parameter type again
+      const aResult = await accountReq.query(accountQuery);
+
+      connection.close(); // Close the connection after queries are done
+    } catch (err) {
+      console.log(err);
+      // Optionally, you can handle errors more gracefully here
+    }
+  }
 
   // Caden's Parts //
   static async getAllFollowersAndFollowing(id) {
@@ -214,8 +240,8 @@ class Volunteer {
     connection.close();
     return [
       {
-        "Followers": result.recordset[0]["No of Followers"],
-        "Following": result.recordset[0]["No of Following"],
+        Followers: result.recordset[0]["No of Followers"],
+        Following: result.recordset[0]["No of Following"],
       },
     ];
   }

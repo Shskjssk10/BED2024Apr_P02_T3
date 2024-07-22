@@ -57,6 +57,18 @@ const updateVolunteerProfile = async (req, res) => {
   }
 };
 
+const deleteVolunteer = async (req, res) => {
+  const id = parseInt(req.params.id);
+  try {
+    // Call your function to delete the volunteer
+    await Volunteer.deleteVolunteer(id);
+    res.status(200).send("Volunteer deleted successfully");
+  } catch (error) {
+    console.error("Error deleting volunteer:", error);
+    res.status(500).send("Error deleting volunteer");
+  }
+};
+
 // Caden's Part
 const getAllFollowersAndFollowing = async (req, res) => {
   const id = req.params.id;
@@ -85,6 +97,7 @@ module.exports = {
   getVolunteerById,
   getVolunteerByUsername,
   updateVolunteerProfile,
+  deleteVolunteer,
   getAllFollowersAndFollowing,
   postComment,
 };
