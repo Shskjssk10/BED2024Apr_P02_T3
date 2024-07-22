@@ -21,6 +21,8 @@ document.addEventListener("DOMContentLoaded", async function () {
             //if user is found then create a chat for that user
             found = true;
             createChat(searchField.value);
+            //here need to conect to room
+            socket.to(room);
             break;
           }
         }
@@ -169,6 +171,9 @@ document.addEventListener("DOMContentLoaded", async function () {
   const socket = io("http://localhost:3000");
   socket.on("connect", () => {
     console.log(`${socket.id}`);
-    socket.emit("message", "hello world");
+  });
+
+  socket.on("receive-message", (message) => {
+    console.log(message);
   });
 });

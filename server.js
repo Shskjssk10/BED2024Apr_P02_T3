@@ -5,8 +5,9 @@ const io = require("socket.io")(3000, {
 });
 
 io.on("connection", (socket) => {
-  console.log("you are", socket.id);
-  socket.on("message", (string) => {
-    console.log("message", string);
+  console.log(socket.id);
+  socket.on("message", (message, room) => {
+    console.log(message);
+    socket.to(room).emit("receive-message", message);
   });
 });

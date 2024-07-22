@@ -133,6 +133,9 @@
   height: 450px; /* Adjust the height as needed */
 }
 
-/* #messageBubble {
-  border: black solid 5px;
-} */
+.message-bubble {
+  word-wrap: break-word; /* For wrapping long words */
+  word-break: break-word; /* For breaking words at any point if necessary */
+  overflow-wrap: break-word; /* For wrapping within an element */
+  white-space: pre-wrap; /* Ensures that whitespace is respected and wrapping occurs */
+}
