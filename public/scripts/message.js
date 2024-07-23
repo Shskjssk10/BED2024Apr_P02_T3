@@ -3,7 +3,14 @@ document.addEventListener("DOMContentLoaded", function () {
 
   const socket = io("http://localhost:3000");
   socket.on("connect", () => {
-    console.log(`${socket.id}`);
+    console.log(`Connected with socket id: ${socket.id}`);
+    const username = sessionStorage.getItem("username");
+    if (username) {
+      console.log(`Emitting userConnected with username: ${username}`);
+      socket.emit("userConnected", username);
+    } else {
+      console.log("Username not found in session storage.");
+    }
   });
 
   socket.on("message", (message) => {

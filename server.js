@@ -8,18 +8,18 @@ let onlineUsers = {};
 
 io.on("connection", (socket) => {
   socket.on("userConnected", (username) => {
-    //store the username with the socket ID as the key
+    console.log(`Username received: ${username}`);
     onlineUsers[socket.id] = username;
+    console.log("Current online users:", onlineUsers);
     io.emit("onlineUsers", Object.values(onlineUsers));
   });
 
   //when user disconnect
   socket.on("disconnect", () => {
+    console.log(`User disconnected: ${socket.id}`);
     delete onlineUsers[socket.id];
-
-    // Emit the updated list of online users to all clients
+    console.log("Updated online users:", onlineUsers);
     io.emit("onlineUsers", Object.values(onlineUsers));
-
     io.emit("message", "User left the chat");
   });
 
