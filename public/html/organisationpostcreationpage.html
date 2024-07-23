@@ -65,11 +65,16 @@
 
     <div class="form-container">
       <h2>Insert Media</h2>
-      <form action="/submit-form" method="post">
+      <form action="/submit-form" method="post" enctype="multipart/form-data">
         <div class="form-group">
-          <button type="button" class="upload-button">
+          <input type="file" id="mediaInput" style="display: none" />
+          <button type="button" class="upload-button" onclick="document.getElementById('mediaInput').click();">
             Select from computer
           </button>
+        </div>
+        <div class="form-group" id="mediaPreviewContainer" style="display: none;">
+          <label for="mediaPreview">Media Preview</label>
+          <img id="mediaPreview" src="#" alt="Media Preview" style="max-width: 100%;" />
         </div>
         <div class="form-group">
           <label for="caption">Caption</label>
@@ -107,8 +112,7 @@
               <a href="organisationlisting.html" class="nav-link">Listings</a>
             </li>
             <li class="nav-item">
-              <a href="organisationfeed.html" class="nav-link">Feed</a>
-            </li>
+              <a href="organisationfeed.html" class="nav-link">Feed</            </li>
             <li class="nav-item">
               <a href="organisationsearch.html" class="nav-link">Search</a>
             </li>
@@ -124,5 +128,20 @@
         </div>
       </div>
     </footer>
+
+    <script>
+      document.getElementById('mediaInput').addEventListener('change', function(event) {
+        const file = event.target.files[0];
+        if (file) {
+          const reader = new FileReader();
+          reader.onload = function(e) {
+            const mediaPreview = document.getElementById('mediaPreview');
+            mediaPreview.src = e.target.result;
+            document.getElementById('mediaPreviewContainer').style.display = 'block';
+          }
+          reader.readAsDataURL(file);
+        }
+      });
+    </script>
   </body>
 </html>
