@@ -18,8 +18,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
       const result = await response.json();
       console.log("Login result:", result);
-      const userID = localStorage.setItem("userID", result.id);
-      const token = localStorage.setItem("authToken", result.token);
+      localStorage.setItem("userID", result.id);
+      localStorage.setItem("authToken", result.token);
+
+      const data = await fetch(`http://localhost:8080/volunteers/${result.id}`);
+      const indivData = await data.json();
+      console.log(indivData.Username);
+      sessionStorage.setItem("username", indivData.Username);
 
       if (response.ok) {
         document.cookie = `authToken=${result.token}; path=/;`;

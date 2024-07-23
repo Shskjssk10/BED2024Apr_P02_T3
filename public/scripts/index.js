@@ -11,6 +11,9 @@ document.addEventListener("DOMContentLoaded", () => {
     return matches ? decodeURIComponent(matches[1]) : undefined;
   }
 
+  const username = sessionStorage.getItem("username");
+  console.log(username);
+
   const token = getCookie("authToken");
 
   console.log("authToken from cookie:", token);

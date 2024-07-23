@@ -41,6 +41,7 @@ document.addEventListener("DOMContentLoaded", function () {
     messageBubble.style.padding = "4px";
     messageBubble.style.borderRadius = "4px";
     messageBubble.style.marginTop = "1rem";
+    //might need to adjust styling here
     messageBubble.style.marginLeft = isOutgoing ? "auto" : "1.2rem";
     messageBubble.style.marginRight = isOutgoing ? "1.2rem" : "auto";
     messageBubble.className = "message-bubble";
