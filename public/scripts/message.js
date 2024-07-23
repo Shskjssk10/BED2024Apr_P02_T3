@@ -2,6 +2,9 @@ document.addEventListener("DOMContentLoaded", function () {
   console.log("DOM loaded");
 
   const socket = io("http://localhost:3000");
+  let currentChatRecipient = null; // Track the current chat recipient
+  let chatHistory = {}; // Object to store chat history for each user
+
   socket.on("connect", () => {
     console.log(`Connected with socket id: ${socket.id}`);
     const username = sessionStorage.getItem("username");
@@ -19,7 +22,25 @@ document.addEventListener("DOMContentLoaded", function () {
 
   socket.on("message", (message) => {
     console.log(message);
-    outputMessage(message, false); // false indicates incoming message
+    // Handle general messages for the currently active chat
+    if (!currentChatRecipient) {
+      outputMessage(message.message, false);
+    }
+  });
+
+  socket.on("privateMessage", (data) => {
+    const { message, from } = data;
+    if (currentChatRecipient) {
+      if (currentChatRecipient === from) {
+        outputMessage(`${message}`, false);
+      }
+    } else {
+      // Save private message to history if the chat is not active
+      if (!chatHistory[from]) {
+        chatHistory[from] = [];
+      }
+      chatHistory[from].push(`${message}`);
+    }
   });
 
   const sendButton = document.getElementById("sendButton");
@@ -37,7 +58,14 @@ document.addEventListener("DOMContentLoaded", function () {
   function sendMessage() {
     const message = messageInput.value;
     if (message.trim() !== "") {
-      socket.emit("chatMessage", message); // Emit message to server
+      if (currentChatRecipient) {
+        socket.emit("privateMessage", {
+          recipient: currentChatRecipient,
+          message,
+        });
+      } else {
+        socket.emit("chatMessage", message);
+      }
       outputMessage(message, true); // true indicates outgoing message
       messageInput.value = ""; // Clear the message input box
     }
@@ -48,11 +76,10 @@ document.addEventListener("DOMContentLoaded", function () {
     const messageBubble = document.createElement("li");
     messageBubble.style.listStyle = "none";
     messageBubble.style.width = "fit-content";
-    messageBubble.style.backgroundColor = isOutgoing ? "white" : "white";
+    messageBubble.style.backgroundColor = isOutgoing ? "white" : "#f0f0f0"; // Different color for private messages
     messageBubble.style.padding = "4px";
     messageBubble.style.borderRadius = "4px";
     messageBubble.style.marginTop = "1rem";
-    //might need to adjust styling here
     messageBubble.style.marginLeft = isOutgoing ? "auto" : "1.2rem";
     messageBubble.style.marginRight = isOutgoing ? "1.2rem" : "auto";
     messageBubble.className = "message-bubble";
@@ -93,19 +120,27 @@ document.addEventListener("DOMContentLoaded", function () {
     chatBox.style.alignItems = "center";
 
     chatBox.addEventListener("click", function () {
-      //to change colour of chatbox when selected
+      // Set the clicked chat box as the current chat recipient
+      currentChatRecipient = username;
+      // Clear the message list and reset for the selected chat
+      const messageList = document.getElementById("message");
+      messageList.innerHTML = "";
+      if (chatHistory[username]) {
+        chatHistory[username].forEach((msg) => outputMessage(msg, false));
+      }
+
+      // Update chatbox appearance
       const previouslySelected = document.querySelector(".selected-chat");
       if (previouslySelected) {
         previouslySelected.style.backgroundColor = "white";
         previouslySelected.classList.remove("selected-chat");
       }
 
-      // Set the clicked chat box to light grey
       chatBox.style.backgroundColor = "#D3D3D3";
       chatBox.classList.add("selected-chat");
     });
 
-    //setting the profile picture
+    // Setting the profile picture
     const profilePic = document.createElement("img");
     profilePic.style.width = "50px";
     profilePic.style.height = "50px";
