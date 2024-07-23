@@ -13,6 +13,10 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });
 
+  socket.on("onlineUsers", (users) => {
+    updateOnlineUsers(users);
+  });
+
   socket.on("message", (message) => {
     console.log(message);
     outputMessage(message, false); // false indicates incoming message
@@ -76,5 +80,63 @@ document.addEventListener("DOMContentLoaded", function () {
   function scrollToBottom() {
     const messageList = document.getElementById("message");
     messageList.scrollTop = messageList.scrollHeight;
+  }
+
+  function createChat(username) {
+    var chats = document.getElementById("chats");
+    var chatBox = document.createElement("div");
+
+    chatBox.setAttribute("id", `chatbox-${username}`);
+    chatBox.style.height = "80px";
+    chatBox.style.backgroundColor = "white";
+    chatBox.style.display = "flex";
+    chatBox.style.alignItems = "center";
+
+    chatBox.addEventListener("click", function () {
+      //to change colour of chatbox when selected
+      const previouslySelected = document.querySelector(".selected-chat");
+      if (previouslySelected) {
+        previouslySelected.style.backgroundColor = "white";
+        previouslySelected.classList.remove("selected-chat");
+      }
+
+      // Set the clicked chat box to light grey
+      chatBox.style.backgroundColor = "#D3D3D3";
+      chatBox.classList.add("selected-chat");
+    });
+
+    //setting the profile picture
+    const profilePic = document.createElement("img");
+    profilePic.style.width = "50px";
+    profilePic.style.height = "50px";
+    profilePic.style.margin = "0 15px";
+    profilePic.style.borderRadius = "50%";
+    profilePic.src = `../images/default-pfp.png`;
+    chatBox.appendChild(profilePic);
+
+    const user = document.createElement("span");
+    user.innerText = username;
+    chatBox.appendChild(user);
+
+    const box = document.createElement("div");
+    box.style.width = "100%";
+    box.style.height = "80px";
+    box.style.border = "1px solid #ddd";
+    box.style.alignItems = "center";
+    box.style.lineHeight = "80px";
+    box.style.backgroundColor = "white";
+
+    chats.appendChild(chatBox);
+  }
+
+  function updateOnlineUsers(users) {
+    const chats = document.getElementById("chats");
+    chats.innerHTML = ""; // Clear existing chatboxes
+    const currentUsername = sessionStorage.getItem("username");
+    users.forEach((user) => {
+      if (user !== currentUsername) {
+        createChat(user);
+      }
+    });
   }
 });
