@@ -5,9 +5,12 @@ const io = require("socket.io")(3000, {
 });
 
 io.on("connection", (socket) => {
-  console.log(socket.id);
-  socket.on("message", (message, room) => {
+  socket.on("disconnect", () => {
+    io.emit("message", "User left the chat");
+  });
+
+  socket.on("chatMessage", (message) => {
     console.log(message);
-    socket.to(room).emit("receive-message", message);
+    socket.broadcast.emit("message", message);
   });
 });
