@@ -9,6 +9,7 @@ body {
   display: flex;
   justify-content: center;
   padding: 20px;
+  flex-wrap: wrap;
 }
 
 .post {
@@ -16,7 +17,7 @@ body {
   border: 1px solid #ccc;
   border-radius: 8px;
   width: 400px;
-  margin-top: 20px;
+  margin: 20px;
   cursor: pointer;
 }
 
@@ -229,4 +230,65 @@ body {
 
 .comment-form button:hover {
   background-color: #c58a59;
+}
+
+/* Media Queries */
+@media (max-width: 768px) {
+  .post {
+    width: 80%;
+    margin: 10px;
+  }
+
+  .modal-content {
+    width: 90%;
+    padding: 15px;
+  }
+
+  .post-footer {
+    padding: 5px;
+  }
+
+  .icon {
+    width: 20px;
+    height: 20px;
+  }
+
+  .likes,
+  .caption {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 576px) {
+  .post {
+    width: 90%;
+    margin: 5px;
+  }
+
+  .modal-content {
+    width: 95%;
+    padding: 10px;
+  }
+
+  .post-footer {
+    padding: 5px;
+  }
+
+  .icon {
+    width: 18px;
+    height: 18px;
+  }
+
+  .likes,
+  .caption {
+    font-size: 12px;
+  }
+
+  .comment-form input {
+    padding: 8px;
+  }
+
+  .comment-form button {
+    padding: 8px 16px;
+  }
 }
