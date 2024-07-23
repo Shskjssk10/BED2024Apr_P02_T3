@@ -1,17 +1,8 @@
 document.addEventListener("DOMContentLoaded", async function () {
-  //console.log("DOM loaded");
-
-  //need to read the user cant use data[0]
-  //using data[0] now just to display
-
   const userID = parseInt(localStorage.getItem("userID"));
-  //console.log(userID);
   const response = await fetch(`http://localhost:8080/volunteers/${userID}`);
   const data = await response.json();
-  //console.log(data);
-
   const token = localStorage.getItem("authToken");
-  //console.log(token);
 
   //for the top card
   var username = document.getElementById("username");
@@ -47,8 +38,6 @@ document.addEventListener("DOMContentLoaded", async function () {
 
   submitButton.addEventListener("click", async function (e) {
     e.preventDefault();
-    //when submit button clicked
-    //should send put req to db to update
     console.log("submit button clicked");
 
     //PUT update works now
@@ -87,5 +76,36 @@ document.addEventListener("DOMContentLoaded", async function () {
     } catch (error) {
       console.error("Error updating user data:", error);
     }
+  });
+
+  const deleteButton = document.getElementById("deleteButton");
+  deleteButton.addEventListener("click", async function (e) {
+    console.log("button clicked");
+
+    const confirmed = confirm(
+      "Are you sure you want to delete your account? This action cannot be undone."
+    );
+    if (!confirmed) {
+      return;
+    }
+
+    const userID = localStorage.getItem("userID");
+
+    await fetch(`http://localhost:8080/volunteers/${userID}`, {
+      method: "DELETE",
+    })
+      .then((response) => {
+        if (response.ok) {
+          alert("Account deleted successfully.");
+          // Optionally redirect the user to another page
+          window.location.href = "./login.html";
+        } else {
+          alert("Failed to delete account.");
+        }
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+        alert("An error occurred. Please try again later.");
+      });
   });
 });
