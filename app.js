@@ -96,6 +96,7 @@ const likesController = require("./controllers/likesController");
 const searchPageController = require("./controllers/userSearchPageController");
 const userFeedPageController = require("./controllers/userFeedPageController");
 const userProfileController = require("./controllers/userProfileController");
+const followController = require("./controllers/followController");
 
 const sql = require("mssql");
 
@@ -110,6 +111,7 @@ app.get("/volunteers", volunteerController.getAllVolunteers); //get all user
 app.get("/volunteers/:id", volunteerController.getVolunteerById); // Get user by ID
 app.get("/volunteers/:username", volunteerController.getVolunteerByUsername);
 app.put("/volunteers/:id", volunteerController.updateVolunteerProfile);
+app.delete("/volunteers/:id", volunteerController.deleteVolunteer);
 
 app.get("/organisations", organisationController.getAllOrganisations); //get all organisation
 app.get("/organisations/:id", organisationController.getOrgById);
@@ -120,12 +122,17 @@ app.get("/organisations/:OrgName", organisationController.getOrgByName);
 
 app.get("/listing", listingController.getAllListings);
 app.get("/listing/byOrgId/:orgID", listingController.getListingsByOrgId);
-app.get("/listing/byListingID/:id", listingController.getListingsByListingId)
+app.get("/listing/byListingID/:id", listingController.getListingsByListingId);
 
 // Caden's Parts
+app.get("/searchPage/allFollower/:id", searchPageController.getFollowersByID);
+app.get(
+  "/searchPage/allFollower",
+  searchPageController.getAllFollowerRelations
+);
+app.post("/searchPage/postFollow", followController.postFollow);
+app.delete("/searchPage/deleteFollow", followController.deleteFollow);
 app.get("/searchPage", searchPageController.getAllAccounts);
-app.post("/searchPage", volunteerController.postFollow);
-app.delete("/searchPage", volunteerController.deleteFollow);
 app.get("/searchPage/:username", searchPageController.getAccountByUsername);
 
 // Likes' end points
@@ -139,7 +146,6 @@ app.post("/userFeedPage", userFeedPageController.postComment);
 // app.get("/userProfile/:id", volunteerController.getAllFollowersAndFollowing)
 app.get("/volunteerProfile/:id", userProfileController.getAccountInfo);
 app.get("/organisationProfile/:id", userProfileController.getOrganisationInfo);
-
 
 app.listen(port, async () => {
   try {

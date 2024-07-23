@@ -1,5 +1,6 @@
 const Volunteer = require("../models/volunteer");
 const Organisation = require("../models/organisation");
+const Follower = require("../models/follower")
 
 const getAllAccounts = async (req, res) => {
     try {
@@ -31,7 +32,28 @@ const getAccountByUsername = async (req, res) => {
         res.status(500).send("Error retrieving account");
     }
 }
+const getAllFollowerRelations = async (req, res) => {
+    try {
+        const allFollowRelations = await Follower.getAllFollowerRelations();
+        res.json(allFollowRelations);
+    } catch (error) {
+        console.error(error);
+        res.status(500).send("Error retrieving follow relations");
+    }
+}
+const getFollowersByID = async (req, res) => {
+    const id = parseInt(req.params.id);
+    try {
+        const allFollowRelations = await Follower.getFollowersByID(id);
+        res.json(allFollowRelations);
+    } catch (error) {
+        console.error(error);
+        res.status(500).send("Error retrieving follow relations");
+    }
+}
 module.exports = {
     getAllAccounts,
-    getAccountByUsername
+    getAccountByUsername, 
+    getAllFollowerRelations,
+    getFollowersByID
 };
