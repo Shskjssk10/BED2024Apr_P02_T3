@@ -105,4 +105,4 @@ document
       console.error("Error during organisation sign-up:", error);
       alert("Error: " + error.message);
     }
-  });
+  }); 
