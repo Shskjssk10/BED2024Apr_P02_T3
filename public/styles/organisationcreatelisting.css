@@ -57,3 +57,53 @@ body {
 .form-group .preview-button:hover {
   background-color: #c58a59;
 }
+
+/* Media Queries */
+@media (max-width: 768px) {
+  .form-container {
+    margin: 30px 20px;
+    padding: 15px;
+  }
+
+  .form-group label {
+    font-size: 16px;
+  }
+
+  .form-group input,
+  .form-group textarea,
+  .form-group button {
+    font-size: 14px;
+    padding: 8px;
+  }
+
+  .date-time-container {
+    flex-direction: column;
+  }
+
+  .date-time-container input[type="date"],
+  .date-time-container input[type="time"] {
+    flex: none;
+  }
+}
+
+@media (max-width: 576px) {
+  .form-container {
+    margin: 20px 10px;
+    padding: 10px;
+  }
+
+  .form-group label {
+    font-size: 14px;
+  }
+
+  .form-group input,
+  .form-group textarea,
+  .form-group button {
+    font-size: 12px;
+    padding: 6px;
+  }
+
+  .date-time-container {
+    gap: 5px;
+  }
+}

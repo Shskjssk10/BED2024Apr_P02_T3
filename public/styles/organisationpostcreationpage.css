@@ -1,17 +1,3 @@
-.userpostcreationpage {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 20px;
-  border: 2px dotted red;
-}
-.userpostcreationpage2 {
-  display: flex;
-  flex-wrap: wrap;
-  border: 2px dotted red;
-  justify-content: space-evenly;
-}
-
 body {
   background-color: #fff8e7;
   font-family: Arial, sans-serif;
@@ -72,4 +58,57 @@ body {
 .form-group .upload-button:hover,
 .form-group .post-button:hover {
   background-color: #c58a59;
+}
+
+/* Media Queries */
+@media (max-width: 768px) {
+  .form-container {
+    margin: 30px 20px;
+    padding: 15px;
+  }
+
+  .form-container h2 {
+    font-size: 22px;
+  }
+
+  .form-group label {
+    font-size: 16px;
+  }
+
+  .form-group textarea {
+    height: 250px;
+    font-size: 14px;
+  }
+
+  .form-group .upload-button,
+  .form-group .post-button {
+    font-size: 14px;
+    padding: 8px 16px;
+  }
+}
+
+@media (max-width: 576px) {
+  .form-container {
+    margin: 20px 10px;
+    padding: 10px;
+  }
+
+  .form-container h2 {
+    font-size: 20px;
+  }
+
+  .form-group label {
+    font-size: 14px;
+  }
+
+  .form-group textarea {
+    height: 200px;
+    font-size: 12px;
+  }
+
+  .form-group .upload-button,
+  .form-group .post-button {
+    font-size: 12px;
+    padding: 6px 12px;
+  }
 }
