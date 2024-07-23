@@ -20,11 +20,20 @@ document.addEventListener("DOMContentLoaded", function () {
     updateOnlineUsers(users);
   });
 
-  socket.on("message", (message) => {
-    console.log(message);
-    // Handle general messages for the currently active chat
+  socket.on("message", (data) => {
+    console.log("Received message:", data);
     if (!currentChatRecipient) {
-      outputMessage(message.message, false);
+      // Broadcast messages to all users except the sender
+      const { message, from } = data;
+      if (currentChatRecipient === from) {
+        outputMessage(message, false);
+      } else {
+        // Save messages to history if chat is not active
+        if (!chatHistory[from]) {
+          chatHistory[from] = [];
+        }
+        chatHistory[from].push(message);
+      }
     }
   });
 
@@ -32,14 +41,14 @@ document.addEventListener("DOMContentLoaded", function () {
     const { message, from } = data;
     if (currentChatRecipient) {
       if (currentChatRecipient === from) {
-        outputMessage(`${message}`, false);
+        outputMessage(message, false);
       }
     } else {
-      // Save private message to history if the chat is not active
+      // Save private messages to history if chat is not active
       if (!chatHistory[from]) {
         chatHistory[from] = [];
       }
-      chatHistory[from].push(`${message}`);
+      chatHistory[from].push(message);
     }
   });
 
