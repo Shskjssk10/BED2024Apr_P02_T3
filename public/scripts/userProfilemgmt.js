@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", async function () {
   const userID = parseInt(localStorage.getItem("userID"));
-  const response = await fetch(`http://localhost:8080/volunteers/${userID}`);
+  const response = await fetch(`/volunteers/${userID}`);
   const data = await response.json();
   const token = localStorage.getItem("authToken");
 
@@ -54,17 +54,14 @@ document.addEventListener("DOMContentLoaded", async function () {
     ];
     console.log("Updated User Data: ", updatedUser);
     try {
-      const updateResponse = await fetch(
-        `http://localhost:8080/volunteers/${userID}`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify(updatedUser),
-        }
-      );
+      const updateResponse = await fetch(`/volunteers/${userID}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(updatedUser),
+      });
 
       if (!updateResponse.ok) {
         throw new Error("Failed to update user data");
@@ -91,7 +88,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
     const userID = localStorage.getItem("userID");
 
-    await fetch(`http://localhost:8080/volunteers/${userID}`, {
+    await fetch(`/volunteers/${userID}`, {
       method: "DELETE",
     })
       .then((response) => {

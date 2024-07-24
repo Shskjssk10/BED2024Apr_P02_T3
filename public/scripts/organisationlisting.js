@@ -9,7 +9,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   try {
-    const response = await fetch("http://localhost:8080/auth/listings", {
+    const response = await fetch("/auth/listings", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
