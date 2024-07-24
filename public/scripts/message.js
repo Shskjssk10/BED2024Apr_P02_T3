@@ -22,34 +22,30 @@ document.addEventListener("DOMContentLoaded", function () {
 
   socket.on("message", (data) => {
     console.log("Received message:", data);
-    if (!currentChatRecipient) {
-      // Broadcast messages to all users except the sender
-      const { message, from } = data;
-      if (currentChatRecipient === from) {
-        outputMessage(message, false);
-      } else {
-        // Save messages to history if chat is not active
-        if (!chatHistory[from]) {
-          chatHistory[from] = [];
-        }
-        chatHistory[from].push(message);
+    const { message, from } = data;
+    if (currentChatRecipient === null) {
+      // Save messages to history if chat is not active
+      if (!chatHistory[from]) {
+        chatHistory[from] = [];
       }
+      chatHistory[from].push({ message, isOutgoing: false });
+    } else if (currentChatRecipient === from) {
+      // Display message if it is from the current chat recipient
+      outputMessage(message, false);
     }
   });
 
   socket.on("privateMessage", (data) => {
     const { message, from } = data;
-    if (currentChatRecipient) {
-      if (currentChatRecipient === from) {
-        outputMessage(message, false);
-      }
-    } else {
-      // Save private messages to history if chat is not active
-      if (!chatHistory[from]) {
-        chatHistory[from] = [];
-      }
-      chatHistory[from].push(message);
+    if (currentChatRecipient === from) {
+      // Display message if it is from the current chat recipient
+      outputMessage(message, false);
     }
+    // Save private messages to history if chat is not active
+    if (!chatHistory[from]) {
+      chatHistory[from] = [];
+    }
+    chatHistory[from].push({ message, isOutgoing: false });
   });
 
   const sendButton = document.getElementById("sendButton");
@@ -72,8 +68,18 @@ document.addEventListener("DOMContentLoaded", function () {
           recipient: currentChatRecipient,
           message,
         });
+        // Store the outgoing message in the chat history
+        if (!chatHistory[currentChatRecipient]) {
+          chatHistory[currentChatRecipient] = [];
+        }
+        chatHistory[currentChatRecipient].push({ message, isOutgoing: true });
       } else {
         socket.emit("chatMessage", message);
+        // Store the outgoing message in the general chat history
+        if (!chatHistory["general"]) {
+          chatHistory["general"] = [];
+        }
+        chatHistory["general"].push({ message, isOutgoing: true });
       }
       outputMessage(message, true); // true indicates outgoing message
       messageInput.value = ""; // Clear the message input box
@@ -135,7 +141,9 @@ document.addEventListener("DOMContentLoaded", function () {
       const messageList = document.getElementById("message");
       messageList.innerHTML = "";
       if (chatHistory[username]) {
-        chatHistory[username].forEach((msg) => outputMessage(msg, false));
+        chatHistory[username].forEach((msg) =>
+          outputMessage(msg.message, msg.isOutgoing)
+        );
       }
 
       // Update chatbox appearance
