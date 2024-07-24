@@ -13,6 +13,29 @@ document
       password: document.getElementById("volunteerPassword").value,
     };
 
+    if (volunteerData.username.length > 15) {
+      alert("Username must be 15 characters or less.");
+      return;
+    } else if (
+      volunteerData.fname.length > 20 ||
+      volunteerData.lname.length > 20
+    ) {
+      alert("First and last name must be 20 characters or less.");
+      return;
+    } else if (volunteerData.bio.length > 150) {
+      alert("Bio must be 150 characters or less.");
+      return;
+    } else if (volunteerData.phone_number.length > 8) {
+      alert("Phone number must be 8 digit Singaporean phone number.");
+      return;
+    } else if (volunteerData.password.length > 255) {
+      alert("Password must be 255 characters or less.");
+      return;
+    } else if (volunteerData.email.length > 255) {
+      alert("Email must be 255 characters or less.");
+      return;
+    }
+
     try {
       const response = await fetch("/auth/signup/volunteer", {
         method: "POST",
@@ -22,9 +45,10 @@ document
         body: JSON.stringify(volunteerData),
       });
       const result = await response.json();
-      console.log("Volunteer Sign Up Result:", result);
+      if (!response.ok) throw new Error(result.message);
+      alert("Volunteer signed up successfully");
     } catch (error) {
-      console.error("Error during volunteer sign up:", error);
+      alert("Signup failed: " + error.message);
     }
   });
 
