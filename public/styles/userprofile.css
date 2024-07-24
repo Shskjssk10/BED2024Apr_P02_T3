@@ -219,3 +219,97 @@ body {
 .comment {
   margin-bottom: 10px;
 }
+
+/* Media Queries */
+@media (max-width: 768px) {
+  .profile-container {
+    padding: 15px;
+  }
+
+  .profile-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .profile-image {
+    width: 120px;
+    height: 120px;
+  }
+
+  .profile-info h1 {
+    font-size: 24px;
+  }
+
+  .profile-info p {
+    font-size: 14px;
+  }
+
+  .profile-stats {
+    font-size: 14px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .posts {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 576px) {
+  .profile-container {
+    padding: 10px;
+  }
+
+  .profile-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .profile-image {
+    width: 100px;
+    height: 100px;
+  }
+
+  .profile-info h1 {
+    font-size: 20px;
+  }
+
+  .profile-info p {
+    font-size: 12px;
+  }
+
+  .profile-stats {
+    font-size: 12px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 5px;
+  }
+
+  .posts {
+    grid-template-columns: 1fr;
+  }
+
+  .listing-item {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .listingimage {
+    width: 100%;
+    height: auto;
+    border-radius: 5px;
+  }
+
+  .listinginfobox {
+    margin-left: 0;
+    margin-top: 10px;
+  }
+
+  .listingname,
+  .listinginfo {
+    font-size: 14px;
+  }
+}

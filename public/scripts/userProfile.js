@@ -5,12 +5,13 @@ document.addEventListener("DOMContentLoaded", async () => {
     window.location.href = "../html/login.html";
     alert("Please log in to access this page.");
     return;
-  } 
+  }
   try {
     // Get Volunteer Details
-    const volunteerResponse = await fetch("http://localhost:8080/volunteerProfile/3", {
-        method: "GET",
-        headers: {
+    //change the 3 cannot hard code
+    const volunteerResponse = await fetch("/volunteerProfile/3", {
+      method: "GET",
+      headers: {
         "Content-Type": "application/json",
       },
     });
@@ -21,24 +22,27 @@ document.addEventListener("DOMContentLoaded", async () => {
       throw new Error(volunteer.message || "Failed to load volunteer");
     }
     // Get Organisations
-    const organisationResponse = await fetch("http://localhost:8080/organisations", {
+    const organisationResponse = await fetch("/organisations", {
       method: "GET",
       headers: {
-      "Content-Type": "application/json",
-    },
-  });
-  console.log("Response status on ORGANISATION:", organisationResponse.status);
-  const organisations = await organisationResponse.json();
-  if (!organisationResponse.ok) {
-    throw new Error(organisations.message || "Failed to load organisation");
-  }
-  
-  const profileHeaderSection = document.querySelector(".profile-header");
-  const postSection = document.querySelector(".posts");
-  const listingSection = document.querySelector(".listings-section");
-  postSection.innerHTML = "";
-  listingSection.innerHTML = "";
-  // Appending Profile Data
+        "Content-Type": "application/json",
+      },
+    });
+    console.log(
+      "Response status on ORGANISATION:",
+      organisationResponse.status
+    );
+    const organisations = await organisationResponse.json();
+    if (!organisationResponse.ok) {
+      throw new Error(organisations.message || "Failed to load organisation");
+    }
+
+    const profileHeaderSection = document.querySelector(".profile-header");
+    const postSection = document.querySelector(".posts");
+    const listingSection = document.querySelector(".listings-section");
+    postSection.innerHTML = "";
+    listingSection.innerHTML = "";
+    // Appending Profile Data
     profileHeaderSection.innerHTML = `
       <img
         src="../images/profile-pic.png"
@@ -58,7 +62,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     `;
     // Apending Posts Data
     const volunteerPosts = volunteer.posts;
-    for (const post of volunteerPosts){
+    for (const post of volunteerPosts) {
       const postContainer = document.createElement("div");
       postContainer.classList.add("post-item");
 
@@ -77,10 +81,12 @@ document.addEventListener("DOMContentLoaded", async () => {
     savedListingContainer.classList.add("listings");
 
     //Preparing Sign Up Listings
-    for (const listing of signUpListings){
+    for (const listing of signUpListings) {
       const listingContainer = document.createElement("div");
       listingContainer.classList.add("listing-item");
-      const orgName = organisations.find(org => org.id === listing.PostedBy)?.OrgName ?? null
+      const orgName =
+        organisations.find((org) => org.id === listing.PostedBy)?.OrgName ??
+        null;
       listingContainer.innerHTML = `
         <div class="listingimage"></div>
         <div class="listinginfobox">
@@ -93,10 +99,12 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     // Preparing Saved Listings
-    for (const listing of savedListings){
+    for (const listing of savedListings) {
       const listingContainer = document.createElement("div");
       listingContainer.classList.add("listing-item");
-      const orgName = organisations.find(org => org.id === listing.PostedBy)?.OrgName ?? null
+      const orgName =
+        organisations.find((org) => org.id === listing.PostedBy)?.OrgName ??
+        null;
       listingContainer.innerHTML = `
         <div class="listingimage"></div>
         <div class="listinginfobox">
@@ -107,9 +115,9 @@ document.addEventListener("DOMContentLoaded", async () => {
       `;
       savedListingContainer.appendChild(listingContainer);
     }
-    
+
     const signUpHeader = document.createElement("h2");
-    signUpHeader.innerHTML = "Signed Up Listings"
+    signUpHeader.innerHTML = "Signed Up Listings";
     const savedListingHeader = document.createElement("h2");
     savedListingHeader.innerHTML = "Saved Listings";
 
@@ -117,9 +125,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     listingSection.appendChild(signUpListingContainer);
     listingSection.appendChild(savedListingHeader);
     listingSection.appendChild(savedListingContainer);
-
   } catch (error) {
     console.error("Error loading SOMETHING:", error);
     alert("Error loading SOMETHING: " + error.message);
   }
-})
+});

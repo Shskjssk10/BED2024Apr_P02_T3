@@ -8,16 +8,13 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   try {
-    const response = await fetch(
-      "http://localhost:8080/auth/check-google-account",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email }),
-      }
-    );
+    const response = await fetch("/auth/check-google-account", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ email }),
+    });
 
     if (!response.ok) {
       throw new Error("Network response was not ok");
@@ -27,7 +24,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     if (result.exists) {
       localStorage.setItem("authToken", result.token);
-      window.location.href = "http://localhost:8080/public/html/index.html";
+      window.location.href = "/public/html/index.html";
     } else {
       document.getElementById("orgSignUpForm").style.display = "block";
       document.getElementById("volunteerSignUpForm").style.display = "block";
@@ -44,16 +41,13 @@ document
     const formData = new FormData(event.target);
     const data = Object.fromEntries(formData.entries());
     try {
-      const response = await fetch(
-        "http://localhost:8080/auth/signup/google-volunteer",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(data),
-        }
-      );
+      const response = await fetch("/auth/signup/google-volunteer", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
 
       if (!response.ok) {
         throw new Error("Network response was not ok");
@@ -61,7 +55,7 @@ document
 
       const result = await response.json();
       alert("Volunteer sign-up successful!");
-      window.location.href = "http://localhost:8080/public/html/index.html";
+      window.location.href = "/public/html/index.html";
     } catch (error) {
       console.error("Error during volunteer sign-up:", error);
       alert("Error: " + error.message);
@@ -75,16 +69,13 @@ document
     const formData = new FormData(event.target);
     const data = Object.fromEntries(formData.entries());
     try {
-      const response = await fetch(
-        "http://localhost:8080/auth/signup/google-organisation",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(data),
-        }
-      );
+      const response = await fetch("/auth/signup/google-organisation", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
 
       if (!response.ok) {
         throw new Error("Network response was not ok");
@@ -92,7 +83,7 @@ document
 
       const result = await response.json();
       alert("Organisation sign-up successful!");
-      window.location.href = "http://localhost:8080/public/html/index.html";
+      window.location.href = "/public/html/index.html";
     } catch (error) {
       console.error("Error during organisation sign-up:", error);
       alert("Error: " + error.message);

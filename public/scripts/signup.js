@@ -14,16 +14,13 @@ document
     };
 
     try {
-      const response = await fetch(
-        "http://localhost:8080/auth/signup/volunteer",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(volunteerData),
-        }
-      );
+      const response = await fetch("/auth/signup/volunteer", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(volunteerData),
+      });
       const result = await response.json();
       console.log("Volunteer Sign Up Result:", result);
     } catch (error) {
@@ -50,16 +47,13 @@ document
     };
 
     try {
-      const response = await fetch(
-        "http://localhost:8080/auth/signup/organisation",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(orgData),
-        }
-      );
+      const response = await fetch("/auth/signup/organisation", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(orgData),
+      });
 
       const result = await response.json();
       if (response.ok) {
