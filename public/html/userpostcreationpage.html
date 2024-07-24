@@ -65,7 +65,7 @@
 
     <div class="form-container">
       <h2>Insert Media</h2>
-      <form action="/submit-form" method="post" enctype="multipart/form-data">
+      <form action="http://localhost:8080/postCreation" method="post">
         <div class="form-group">
           <input type="file" id="mediaInput" style="display: none" />
           <button
@@ -137,7 +137,7 @@
         </div>
       </div>
     </footer>
-
+    <script src="../scripts/userPostCreation.js"></script>
     <script>
       document
         .getElementById("mediaInput")

@@ -147,6 +147,8 @@ app.post("/userFeedPage", userFeedPageController.postComment);
 app.get("/volunteerProfile/:id", userProfileController.getAccountInfo);
 app.get("/organisationProfile/:id", userProfileController.getOrganisationInfo);
 
+app.post("/postCreation", postController.postPost);
+
 app.listen(port, async () => {
   try {
     // Connect to the database
