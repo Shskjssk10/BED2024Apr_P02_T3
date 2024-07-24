@@ -54,7 +54,7 @@ body {
 }
 
 .image-placeholder {
-  width: 600px;
+  width: 100%;
   height: 300px;
   background-color: #ccc;
   border-radius: 10px;
@@ -151,4 +151,74 @@ body {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+}
+
+.no-underline {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
+
+/* Media Queries */
+@media (max-width: 768px) {
+  .content {
+    flex-direction: column;
+  }
+
+  .image-placeholder {
+    height: 200px;
+  }
+
+  .applybookmark {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .apply-button {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+}
+
+@media (max-width: 576px) {
+  .container {
+    padding: 10px;
+  }
+
+  .listing-header h1 {
+    font-size: 24px;
+  }
+
+  .organization {
+    font-size: 16px;
+  }
+
+  .main-content h2,
+  .sidebar h2 {
+    font-size: 20px;
+  }
+
+  .main-content h3 {
+    font-size: 18px;
+  }
+
+  .image-placeholder {
+    height: 150px;
+  }
+
+  .apply-button {
+    font-size: 14px;
+  }
+
+  .listingname {
+    font-size: 14px;
+  }
+
+  .listinginfo {
+    font-size: 12px;
+  }
+
+  .cause-area {
+    font-size: 12px;
+  }
 }

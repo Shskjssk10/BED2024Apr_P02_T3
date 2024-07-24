@@ -24,24 +24,44 @@ html {
 
 footer {
   background-color: #296154;
-  height: 6rem;
+  padding: 20px 0;
+}
+
+.footer-wrapper {
   display: flex;
-  align-items: center;
+  flex-wrap: wrap;
   justify-content: space-between;
+  align-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
 }
 
 .brand {
-  margin: 0 0 0 4rem;
+  margin-left: 4rem;
+}
+
+.footer-middle {
+  flex: 2;
+  text-align: center;
+}
+
+.footer-middle small {
+  font-size: x-small;
+  margin: 0;
+  color: white;
 }
 
 .site-map {
-  margin: 0 0 0 6rem;
+  margin-right: 4rem;
 }
 
 .site-map ul {
   list-style-type: none;
   display: flex;
   flex-direction: row;
+  padding: 0;
+  margin: 0;
 }
 
 .site-map li a {
@@ -49,8 +69,31 @@ footer {
   color: white;
 }
 
-.footer-wrapper {
-  display: flex; /* Make it a flex container */
-  justify-content: space-between; /* Distribute space evenly */
-  align-items: center; /* Align content vertically */
+/* Media Queries */
+@media (max-width: 768px) {
+  .footer-wrapper {
+    flex-direction: column;
+    text-align: center;
+    padding: 20px;
+  }
+
+  .brand {
+    margin: 0 0 20px 0;
+  }
+
+  .footer-middle {
+    margin: 20px 0;
+  }
+
+  .site-map {
+    margin: 20px 0 0 0;
+  }
+
+  .site-map ul {
+    flex-direction: column;
+  }
+
+  .site-map li a {
+    margin: 10px 0;
+  }
 }

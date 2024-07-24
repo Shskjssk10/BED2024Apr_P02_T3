@@ -3,7 +3,7 @@ const dbConfig = require("../dbConfig");
 
 class Organisation {
   constructor(
-    id,
+    AccID,
     OrgName,
     Website,
     IssueArea,
@@ -15,7 +15,7 @@ class Organisation {
     Email,
     Password
   ) {
-    this.id = id;
+    this.AccID = AccID;
     this.OrgName = OrgName;
     this.Website = Website;
     this.IssueArea = IssueArea;
@@ -215,6 +215,27 @@ class Organisation {
     } catch (err) {
       console.error(err);
     }
+  }
+  static async getAllFollowersAndFollowing(id) {
+    const connection = await sql.connect(dbConfig);
+
+    const sqlQuery = `
+    SELECT COUNT(Follower) AS 'No of Followers', 
+    COUNT(FollowedBy) AS 'No of Following'
+    FROM Follower
+    WHERE Follower = @id`;
+
+    const request = connection.request();
+    request.input("id", id);
+
+    const result = await request.query(sqlQuery);
+    connection.close();
+    return [
+      {
+        "Followers": result.recordset[0]["No of Followers"],
+        "Following": result.recordset[0]["No of Following"],
+      },
+    ];
   }
 }
 module.exports = Organisation;

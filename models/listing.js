@@ -154,6 +154,7 @@ class Listing {
   static async getListingsByOrgId(orgID) {
     const connection = await sql.connect(dbConfig);
 
+    console.log(orgID);
     const sqlQuery = ` 
         SELECT *  
         FROM Listing 
@@ -162,6 +163,8 @@ class Listing {
     const request = connection.request();
     request.input("orgID", orgID);
     const result = await request.query(sqlQuery);
+
+    console.log(result);
 
     connection.close();
     if (result.recordset.length === 1) {
@@ -198,8 +201,42 @@ class Listing {
             row.MediaPath
           )
       );
+      console.log(posts);
       return posts;
     }
+  }
+  static async getListingsByListingId(id) {
+    const connection = await sql.connect(dbConfig);
+
+    console.log(id);
+    const sqlQuery = ` 
+        SELECT *  
+        FROM Listing 
+        WHERE ListingID = @id`;
+
+    const request = connection.request();
+    request.input("id", id);
+    const result = await request.query(sqlQuery);
+
+    console.log(result);
+
+    connection.close();
+
+    return [
+      new Listing(
+        result.recordset[0].ListingID,
+        result.recordset[0].PostedBy,
+        result.recordset[0].ListingName,
+        result.recordset[0].Addr,
+        result.recordset[0].StartDate,
+        result.recordset[0].EndDate,
+        result.recordset[0].CauseArea,
+        result.recordset[0].Skill,
+        result.recordset[0].Requirements,
+        result.recordset[0].About,
+        result.recordset[0].MediaPath
+      ),
+    ]; // Wrap the single Post object in an array
   }
   static async postListing(listingDetails) {
     const connection = await sql.connect(dbConfig);

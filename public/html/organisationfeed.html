@@ -13,15 +13,14 @@
       crossorigin="anonymous"
     />
   </head>
-
   <body style="background-color: #fff8e7">
     <header>
       <nav class="navbar navbar-light navbar-expand-sm custom-navbar">
         <div class="container-fluid">
-          <a href="#" class="navbar-brand mb-0 h1"
-            ><span style="color: #f6ecec">Helping</span
-            ><span style="color: #ff8f80">Hearts</span></a
-          >
+          <a href="#" class="navbar-brand mb-0 h1">
+            <span style="color: #f6ecec">Helping</span>
+            <span style="color: #ff8f80">Hearts</span>
+          </a>
           <button
             class="navbar-toggler"
             type="button"
@@ -36,24 +35,24 @@
           <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto">
               <li class="nav-item">
-                <a href="#" class="nav-link">Listings</a>
+                <a href="listings.html" class="nav-link">Listings</a>
               </li>
               <li class="nav-item">
-                <a href="#" class="nav-link">Feed</a>
+                <a href="feed.html" class="nav-link">Feed</a>
               </li>
               <li class="nav-item">
-                <a href="#" class="nav-link">Search</a>
+                <a href="search.html" class="nav-link">Search</a>
               </li>
               <li class="nav-item">
-                <a href="#" class="nav-link">Create</a>
+                <a href="create.html" class="nav-link">Create</a>
               </li>
               <li class="nav-item">
-                <a href="#" class="nav-link">Message</a>
+                <a href="message.html" class="nav-link">Message</a>
               </li>
               <li class="nav-item">
-                <a href="#" class="nav-link"
-                  ><img src="../images/github-icon.png" alt="GitHub icon"
-                /></a>
+                <a href="https://github.com/your-repo" class="nav-link">
+                  <img src="../images/github-icon.png" alt="GitHub icon" />
+                </a>
               </li>
             </ul>
           </div>
@@ -63,7 +62,7 @@
 
     <main>
       <div class="feed-container">
-        <div class="post">
+        <div class="post" onclick="openModal('post1')">
           <div class="post-header">
             <img
               src="../images/github-icon.png"
@@ -98,44 +97,125 @@
             </p>
           </div>
         </div>
+        <!-- Repeat for other posts -->
       </div>
     </main>
+
+    <!-- Modal -->
+    <div id="postModal" class="modal">
+      <div class="modal-content">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <div class="post-content" id="post1">
+          <img src="../images/userfeedexample.jpg" alt="Post Image" />
+          <label class="container">
+            <input type="checkbox" checked="checked" />
+            <div class="checkmark">
+              <svg viewBox="0 0 256 256">
+                <rect fill="none" height="256" width="256"></rect>
+                <path
+                  d="M224.6,51.9a59.5,59.5,0,0,0-43-19.9,60.5,60.5,0,0,0-44,17.6L128,59.1l-7.5-7.4C97.2,28.3,59.2,26.3,35.9,47.4a59.9,59.9,0,0,0-2.3,87l83.1,83.1a15.9,15.9,0,0,0,22.6,0l81-81C243.7,113.2,245.6,75.2,224.6,51.9Z"
+                  stroke-width="20px"
+                  stroke="#FFF"
+                  fill="none"
+                ></path>
+              </svg>
+            </div>
+          </label>
+          <div class="post-details">
+            <h3>EcoVolunteers</h3>
+            <p>
+              Good work today everyone! Thanks to all those who volunteered as
+              we planted 1000 trees in a single day! &lt;3
+            </p>
+            <div class="comments">
+              <h4>Comments</h4>
+              <div class="comment">
+                <p><strong>User1:</strong> Great post!</p>
+              </div>
+              <div class="comment">
+                <p><strong>User2:</strong> Love this!</p>
+              </div>
+              <!-- Repeat for other comments -->
+            </div>
+            <div class="comment-form">
+              <input
+                type="text"
+                id="commentInput"
+                placeholder="Add a comment..."
+              />
+              <button onclick="addComment()">Post</button>
+            </div>
+          </div>
+        </div>
+        <!-- Repeat for other posts -->
+      </div>
+    </div>
+
     <footer>
       <div class="footer-wrapper">
         <div class="brand">
-          <a href="#" class="navbar-brand mb-0 h1"
-            ><span style="color: #f6ecec">Helping</span
-            ><span style="color: #ff8f80">Hearts</span></a
-          >
+          <a href="#" class="navbar-brand mb-0 h1">
+            <span style="color: #f6ecec">Helping</span>
+            <span style="color: #ff8f80">Hearts</span>
+          </a>
         </div>
-        <div
-          class="footer-middle"
-          style="text-align: center; margin: 4rem 0 0 22rem"
-        >
-          <small style="margin: 0; font-size: x-small"
-            >HelpingHearts Copyright 2024 IT02 Team 3</small
-          >
+        <div class="footer-middle">
+          <small>HelpingHearts Copyright 2024 IT02 Team 3</small>
         </div>
         <div class="site-map">
           <ul class="navbar-nav ms-auto">
             <li class="nav-item">
-              <a href="#" class="nav-link">Listings</a>
+              <a href="organisationlisting.html" class="nav-link">Listings</a>
             </li>
             <li class="nav-item">
-              <a href="#" class="nav-link">Feed</a>
+              <a href="organisationfeed.html" class="nav-link">Feed</a>
             </li>
             <li class="nav-item">
-              <a href="#" class="nav-link">Search</a>
+              <a href="organisationsearch.html" class="nav-link">Search</a>
             </li>
             <li class="nav-item">
-              <a href="#" class="nav-link">Create</a>
+              <a href="organisationpostcreationpage.html" class="nav-link"
+                >Create</a
+              >
             </li>
             <li class="nav-item">
-              <a href="#" class="nav-link">Message</a>
+              <a href="message.html" class="nav-link">Message</a>
             </li>
           </ul>
         </div>
       </div>
     </footer>
+    <script>
+      function openModal(postId) {
+        document.getElementById("postModal").style.display = "block";
+        var posts = document.getElementsByClassName("post-content");
+        for (var i = 0; i < posts.length; i++) {
+          posts[i].style.display = "none";
+        }
+        document.getElementById(postId).style.display = "block";
+      }
+
+      function closeModal() {
+        document.getElementById("postModal").style.display = "none";
+      }
+
+      function addComment() {
+        var commentInput = document.getElementById("commentInput");
+        var commentText = commentInput.value;
+
+        if (commentText.trim() !== "") {
+          var newComment = document.createElement("div");
+          newComment.className = "comment";
+          newComment.innerHTML =
+            "<p><strong>You:</strong> " + commentText + "</p>";
+
+          var commentsSection = document.querySelector(
+            '.post-content:not([style="display: none;"]) .comments'
+          );
+          commentsSection.appendChild(newComment);
+          commentInput.value = "";
+        }
+      }
+    </script>
   </body>
 </html>

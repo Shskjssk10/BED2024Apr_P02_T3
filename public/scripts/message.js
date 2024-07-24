@@ -1,76 +1,163 @@
-document.addEventListener("DOMContentLoaded", async function () {
+document.addEventListener("DOMContentLoaded", function () {
   console.log("DOM loaded");
-  var searchField = document.getElementById("inputBox");
-  const token = localStorage.getItem("authToken");
-  //console.log(token);
 
-  //can try to implement for org later
-  //this gets all the volunteer data
-  var response = await fetch("http://localhost:8080/volunteers");
-  var data = await response.json();
-  //console.log(data);
+  const socket = io("http://localhost:3000");
+  let currentChatRecipient = null; // Track the current chat recipient
+  let chatHistory = {}; // Object to store chat history for each user
 
-  if (searchField) {
-    //this is the input box where user enters who they want to send a message to
-    searchField.addEventListener("keypress", function (event) {
-      //listen for enter key hit means to initiate a search for that user
-      if (event.keyCode === 13) {
-        var found = false;
-        for (let i = 0; i < data.length; i++) {
-          if (searchField.value === data[i].Username) {
-            //if user is found then create a chat for that user
-            found = true;
-            createChat(searchField.value);
-            break;
-          }
-        }
-        if (!found) {
-          //if invalid username is entered
-          alert("Invalid Username");
-        }
+  socket.on("connect", () => {
+    console.log(`Connected with socket id: ${socket.id}`);
+    const username = sessionStorage.getItem("username");
+    if (username) {
+      console.log(`Emitting userConnected with username: ${username}`);
+      socket.emit("userConnected", username);
+    } else {
+      console.log("Username not found in session storage.");
+    }
+  });
+
+  socket.on("onlineUsers", (users) => {
+    updateOnlineUsers(users);
+  });
+
+  socket.on("message", (data) => {
+    console.log("Received message:", data);
+    const { message, from } = data;
+    if (currentChatRecipient === null) {
+      // Save messages to history if chat is not active
+      if (!chatHistory[from]) {
+        chatHistory[from] = [];
       }
-    });
-  } else {
-    console.error("Element with ID 'inputBox' not found!");
+      chatHistory[from].push({ message, isOutgoing: false });
+    } else if (currentChatRecipient === from) {
+      // Display message if it is from the current chat recipient
+      outputMessage(message, false);
+    }
+  });
+
+  socket.on("privateMessage", (data) => {
+    const { message, from } = data;
+    if (currentChatRecipient === from) {
+      // Display message if it is from the current chat recipient
+      outputMessage(message, false);
+    }
+    // Save private messages to history if chat is not active
+    if (!chatHistory[from]) {
+      chatHistory[from] = [];
+    }
+    chatHistory[from].push({ message, isOutgoing: false });
+  });
+
+  const sendButton = document.getElementById("sendButton");
+  sendButton.addEventListener("click", () => {
+    sendMessage();
+  });
+
+  const messageInput = document.getElementById("messageInput");
+  messageInput.addEventListener("keypress", function (event) {
+    if (event.key === "Enter") {
+      sendMessage(); // Send message on Enter key press
+    }
+  });
+
+  function sendMessage() {
+    const message = messageInput.value;
+    if (message.trim() !== "") {
+      if (currentChatRecipient) {
+        socket.emit("privateMessage", {
+          recipient: currentChatRecipient,
+          message,
+        });
+        // Store the outgoing message in the chat history
+        if (!chatHistory[currentChatRecipient]) {
+          chatHistory[currentChatRecipient] = [];
+        }
+        chatHistory[currentChatRecipient].push({ message, isOutgoing: true });
+      } else {
+        socket.emit("chatMessage", message);
+        // Store the outgoing message in the general chat history
+        if (!chatHistory["general"]) {
+          chatHistory["general"] = [];
+        }
+        chatHistory["general"].push({ message, isOutgoing: true });
+      }
+      outputMessage(message, true); // true indicates outgoing message
+      messageInput.value = ""; // Clear the message input box
+    }
   }
 
-  const chatBoxes = {};
+  function outputMessage(message, isOutgoing) {
+    const messageList = document.getElementById("message");
+    const messageBubble = document.createElement("li");
+    messageBubble.style.listStyle = "none";
+    messageBubble.style.width = "fit-content";
+    messageBubble.style.backgroundColor = isOutgoing ? "white" : "#f0f0f0"; // Different color for private messages
+    messageBubble.style.padding = "4px";
+    messageBubble.style.borderRadius = "4px";
+    messageBubble.style.marginTop = "1rem";
+    messageBubble.style.marginLeft = isOutgoing ? "auto" : "1.2rem";
+    messageBubble.style.marginRight = isOutgoing ? "1.2rem" : "auto";
+    messageBubble.className = "message-bubble";
+    messageBubble.setAttribute("id", "messageBubble");
+    messageBubble.innerText = message;
+    messageList.appendChild(messageBubble);
 
-  async function createChat(username) {
-    if (chatBoxes[username]) {
-      //checks if chatbox already exists so that if yes user carries on from there
-      console.log("Chat box already exists for", username);
-      return;
-    }
+    const timestamp = document.createElement("span");
+    timestamp.style.fontSize = "0.8rem"; // Adjust font size as needed
+    timestamp.style.color = "#aaa"; // Adjust timestamp color
+    timestamp.style.marginLeft = "10px"; // Adjust margin as needed
+    const currentDate = new Date();
+    timestamp.innerText = formatTimestamp(currentDate);
+    messageBubble.appendChild(timestamp);
 
-    //creation of chatbox
+    scrollToBottom();
+  }
+
+  function formatTimestamp(date) {
+    const hours = date.getHours().toString().padStart(2, "0");
+    const minutes = date.getMinutes().toString().padStart(2, "0");
+    return `${hours}:${minutes}`;
+  }
+
+  function scrollToBottom() {
+    const messageList = document.getElementById("message");
+    messageList.scrollTop = messageList.scrollHeight;
+  }
+
+  function createChat(username) {
     var chats = document.getElementById("chats");
     var chatBox = document.createElement("div");
 
-    chatBox.setAttribute("id", "chatBox");
+    chatBox.setAttribute("id", `chatbox-${username}`);
     chatBox.style.height = "80px";
     chatBox.style.backgroundColor = "white";
     chatBox.style.display = "flex";
     chatBox.style.alignItems = "center";
 
     chatBox.addEventListener("click", function () {
-      //to change colour of chatbox when selected
+      // Set the clicked chat box as the current chat recipient
+      currentChatRecipient = username;
+      // Clear the message list and reset for the selected chat
+      const messageList = document.getElementById("message");
+      messageList.innerHTML = "";
+      if (chatHistory[username]) {
+        chatHistory[username].forEach((msg) =>
+          outputMessage(msg.message, msg.isOutgoing)
+        );
+      }
+
+      // Update chatbox appearance
       const previouslySelected = document.querySelector(".selected-chat");
       if (previouslySelected) {
         previouslySelected.style.backgroundColor = "white";
         previouslySelected.classList.remove("selected-chat");
       }
 
-      // Set the clicked chat box to light grey
       chatBox.style.backgroundColor = "#D3D3D3";
       chatBox.classList.add("selected-chat");
-
-      // Allow sending messages to the selected chat box
-      // Once chat is selected, enable the send message function
-      enableSendMessage();
     });
 
-    //setting the profile picture
+    // Setting the profile picture
     const profilePic = document.createElement("img");
     profilePic.style.width = "50px";
     profilePic.style.height = "50px";
@@ -92,83 +179,16 @@ document.addEventListener("DOMContentLoaded", async function () {
     box.style.backgroundColor = "white";
 
     chats.appendChild(chatBox);
-
-    chatBoxes[username] = chatBox;
   }
 
-  async function enableSendMessage() {
-    const sendButton = document.getElementById("sendButton");
-    const messageInput = document.getElementById("messageInput");
-
-    messageInput.addEventListener("keypress", function (event) {
-      if (event.keyCode === 13) {
-        sendMessage();
+  function updateOnlineUsers(users) {
+    const chats = document.getElementById("chats");
+    chats.innerHTML = ""; // Clear existing chatboxes
+    const currentUsername = sessionStorage.getItem("username");
+    users.forEach((user) => {
+      if (user !== currentUsername) {
+        createChat(user);
       }
     });
-
-    sendButton.addEventListener("click", function () {
-      sendMessage();
-    });
-
-    function sendMessage() {
-      const message = messageInput.value;
-      console.log(message);
-      if (document.querySelector(".selected-chat")) {
-        if (message.trim() !== "") {
-          createMessageBubble(message);
-          socket.emit("message", message);
-          //resets to blank after submitting a message everytime
-          messageInput.value = "";
-        }
-      } else {
-        alert("Please select a chat box to send a message.");
-      }
-    }
-
-    function createMessageBubble(message) {
-      //creation of message bubble
-      const messageList = document.getElementById("message");
-      const messageBubble = document.createElement("li");
-      messageBubble.style.listStyle = "none";
-      messageBubble.style.width = "fit-content";
-      messageBubble.style.backgroundColor = "white";
-      messageBubble.style.padding = "4px";
-      messageBubble.style.borderRadius = "4px";
-      messageBubble.style.marginTop = "1rem";
-      messageBubble.style.marginLeft = "auto";
-      messageBubble.style.marginRight = "1.2rem";
-      messageBubble.className = "message-bubble";
-      messageBubble.setAttribute("id", "messageBubble");
-      messageBubble.innerText = message;
-      messageList.appendChild(messageBubble);
-
-      function formatTimestamp(date) {
-        //to put time stamp on message
-        const hours = date.getHours().toString().padStart(2, "0");
-        const minutes = date.getMinutes().toString().padStart(2, "0");
-        return `${hours}:${minutes}`;
-      }
-
-      const timestamp = document.createElement("span");
-      timestamp.style.fontSize = "0.8rem"; // Adjust font size as needed
-      timestamp.style.color = "#aaa"; // Adjust timestamp color
-      timestamp.style.marginLeft = "10px"; // Adjust margin as needed
-      const currentDate = new Date();
-      timestamp.innerText = formatTimestamp(currentDate);
-      messageBubble.appendChild(timestamp);
-
-      function scrollToBottom() {
-        //message auto scrolls to bottom meaning that always will see the newest / latest message sent
-        const messageList = document.getElementById("message");
-        messageList.scrollTop = messageList.scrollHeight;
-      }
-      scrollToBottom();
-    }
   }
-
-  const socket = io("http://localhost:3000");
-  socket.on("connect", () => {
-    console.log(`${socket.id}`);
-    socket.emit("message", "hello world");
-  });
 });

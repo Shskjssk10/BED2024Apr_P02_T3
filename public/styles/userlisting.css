@@ -1,3 +1,10 @@
+body {
+  font-family: Arial, sans-serif;
+  background-color: #fff8e7;
+  margin: 0;
+  padding: 0;
+}
+
 .location {
   display: flex;
   flex-direction: column;
@@ -14,7 +21,7 @@
 
 .userlistingbox {
   width: 1000px;
-  height: 2000px;
+  height: auto;
   background-color: #8ba697;
   border-radius: 30px;
   margin: 10px;
@@ -22,15 +29,16 @@
   flex-direction: column;
   align-items: center;
   padding-top: 40px;
+  padding-bottom: 40px;
 }
 
 .search-bar input {
   flex: 1;
-  padding: 12px; /* Increase padding for a bigger input box */
+  padding: 12px;
   border: 1px solid #ccc;
   border-radius: 4px;
-  width: 550px; /* Set a specific width */
-  font-size: 16px; /* Increase font size for better visibility */
+  width: 550px;
+  font-size: 16px;
 }
 
 .search-bar {
@@ -38,8 +46,8 @@
 }
 
 .userlistings {
-  width: 550px;
-  height: 1850px;
+  width: 90%;
+  max-width: 550px;
   text-align: center;
   display: flex;
   flex-direction: column;
@@ -52,6 +60,7 @@
   height: 150px;
   margin-bottom: 25px;
   border-radius: 10px;
+  align-items: center;
 }
 
 .listingimage {
@@ -63,7 +72,7 @@
 
 .listinginfobox {
   margin-left: 25px;
-  width: 350px;
+  width: calc(100% - 125px);
   text-align: left;
   padding: 0;
 }
@@ -83,4 +92,95 @@
 
 .pages {
   color: white;
+}
+
+.no-underline {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
+
+/* Media Queries */
+@media (max-width: 768px) {
+  .userlistingbox {
+    width: 90%;
+    padding: 20px;
+  }
+
+  .search-bar input {
+    width: 100%;
+  }
+
+  .userlistings {
+    width: 100%;
+  }
+
+  .listings {
+    height: auto;
+    padding: 15px;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .listingimage {
+    width: 80px;
+    height: 80px;
+  }
+
+  .listinginfobox {
+    margin-left: 0;
+    margin-top: 10px;
+    width: 100%;
+  }
+
+  .listingname {
+    font-size: medium;
+  }
+
+  .listinginfo {
+    font-size: small;
+  }
+}
+
+@media (max-width: 576px) {
+  .userlistingbox {
+    width: 95%;
+    padding: 10px;
+  }
+
+  .search-bar input {
+    width: 100%;
+    font-size: 14px;
+    padding: 10px;
+  }
+
+  .userlistings {
+    width: 100%;
+  }
+
+  .listings {
+    height: auto;
+    padding: 10px;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .listingimage {
+    width: 60px;
+    height: 60px;
+  }
+
+  .listinginfobox {
+    margin-left: 0;
+    margin-top: 10px;
+    width: 100%;
+  }
+
+  .listingname {
+    font-size: medium;
+  }
+
+  .listinginfo {
+    font-size: small;
+  }
 }
