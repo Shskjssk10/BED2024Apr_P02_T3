@@ -101,22 +101,16 @@ const checkGoogleAccount = async (req, res) => {
 };
 
 const googleSignupVolunteerController = async (req, res) => {
-  const { fname, lname, username, phone_number, gender, bio } = req.body;
-  const email = req.query.email; // Get email from URL parameters
-  console.log("Starting volunteer sign-up with Google");
-  console.log("Request body:", req.body);
-
   try {
-    await googleSignupVolunteer({
-      fname,
-      lname,
-      username,
-      email,
-      phone_number,
-      gender,
-      bio,
-    });
-    res.status(201).json({ message: "Volunteer created successfully", email });
+    const volunteerData = req.body;
+    volunteerData.email = req.body.email || req.query.email; // Ensure email is included from the URL or body
+    console.log("Starting volunteer sign-up with Google");
+    console.log("Request body:", volunteerData);
+
+    const result = await googleSignupVolunteer(volunteerData);
+    res
+      .status(201)
+      .json({ message: "Volunteer created successfully", email: result.email });
   } catch (error) {
     console.error("Error during Google volunteer sign-up:", error);
     res.status(500).json({ message: "Internal server error" });
@@ -124,38 +118,28 @@ const googleSignupVolunteerController = async (req, res) => {
 };
 
 const googleSignupOrganisationController = async (req, res) => {
-  const {
-    org_name,
-    phone_number,
-    issue_area,
-    mission,
-    description,
-    address,
-    apt_floor_unit,
-    website,
-  } = req.body;
-  const email = req.query.email; // Get email from URL parameters
-  console.log("Starting organisation sign-up with Google");
-  console.log("Request body:", req.body);
-
   try {
-    await googleSignupOrganisation({
-      org_name,
-      email,
-      phone_number,
-      issue_area,
-      mission,
-      description,
-      address,
-      apt_floor_unit,
-      website,
-    });
+    const organisationData = req.body;
+    console.log("Starting organisation sign-up with Google");
+    console.log("Request body:", organisationData);
+
+    const result = await googleSignupOrganisation(organisationData);
     res
       .status(201)
-      .json({ message: "Organisation created successfully", email });
+      .json({
+        message: "Organisation created successfully",
+        email: result.email,
+      });
   } catch (error) {
     console.error("Error during Google organisation sign-up:", error);
-    res.status(500).json({ message: "Internal server error" });
+
+    if (error.number === 2627 || error.number === 2601) { // SQL error code for violating unique constraints
+      res
+        .status(400)
+        .json({ message: "Username is already taken. Please try again." });
+    } else {
+      res.status(500).json({ message: "Internal server error" });
+    }
   }
 };
 
@@ -166,4 +150,4 @@ module.exports = {
   checkGoogleAccount,
   googleSignupOrganisationController,
   googleSignupVolunteerController,
-};
+}; 
