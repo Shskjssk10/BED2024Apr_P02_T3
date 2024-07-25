@@ -16,10 +16,6 @@ const storage = new Storage({keyFilename: keyFile});
 async function downloadIntoMemory(fileName) {
   // Downloads the file into a buffer in memory.
   const profilePicture = await storage.bucket(bucketName).file(fileName).download();
-  
-  console.log(
-    `I got the pfp!!!`
-  );
   return profilePicture;
 }
 // Not working, needs fixing

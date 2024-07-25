@@ -99,7 +99,6 @@ const googleBucketMiddleware = require("./middlewares/googleBucketMiddleware");
 app.get("/image/:mediapath", async (req, res) => {
   try {
     const mediaPath = req.params.mediapath;
-    console.log(mediaPath);
     const imageData = await googleBucketMiddleware.downloadIntoMemory(mediaPath);
     res.setHeader('Content-Type', 'image/jpeg'); // Or the appropriate MIME type
     res.send(imageData[0]); 
