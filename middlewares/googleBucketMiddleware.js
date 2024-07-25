@@ -7,15 +7,13 @@ const bucketName = process.env.BUCKET_NAME;
 const keyFile = process.env.KEYFILENAME
 
 // The ID of your GCS file
-const fileName = 'image.jpg';
 
 // Imports the Google Cloud client library
 const {Storage} = require('@google-cloud/storage');
 
 // Creates a client
 const storage = new Storage({keyFilename: keyFile});
-
-async function downloadIntoMemory() {
+async function downloadIntoMemory(fileName) {
   // Downloads the file into a buffer in memory.
   const profilePicture = await storage.bucket(bucketName).file(fileName).download();
   
@@ -32,6 +30,11 @@ async function downloadIntoMemory() {
 //   };
 //   await storage.bucket(bucketName).upload()
 // }
-
 let profilePicture = downloadIntoMemory().catch(console.error);
+console.log("🚀 ~ profilePicture:", profilePicture)
+
 //appendIntoFile(profilePicture);
+
+module.exports = {
+  downloadIntoMemory
+}

@@ -87,6 +87,27 @@ app.get("/", (req, res) => {
   res.sendFile("public/html/index.html", { root: "." });
 });
 
+// Google Bucket Credentials
+const bucketName = process.env.BUCKET_NAME;
+const keyFile = process.env.KEYFILENAME
+
+const {Storage} = require('@google-cloud/storage');
+const storage = new Storage({keyFilename: keyFile});
+const googleBucketMiddleware = require("./middlewares/googleBucketMiddleware");
+
+// Google Bucket Get 
+app.get("/image/:mediapath", async (req, res) => {
+  try {
+    const mediaPath = req.params.mediapath;
+    console.log(mediaPath);
+    const imageData = await googleBucketMiddleware.downloadIntoMemory(mediaPath);
+    res.setHeader('Content-Type', 'image/jpeg'); // Or the appropriate MIME type
+    res.send(imageData[0]); 
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to download image' });
+  }
+})
+
 const dbConfig = require("./dbConfig");
 const volunteerController = require("./controllers/volunteerController");
 const organisationController = require("./controllers/organisationController");
@@ -123,6 +144,7 @@ app.get("/organisations/:OrgName", organisationController.getOrgByName);
 app.get("/listing", listingController.getAllListings);
 app.get("/listing/byOrgId/:orgID", listingController.getListingsByOrgId);
 app.get("/listing/byListingID/:id", listingController.getListingsByListingId);
+app.get("/listing/:username", listingController.getListingByListingName);
 
 // Caden's Parts
 app.get("/searchPage/allFollower/:id", searchPageController.getFollowersByID);
