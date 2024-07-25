@@ -1,10 +1,13 @@
 document.addEventListener("DOMContentLoaded", async function () {
+  //retrieve the user id from local storage
   const userID = parseInt(localStorage.getItem("userID"));
   //HENDRIK GET
+  //GET request using the user id from local storage
   const response = await fetch(`/volunteers/${userID}`);
   const data = await response.json();
   const token = localStorage.getItem("authToken");
 
+  //dynamically display the user data based on user id
   //for the top card
   var username = document.getElementById("username");
   username.textContent = data.Username;
@@ -39,9 +42,11 @@ document.addEventListener("DOMContentLoaded", async function () {
 
   submitButton.addEventListener("click", async function (e) {
     e.preventDefault();
+    //listen for submit button clicked
     console.log("submit button clicked");
 
     //HENDRIK PUT
+    //sending out the json to update the user data
     const updatedUser = [
       {
         FName: fname.value,
@@ -55,12 +60,15 @@ document.addEventListener("DOMContentLoaded", async function () {
     ];
     console.log("Updated User Data: ", updatedUser);
     try {
+      //PUT request
       const updateResponse = await fetch(`/volunteers/${userID}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
+          //auth to update
           Authorization: `Bearer ${token}`,
         },
+        //send the updates
         body: JSON.stringify(updatedUser),
       });
 
@@ -79,7 +87,8 @@ document.addEventListener("DOMContentLoaded", async function () {
   const deleteButton = document.getElementById("deleteButton");
   deleteButton.addEventListener("click", async function (e) {
     console.log("button clicked");
-
+    //listen for delete
+    //ask for confirmation
     const confirmed = confirm(
       "Are you sure you want to delete your account? This action cannot be undone."
     );
@@ -89,6 +98,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
     const userID = localStorage.getItem("userID");
 
+    //delete by user id
     //HENDRIK DELETE
     await fetch(`/volunteers/${userID}`, {
       method: "DELETE",
@@ -96,7 +106,7 @@ document.addEventListener("DOMContentLoaded", async function () {
       .then((response) => {
         if (response.ok) {
           alert("Account deleted successfully.");
-          // Optionally redirect the user to another page
+          //redirect the user to login page
           window.location.href = "./login.html";
         } else {
           alert("Failed to delete account.");

@@ -1,5 +1,6 @@
 const Volunteer = require("../models/volunteer");
 
+//Hendrik part
 const getAllVolunteers = async (req, res) => {
   try {
     const volunteers = await Volunteer.getAllVolunteer();
