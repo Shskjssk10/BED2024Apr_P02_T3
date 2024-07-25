@@ -24,20 +24,6 @@ const getVolunteerById = async (req, res) => {
     res.status(500).send("Error retrieving Volunteer");
   }
 };
-const getVolunteerByUsername = async (req, res) => {
-  const username = req.params.username;
-  console.log(username);
-  try {
-    const volunteer = await Volunteer.getVolunteerByUsername(username);
-    if (!volunteer) {
-      return res.status(404).send("Volunteer not found");
-    }
-    res.json(volunteer);
-  } catch (error) {
-    console.error(error);
-    res.status(500).send("Error retrieving Volunteer");
-  }
-};
 
 const updateVolunteerProfile = async (req, res) => {
   const userId = parseInt(req.params.id);
@@ -91,6 +77,20 @@ const postComment = async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).send("Error posting commnet");
+  }
+};
+const getVolunteerByUsername = async (req, res) => {
+  const username = req.params.username;
+  console.log(username);
+  try {
+    const volunteer = await Volunteer.getVolunteerByUsername(username);
+    if (!volunteer) {
+      return res.status(404).send("Volunteer not found");
+    }
+    res.json(volunteer);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Error retrieving Volunteer");
   }
 };
 module.exports = {
