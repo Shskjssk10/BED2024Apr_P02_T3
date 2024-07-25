@@ -19,19 +19,17 @@ async function downloadIntoMemory(fileName) {
   const profilePicture = await storage.bucket(bucketName).file(fileName).download();
   return profilePicture;
 }
-// Not working, needs fixing
 
-// async function uploadImages(images) {
-//   const options = {
-//     destination: images,
-//   };
-//   await storage.bucket(bucketName).upload()
-// }
-let profilePicture = downloadIntoMemory().catch(console.error);
-console.log("🚀 ~ profilePicture:", profilePicture)
+async function uploadFromMemory(image) {
+  const destFileName = "Something-New.jpg"
+  await storage.bucket(bucketName).file(destFileName).save(image);
 
-//appendIntoFile(profilePicture);
+  console.log(
+    `The file has been successfully uploaded!.`
+  );
+}
 
 module.exports = {
-  downloadIntoMemory
+  downloadIntoMemory,
+  uploadFromMemory,
 }
