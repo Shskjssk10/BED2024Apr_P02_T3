@@ -118,6 +118,8 @@ const searchPageController = require("./controllers/userSearchPageController");
 const userFeedPageController = require("./controllers/userFeedPageController");
 const userProfileController = require("./controllers/userProfileController");
 const followController = require("./controllers/followController");
+const signUpController = require("./controllers/signUpController")
+const savedListingController = require("./controllers/savedListingController");
 
 const sql = require("mssql");
 
@@ -170,6 +172,14 @@ app.get("/volunteerProfile/:id", userProfileController.getAccountInfo);
 app.get("/organisationProfile/:id", userProfileController.getOrganisationInfo);
 
 app.post("/postCreation", postController.postPost);
+
+app.get("/signUp/:AccID/:ListingID", signUpController.getAllSignUpByListingID);
+app.post("/signUp", signUpController.postSignUp);
+app.delete("/signUp", signUpController.deleteSignUp);
+
+app.get("/savedListing/:AccID/:ListingID", savedListingController.getAllSavedByListingID);
+app.post("/savedListing", savedListingController.postSaved);
+app.delete("/savedListing", savedListingController.deleteSaved);
 
 app.listen(port, async () => {
   try {

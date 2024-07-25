@@ -69,6 +69,7 @@ const getSavedListingsById = async (req, res) => {
 };
 const getListingsByOrgId = async (req, res) => {
   const orgID = req.params.orgID;
+  console.log("🚀 ~ getListingsByOrgId ~ orgID:", orgID)
   try {
     const listings = await Listing.getListingsByOrgId(orgID);
     if (!listings) {

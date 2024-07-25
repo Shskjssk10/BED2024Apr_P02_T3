@@ -58,24 +58,24 @@ document.addEventListener("DOMContentLoaded", async () => {
       }
 
       listingItem.innerHTML = `
-          <div class="listings" id=${listing.ListingID}>
-              <div class="listingimage">
-                  <img src="${image.url}">
-              </div>
-              <div class="listinginfobox">
-                  <p class="listingname">${listing.ListingName}</p>
-                  <p class="listinginfo">${orgName}</p>
-                  <p class="listinginfo">${listing.Addr}</p>
-              </div>
-          </div>
-          `;
+        <div class="listings" id=${listing.ListingID}>
+            <div class="listingimage">
+                <img src="${image.url}">
+            </div>
+            <div class="listinginfobox">
+                <p class="listingname">${listing.ListingName}</p>
+                <p class="listinginfo">${orgName}</p>
+                <p class="listinginfo">${listing.Addr}</p>
+            </div>
+        </div>
+        `;
       listingsContainer.appendChild(listingItem);
     }
     function updateListings(listings){
       listingsContainer.innerHTML = ""; // Clear existing content
 
-      const promises = listings.map(processListing); // Use the globally defined processListing
-      Promise.all(promises).then(() => { // Wait for all promises to resolve
+      const promises = listings.map(processListing); 
+      Promise.all(promises).then(() => { 
       let allListings = document.querySelectorAll(".no-underline");
       console.log("🚀 ~ updateListings ~ allListings:", allListings);
       allListings.forEach((listing) => {

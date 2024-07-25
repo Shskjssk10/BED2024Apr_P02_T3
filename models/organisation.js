@@ -60,13 +60,14 @@ class Organisation {
   }
   static async getOrgById(id) {
     const connection = await sql.connect(dbConfig);
+    const request = connection.request();
+    request.input("id", id);
+    
     const sqlQuery = `
     SELECT O.*, A.Email, A.PhoneNo, A.Password
     FROM Organisation O INNER JOIN Account A ON O.OrgName = A.Username
     WHERE A.AccID = @id`;
 
-    const request = connection.request();
-    request.input("id", id);
     const result = await request.query(sqlQuery);
 
     connection.close();
