@@ -12,6 +12,7 @@ const keyFile = process.env.KEYFILENAME
 const {Storage} = require('@google-cloud/storage');
 
 // Creates a client
+let fileName = "";
 const storage = new Storage({keyFilename: keyFile});
 async function downloadIntoMemory(fileName) {
   // Downloads the file into a buffer in memory.
