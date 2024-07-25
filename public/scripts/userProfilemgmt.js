@@ -1,5 +1,6 @@
 document.addEventListener("DOMContentLoaded", async function () {
   const userID = parseInt(localStorage.getItem("userID"));
+  //HENDRIK GET
   const response = await fetch(`/volunteers/${userID}`);
   const data = await response.json();
   const token = localStorage.getItem("authToken");
@@ -40,7 +41,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     e.preventDefault();
     console.log("submit button clicked");
 
-    //PUT update works now
+    //HENDRIK PUT
     const updatedUser = [
       {
         FName: fname.value,
@@ -88,6 +89,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
     const userID = localStorage.getItem("userID");
 
+    //HENDRIK DELETE
     await fetch(`/volunteers/${userID}`, {
       method: "DELETE",
     })
