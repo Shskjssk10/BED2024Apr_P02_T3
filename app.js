@@ -46,6 +46,7 @@ app.post("/auth/signup/google-volunteer", googleSignupVolunteerController);
 app.post("/auth/signup/google-organisation", googleSignupOrganisationController);
 app.post("/auth/check-google-account", checkGoogleAccount);
 app.get("/listings", verifyToken, getOrganisationListings);
+
 // Serve static files with the /public prefix
 app.use("/public", express.static("public"));
 // Route to start OAuth flow
@@ -119,6 +120,10 @@ app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Headers", "Content-Type"); // Add other allowed headers
   next();
 });
+// Cheryl's Parts
+app.put("/volunteers/:id/password", volunteerController.updateVolunteerHash);
+app.put("/organisations/:id/password", organisationController.updateOrganisationHash);
+
 
 app.get("/volunteers", volunteerController.getAllVolunteers); //get all user
 app.get("/volunteers/:id", volunteerController.getVolunteerById); // Get user by ID

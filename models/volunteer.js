@@ -1,5 +1,6 @@
 const sql = require("mssql");
 const dbConfig = require("../dbConfig");
+const { hashPassword } = require("../models/authModel");
 
 class Volunteer {
   constructor(
@@ -260,5 +261,33 @@ class Volunteer {
 
     connection.close();
   }
+
+  // Cheryl's part
+  static async updateVolunteerHash(id, newPassword) {
+    try {
+      console.log("trying method");
+      const connection = await sql.connect(dbConfig);
+      const { salt, hashedPassword } = await hashPassword(newPassword); // Use hashPassword function
+
+      console.log("New generated salt:", salt);
+      console.log("New generated hashed password:", hashedPassword);
+
+      const volunteerQuery = `UPDATE Volunteer SET
+        Salt = @Salt,
+        HashedPassword = @HashedPassword
+        WHERE AccID = @AccID`;
+
+      const volunteerReq = connection.request();
+      volunteerReq.input("AccID", sql.SmallInt, id);
+      volunteerReq.input("Salt", sql.VarChar, salt);
+      volunteerReq.input("HashedPassword", sql.VarChar, hashedPassword);
+      await volunteerReq.query(volunteerQuery);
+
+      connection.close();
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
 }
 module.exports = Volunteer;

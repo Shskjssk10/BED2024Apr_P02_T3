@@ -1,5 +1,6 @@
 const sql = require("mssql");
 const dbConfig = require("../dbConfig");
+const { hashPassword } = require("../models/authModel");
 
 class Organisation {
   constructor(
@@ -236,6 +237,28 @@ class Organisation {
         "Following": result.recordset[0]["No of Following"],
       },
     ];
+  }
+  // Cheryl's part
+  static async updateOrganisationHash(id, newPassword) {
+    try {
+      const connection = await sql.connect(dbConfig);
+      const { salt, hashedPassword } = await hashPassword(newPassword); // Use hashPassword function
+
+      const organisationQuery = `UPDATE Organisation SET
+        Salt = @Salt,
+        HashedPassword = @HashedPassword
+        WHERE AccID = @AccID`;
+
+      const organisationReq = connection.request();
+      organisationReq.input("AccID", sql.SmallInt, id);
+      organisationReq.input("Salt", sql.VarChar, salt);
+      organisationReq.input("HashedPassword", sql.VarChar, hashedPassword);
+      await organisationReq.query(organisationQuery);
+
+      connection.close();
+    } catch (err) {
+      console.error(err);
+    }
   }
 }
 module.exports = Organisation;

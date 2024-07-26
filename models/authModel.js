@@ -1,8 +1,6 @@
 const sql = require("mssql");
 const dbConfig = require("../dbConfig.js");
 const bcrypt = require("bcrypt");
-const generateToken = require("../utils/token.js");
-
 const saltRounds = 10;
 
 const hashPassword = async (password) => {

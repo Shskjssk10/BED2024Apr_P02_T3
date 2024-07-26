@@ -8,6 +8,40 @@ document.addEventListener("DOMContentLoaded", () => {
     console.log("Login attempt:", email, password);
 
     try {
+      const response = await fetch("http://localhost:8080/auth/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
+      });
+
+      const result = await response.json();
+      console.log("Login result:", result);
+
+      if (response.ok) {
+        document.cookie = `authToken=${result.token}; path=/;`;
+        alert("Login successful");
+        window.location.href = "../html/index.html";
+      } else {
+        alert("Login failed: " + result.message);
+      }
+    } catch (error) {
+      console.error("Error during login:", error);
+    }
+  });
+});
+
+/*document.addEventListener("DOMContentLoaded", () => {
+  document.querySelector("form").addEventListener("submit", async (event) => {
+    event.preventDefault();
+
+    const email = document.getElementById("email").value;
+    const password = document.getElementById("password").value;
+
+    console.log("Login attempt:", email, password);
+
+    try {
       const response = await fetch("/auth/login", {
         method: "POST",
         headers: {
@@ -16,32 +50,26 @@ document.addEventListener("DOMContentLoaded", () => {
         body: JSON.stringify({ email, password }),
       });
 
-      let result;
-      const contentType = response.headers.get("content-type");
-      if (contentType && contentType.indexOf("application/json") !== -1) {
-        result = await response.json();
-      } else {
-        result = await response.text();
-      }
+      const result = await response.json();
+      console.log("Login result:", result);
+      localStorage.setItem("userID", result.id);
+      localStorage.setItem("authToken", result.token);
+
+      const data = await fetch(`/organisations/${result.id}`);
+      const indivData = await data.json();
+      console.log(indivData.Username);
+      sessionStorage.setItem("username", indivData.Username);
 
       if (response.ok) {
-        localStorage.setItem("userID", result.id);
-        localStorage.setItem("authToken", result.token);
-
-        const data = await fetch(`/volunteers/${result.id}`);
-        const indivData = await data.json();
-        console.log(indivData.Username);
-        sessionStorage.setItem("username", indivData.Username);
-
         document.cookie = `authToken=${result.token}; path=/;`;
         alert("Login successful");
         window.location.href = "../html/index.html";
       } else {
-        alert("Login failed: " + (result.message || result));
+        alert("Login failed: " + result.message);
       }
     } catch (error) {
       console.error("Error during login:", error);
-      alert("Login failed: " + error.message);
     }
   });
-});
+}); */
+
