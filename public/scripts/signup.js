@@ -70,6 +70,23 @@ document
       website: document.getElementById("orgWebsite").value,
     };
 
+    if (orgData.org_name.length > 20) {
+      alert("Organisation name must be 20 characters or less.");
+      return;
+    } else if (orgData.issue_area.length > 50) {
+      alert("Issue area must be 50 characters or less.");
+      return;
+    } else if (orgData.mission.length > 255) {
+      alert("Mission must be 255 characters or less.");
+      return;
+    } else if (orgData.address.length > 255) {
+      alert("Address must be 255 characters or less.");
+      return;
+    } else if (orgData.apt_floor_unit.length > 50) {
+      alert("Apt/Floor/Unit must be 50 characters or less.");
+      return;
+    }
+
     try {
       const response = await fetch("/auth/signup/organisation", {
         method: "POST",
@@ -80,12 +97,9 @@ document
       });
 
       const result = await response.json();
-      if (response.ok) {
-        alert("Organisation signed up successfully");
-      } else {
-        alert("Error: " + result.message);
-      }
+      if (!response.ok) throw new Error(result.message);
+      alert("Organisation signed up successfully");
     } catch (error) {
-      console.error("Error during sign-up:", error);
+      alert("Signup failed: " + error.message);
     }
   });

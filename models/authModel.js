@@ -80,12 +80,11 @@ const getOrganisationByAccountId = async (accountId) => {
   }
 };
 
-
 const createVolunteer = async (req, res) => {
   const { fname, lname, username, email, phone_number, gender, bio, password } =
     req.body;
   const { salt, hashedPassword } = await hashPassword(password);
-  
+
   // Validate input fields
   if (username.length > 15) {
     return res
@@ -111,6 +110,10 @@ const createVolunteer = async (req, res) => {
     return res
       .status(400)
       .json({ message: "Password must be 255 characters or less." });
+  } else if (bio.length > 150) {
+    return res
+      .status(400)
+      .json({ message: "Bio must be 150 characters or less." });
   }
 
   try {
@@ -123,7 +126,10 @@ const createVolunteer = async (req, res) => {
       `SELECT COUNT(*) as count FROM Account WHERE Username = @username`
     );
     if (result.recordset[0].count > 0) {
-      return res.status(400).json({ message: "This username has been taken. Please use a different username." });
+      return res.status(400).json({
+        message:
+          "This username has been taken. Please use a different username.",
+      });
     }
 
     // Check for existing email
@@ -133,7 +139,10 @@ const createVolunteer = async (req, res) => {
       `SELECT COUNT(*) as count FROM Account WHERE Email = @email`
     );
     if (result.recordset[0].count > 0) {
-      return res.status(400).json({ message: "This email address is connected to another account. Please use a different email address." });
+      return res.status(400).json({
+        message:
+          "This email address is connected to another account. Please use a different email address.",
+      });
     }
 
     // Check for existing phone number
@@ -143,7 +152,10 @@ const createVolunteer = async (req, res) => {
       `SELECT COUNT(*) as count FROM Account WHERE PhoneNo = @phoneNo`
     );
     if (result.recordset[0].count > 0) {
-      return res.status(400).json({ message: "This phone number is connected to another account. Please use a different phone number." });
+      return res.status(400).json({
+        message:
+          "This phone number is connected to another account. Please use a different phone number.",
+      });
     }
 
     const accountSqlQuery = `
@@ -177,45 +189,129 @@ const createVolunteer = async (req, res) => {
     console.log(`Volunteer created with email ${email}`);
     res.status(201).json({ message: "Volunteer created successfully", email });
   } catch (error) {
-    console.error("Error creating volunteer:", error);
-    res.status(500).json({ message: "Internal server error" });
+    alert("Sign up failed: " + error.message);
   }
 };
 
 const createOrganisation = async (req, res) => {
   const {
-    org_name,
-    email,
-    phone_number,
-    password,
-    issue_area,
-    mission,
+    org_name, //
+    email, //
+    phone_number, //
+    password, //
+    issue_area, //
+    mission, //
     description,
-    address,
-    apt_floor_unit,
+    address, //
+    apt_floor_unit, //
     website, // Add website field
   } = req.body;
 
   const { salt, hashedPassword } = await hashPassword(password);
   const username = org_name; // Set username to org_name
 
+  if (username.length > 15) {
+    return res
+      .status(400)
+      .json({ message: "Username must be 15 characters or less." });
+  } else if (phone_number.length > 8) {
+    return res.status(400).json({
+      message: "Phone number must be 8 digits Singaporean phone number.",
+    });
+  } else if (email.length > 255) {
+    return res
+      .status(400)
+      .json({ message: "Email must be 255 characters or less." });
+  } else if (password.length > 255) {
+    return res
+      .status(400)
+      .json({ message: "Password must be 255 characters or less." });
+  } else if (org_name.length > 20) {
+    return res
+      .status(400)
+      .json({ message: "Organisation name must be 20 characters or less." });
+  } else if (issue_area.length > 50) {
+    return res
+      .status(400)
+      .json({ message: "Issue area must be 50 characters or less." });
+  } else if (mission.length > 255) {
+    return res
+      .status(400)
+      .json({ message: "Mission must be 255 characters or less." });
+  } else if (address.length > 255) {
+    return res
+      .status(400)
+      .json({ message: "Address must be 255 characters or less." });
+  } else if (apt_floor_unit.length > 50) {
+    return res
+      .status(400)
+      .json({ message: "Apt/Floor/Unit must be 50 characters or less." });
+  } else if (website.length > 255) {
+    return res
+      .status(400)
+      .json({ message: "Website must be 255 characters or less." });
+  }
+
   try {
     const connection = await sql.connect(dbConfig);
-    const request = connection.request();
-    request.input("username", sql.VarChar, username); // Use org_name as username
-    request.input("phoneNo", sql.VarChar, phone_number);
+
+    // Check for existing username
+    let request = connection.request();
+    request.input("username", sql.VarChar, username);
+    let result = await request.query(
+      `SELECT COUNT(*) as count FROM Account WHERE Username = @username`
+    );
+    if (result.recordset[0].count > 0) {
+      return res.status(400).json({
+        message:
+          "This username has been taken. Please use a different username.",
+      });
+    }
+
+    // Check for existing email
+    request = connection.request();
     request.input("email", sql.VarChar, email);
-    request.input("password", sql.VarChar, password);
+    result = await request.query(
+      `SELECT COUNT(*) as count FROM Account WHERE Email = @email`
+    );
+    if (result.recordset[0].count > 0) {
+      return res.status(400).json({
+        message:
+          "This email address is connected to another account. Please use a different email address.",
+      });
+    }
+
+    // Check for existing phone number
+    request = connection.request();
+    request.input("phoneNo", sql.VarChar, phone_number);
+    result = await request.query(
+      `SELECT COUNT(*) as count FROM Account WHERE PhoneNo = @phoneNo`
+    );
+    if (result.recordset[0].count > 0) {
+      return res.status(400).json({
+        message:
+          "This phone number is connected to another account. Please use a different phone number.",
+      });
+    }
 
     const accountSqlQuery = `
       INSERT INTO Account (Username, PhoneNo, Email, Password)
       VALUES (@username, @phoneNo, @Email, @Password);
       SELECT SCOPE_IDENTITY() AS AccID;
     `;
+    request = connection.request();
+    request.input("username", sql.VarChar, username);
+    request.input("phoneNo", sql.VarChar, phone_number);
+    request.input("email", sql.VarChar, email);
+    request.input("password", sql.VarChar, password);
     const accountResult = await request.query(accountSqlQuery);
     const accId = accountResult.recordset[0].AccID;
 
-    const organisationReq = connection.request(); // Correct variable name
+    const organisationSqlQuery = `
+      INSERT INTO Organisation (AccID, OrgName, IssueArea, Mission, Descr, Addr, AptFloorUnit, Website, Salt, HashedPassword)
+      VALUES (@accId, @orgName, @issueArea, @mission, @description, @address, @aptFloorUnit, @website, @salt, @hashedPassword)
+    `;
+    const organisationReq = connection.request();
     organisationReq.input("accId", sql.SmallInt, accId);
     organisationReq.input("orgName", sql.VarChar, org_name);
     organisationReq.input("issueArea", sql.VarChar, issue_area);
@@ -227,19 +323,14 @@ const createOrganisation = async (req, res) => {
     organisationReq.input("salt", sql.VarChar, salt);
     organisationReq.input("hashedPassword", sql.VarChar, hashedPassword); // Use hashed password
 
-    const organisationSqlQuery = `
-      INSERT INTO Organisation (AccID, OrgName, IssueArea, Mission, Descr, Addr, AptFloorUnit, Website, Salt, HashedPassword)
-      VALUES (@accId, @orgName, @issueArea, @mission, @description, @address, @aptFloorUnit, @website, @salt, @hashedPassword)
-    `;
     await organisationReq.query(organisationSqlQuery);
 
-    console.log(`Organisation created with email ${email}`);
+    console.log(`Organisation account created with email ${email}`);
     res
       .status(201)
-      .json({ message: "Organisation created successfully", email });
+      .json({ message: "Organisation account created successfully", email });
   } catch (error) {
-    console.error("Error creating organisation:", error);
-    res.status(500).json({ message: "Internal server error" });
+    alert("Signup failed: " + error.message);
   }
 };
 
@@ -288,12 +379,12 @@ const googleSignupVolunteer = async (volunteerData) => {
       VALUES (@accId, @fname, @lname, @username, @gender, @bio, @salt, @hashedPassword)
     `;
     await volunteerReq.query(volunteerSqlQuery);
-
-    console.log(`Volunteer created with email ${email}`);
-    return { email };
+    console.log(`Volunteer account created with email ${email}`);
+    res
+      .status(201)
+      .json({ message: "Volunteer account created successfully", email });
   } catch (error) {
-    console.error("Error creating volunteer:", error);
-    throw error;
+    alert("Sign up failed: " + error.message);
   }
 };
 
