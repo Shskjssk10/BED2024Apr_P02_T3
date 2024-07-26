@@ -213,6 +213,7 @@ app.get("/userProfile/:id", volunteerController.getAllFollowersAndFollowing)
 app.get("/volunteerProfile/:id", userProfileController.getAccountInfo);
 app.get("/organisationProfile/:id", userProfileController.getOrganisationInfo);
 
+app.get("/followedPost/:id", postController.getAllFollowedPosts);
 app.post("/postCreation", postController.postPost);
 
 app.get("/signUp/:AccID/:ListingID", signUpController.getAllSignUpByListingID);
