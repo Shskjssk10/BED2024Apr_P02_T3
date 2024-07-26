@@ -85,6 +85,11 @@ const createVolunteer = async (req, res) => {
     req.body;
   const { salt, hashedPassword } = await hashPassword(password);
 
+  console.log(req.body);
+
+  // check if google sign up
+  const isGoogleSignUp = !password;
+
   // Validate input fields
   if (username.length > 15) {
     return res
@@ -102,11 +107,11 @@ const createVolunteer = async (req, res) => {
     return res.status(400).json({
       message: "Phone number must be 8 digits Singaporean phone number.",
     });
-  } else if (email.length > 255) {
+  } else if (!isGoogleSignUp && email.length > 255) {
     return res
       .status(400)
       .json({ message: "Email must be 255 characters or less." });
-  } else if (password.length > 255) {
+  } else if (!isGoogleSignUp && password.length > 255) {
     return res
       .status(400)
       .json({ message: "Password must be 255 characters or less." });
@@ -210,26 +215,28 @@ const createOrganisation = async (req, res) => {
   const { salt, hashedPassword } = await hashPassword(password);
   const username = org_name; // Set username to org_name
 
-  if (username.length > 15) {
-    return res
-      .status(400)
-      .json({ message: "Username must be 15 characters or less." });
-  } else if (phone_number.length > 8) {
-    return res.status(400).json({
-      message: "Phone number must be 8 digits Singaporean phone number.",
-    });
-  } else if (email.length > 255 || !null) {
-    return res
-      .status(400)
-      .json({ message: "Email must be 255 characters or less." });
-  } else if (password.length > 255 || !null) {
-    return res
-      .status(400)
-      .json({ message: "Password must be 255 characters or less." });
-  } else if (org_name.length > 20) {
+  // check if google sign up
+  const isGoogleSignUp = !password;
+
+  // Validate input fields
+  if (org_name.length > 20) {
     return res
       .status(400)
       .json({ message: "Organisation name must be 20 characters or less." });
+  } else if (phone_number.length > 8) {
+    return res
+      .status(400)
+      .json({
+        message: "Phone number must be 8 digits Singaporean phone number.",
+      });
+  } else if (!isGoogleSignUp && email.length > 255) {
+    return res
+      .status(400)
+      .json({ message: "Email must be 255 characters or less." });
+  } else if (!isGoogleSignUp && password.length > 255) {
+    return res
+      .status(400)
+      .json({ message: "Password must be 255 characters or less." });
   } else if (issue_area.length > 50) {
     return res
       .status(400)
@@ -238,6 +245,10 @@ const createOrganisation = async (req, res) => {
     return res
       .status(400)
       .json({ message: "Mission must be 255 characters or less." });
+  } else if (description.length > 255) {
+    return res
+      .status(400)
+      .json({ message: "Description must be 255 characters or less." });
   } else if (address.length > 255) {
     return res
       .status(400)

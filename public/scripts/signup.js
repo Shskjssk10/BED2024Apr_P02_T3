@@ -85,6 +85,9 @@ document
     } else if (orgData.apt_floor_unit.length > 50) {
       alert("Apt/Floor/Unit must be 50 characters or less.");
       return;
+    } else if (orgData.email.length > 255) {
+      alert("Email must be 255 characters or less.");
+      return;
     }
 
     try {
