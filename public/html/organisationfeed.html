@@ -38,7 +38,7 @@
                 <a href="listings.html" class="nav-link">Listings</a>
               </li>
               <li class="nav-item">
-                <a href="feed.html" class="nav-link">Feed</a>
+                <a href="organisationfeed.html" class="nav-link">Feed</a>
               </li>
               <li class="nav-item">
                 <a href="search.html" class="nav-link">Search</a>
@@ -88,7 +88,12 @@
                   />
                 </svg>
               </label>
-              <img src="../images/comment.png" alt="comment" class="icon" />
+              <img
+                src="../images/comment.png"
+                alt="comment"
+                class="icon comment-btn"
+                onclick="openModal('post1')"
+              />
             </div>
             <span class="likes">100,000 Likes</span>
             <p class="caption">
@@ -102,41 +107,47 @@
     </main>
 
     <!-- Modal -->
-    <div id="postModal" class="modal">
-      <div class="modal-content">
-        <span class="close" onclick="closeModal()">&times;</span>
-        <div class="post-content" id="post1">
-          <img src="../images/userfeedexample.jpg" alt="Post Image" />
-          <label class="container">
-            <input type="checkbox" checked="checked" />
-            <div class="checkmark">
-              <svg viewBox="0 0 256 256">
-                <rect fill="none" height="256" width="256"></rect>
-                <path
-                  d="M224.6,51.9a59.5,59.5,0,0,0-43-19.9,60.5,60.5,0,0,0-44,17.6L128,59.1l-7.5-7.4C97.2,28.3,59.2,26.3,35.9,47.4a59.9,59.9,0,0,0-2.3,87l83.1,83.1a15.9,15.9,0,0,0,22.6,0l81-81C243.7,113.2,245.6,75.2,224.6,51.9Z"
-                  stroke-width="20px"
-                  stroke="#FFF"
-                  fill="none"
-                ></path>
-              </svg>
+    <div id="postModal" class="modal" onclick="closeModal(event)">
+      <div class="modal-content" onclick="event.stopPropagation()">
+        <div class="modal-body">
+          <div class="modal-left">
+            <img
+              src="../images/userfeedexample.jpg"
+              alt="Post Image"
+              class="modal-image"
+            />
+          </div>
+          <div class="modal-right">
+            <div class="modal-header">
+              <img
+                src="../images/github-icon.png"
+                alt="Profile Picture"
+                class="profile-pic"
+              />
+              <span class="username">EcoVolunteers</span>
             </div>
-          </label>
-          <div class="post-details">
-            <h3>EcoVolunteers</h3>
-            <p>
-              Good work today everyone! Thanks to all those who volunteered as
-              we planted 1000 trees in a single day! &lt;3
-            </p>
-            <div class="comments">
-              <h4>Comments</h4>
-              <div class="comment">
-                <p><strong>User1:</strong> Great post!</p>
+            <div class="comments-container">
+              <div class="comments">
+                <div class="comment">
+                  <img
+                    src="../images/user1.png"
+                    alt="User1"
+                    class="profile-pic small"
+                  />
+                  <p><strong>User1:</strong> Great post!</p>
+                </div>
+                <div class="comment">
+                  <img
+                    src="../images/user2.png"
+                    alt="User2"
+                    class="profile-pic small"
+                  />
+                  <p><strong>User2:</strong> Love this!</p>
+                </div>
+                <!-- Repeat for other comments -->
               </div>
-              <div class="comment">
-                <p><strong>User2:</strong> Love this!</p>
-              </div>
-              <!-- Repeat for other comments -->
             </div>
+            <hr />
             <div class="comment-form">
               <input
                 type="text"
@@ -147,7 +158,6 @@
             </div>
           </div>
         </div>
-        <!-- Repeat for other posts -->
       </div>
     </div>
 
@@ -195,8 +205,10 @@
         document.getElementById(postId).style.display = "block";
       }
 
-      function closeModal() {
-        document.getElementById("postModal").style.display = "none";
+      function closeModal(event) {
+        if (event.target.id === "postModal") {
+          document.getElementById("postModal").style.display = "none";
+        }
       }
 
       function addComment() {
@@ -207,11 +219,11 @@
           var newComment = document.createElement("div");
           newComment.className = "comment";
           newComment.innerHTML =
-            "<p><strong>You:</strong> " + commentText + "</p>";
+            '<img src="../images/default-user.png" alt="User" class="profile-pic small" /><p><strong>You:</strong> ' +
+            commentText +
+            "</p>";
 
-          var commentsSection = document.querySelector(
-            '.post-content:not([style="display: none;"]) .comments'
-          );
+          var commentsSection = document.querySelector("#postModal .comments");
           commentsSection.appendChild(newComment);
           commentInput.value = "";
         }
