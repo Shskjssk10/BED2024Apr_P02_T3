@@ -46,9 +46,9 @@ body {
 
 .post-image {
   width: 100%;
-  height: 400px;
-  object-fit: cover;
-  object-position: center;
+  height: 400px; /* Ensures the height is 400px */
+  object-fit: cover; /* Ensures the image covers the container */
+  object-position: center; /* Centers the image */
   border-top: 1px solid #ccc;
   border-bottom: 1px solid #ccc;
 }
@@ -187,7 +187,8 @@ body {
 .modal-left {
   flex: 1;
   display: flex;
-  align-items: center;
+  flex-direction: column;
+  align-items: flex-start;
   justify-content: center;
 }
 
@@ -207,9 +208,10 @@ body {
 }
 
 .modal-header {
+  max-height: 50px;
+  height: 100%;
   display: flex;
   align-items: center;
-  margin-bottom: 20px;
 }
 
 .modal-header .profile-pic {
@@ -221,7 +223,7 @@ body {
 
 .comments-container {
   flex-grow: 1;
-  max-height: 250px;
+  max-height: 320px;
   overflow-y: auto;
 }
 
@@ -272,7 +274,7 @@ body {
   .modal-content {
     width: 90%;
     padding: 15px;
-    height: auto;
+    height: auto; /* Allow auto height for better flexibility */
   }
 
   .modal-body {
@@ -286,17 +288,17 @@ body {
   }
 
   .modal-left {
-    max-height: 200px;
+    max-height: 200px; /* Set a maximum height for the image */
     margin-bottom: 10px;
   }
 
   .modal-header {
-    padding: 5px 10px;
-    font-size: 14px;
+    padding: 5px 10px; /* Reduce padding */
+    font-size: 14px; /* Reduce font size */
   }
 
   .profile-pic {
-    width: 30px;
+    width: 30px; /* Reduce profile picture size */
     height: 30px;
     margin-right: 5px;
   }
@@ -308,7 +310,7 @@ body {
 
   .modal-image {
     width: 100%;
-    max-height: 200px;
+    max-height: 200px; /* Ensure the image fits within the maximum height */
     height: auto;
   }
 
@@ -346,7 +348,7 @@ body {
   .modal-content {
     width: 95%;
     padding: 10px;
-    height: auto;
+    height: auto; /* Allow auto height for better flexibility */
   }
 
   .modal-body {
@@ -360,17 +362,17 @@ body {
   }
 
   .modal-left {
-    max-height: 200px;
+    max-height: 200px; /* Set a maximum height for the image */
     margin-bottom: 10px;
   }
 
   .modal-header {
-    padding: 5px 10px;
-    font-size: 14px;
+    padding: 5px 10px; /* Reduce padding */
+    font-size: 14px; /* Reduce font size */
   }
 
   .profile-pic {
-    width: 30px;
+    width: 30px; /* Reduce profile picture size */
     height: 30px;
     margin-right: 5px;
   }
@@ -382,7 +384,7 @@ body {
 
   .modal-image {
     width: 100%;
-    max-height: 200px;
+    max-height: 200px; /* Ensure the image fits within the maximum height */
     height: auto;
   }
 
