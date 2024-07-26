@@ -24,13 +24,30 @@ const CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
 const REDIRECT_URI = process.env.GOOGLE_REDIRECT_URI;
 const oauth2Client = new OAuth2Client(CLIENT_ID, CLIENT_SECRET, REDIRECT_URI);
 
+const {
+  authAccount,
+  createVolunteer,
+  createOrganisation,
+  checkGoogleAccount,
+  googleSignupVolunteerController,
+  googleSignupOrganisationController,
+} = require("./controllers/authController.js");
+
+const { verifyToken } = require("./middlewares/authMiddleware.js");
+const {
+  getOrganisationListings,
+} = require("./controllers/listingController.js");
+
+// Cheryl's Routes
+app.post("/auth/login", authAccount);
+app.post("/auth/signup/volunteer", createVolunteer);
+app.post("/auth/signup/organisation", createOrganisation);
+app.post("/auth/signup/google-volunteer", googleSignupVolunteerController);
+app.post("/auth/signup/google-organisation", googleSignupOrganisationController);
+app.post("/auth/check-google-account", checkGoogleAccount);
+app.get("/listings", verifyToken, getOrganisationListings);
 // Serve static files with the /public prefix
 app.use("/public", express.static("public"));
-
-// Routes
-const authRoutes = require("./routes/authRoutes");
-app.use("/auth", authRoutes);
-
 // Route to start OAuth flow
 app.get("/auth/google", (req, res) => {
   const authUrl = oauth2Client.generateAuthUrl({
@@ -39,17 +56,14 @@ app.get("/auth/google", (req, res) => {
   });
   res.redirect(authUrl);
 });
-
 // OAuth2 callback route
 app.get("/oauth2callback", async (req, res) => {
   try {
     const { code } = req.query;
     const { tokens } = await oauth2Client.getToken(code);
     oauth2Client.setCredentials(tokens);
-
     // Log tokens to ensure they are being retrieved correctly
     console.log("Tokens received:", tokens);
-
     // Verify ID token
     const ticket = await oauth2Client.verifyIdToken({
       idToken: tokens.id_token,
@@ -57,13 +71,10 @@ app.get("/oauth2callback", async (req, res) => {
     });
     const payload = ticket.getPayload();
     const email = payload.email;
-
     // Save tokens in a cookie
     res.cookie("authToken", tokens.id_token, { httpOnly: false });
-
     // Log the cookies to ensure they are being set correctly
     console.log("Cookies set:", req.cookies);
-
     // Redirect to googleLogin.html with email as URL parameter
     res.redirect(`/public/html/googleLogin.html?email=${email}`);
   } catch (error) {
@@ -86,6 +97,8 @@ app.get("/store-token", (req, res) => {
 app.get("/", (req, res) => {
   res.sendFile("public/html/index.html", { root: "." });
 });
+
+
 
 const dbConfig = require("./dbConfig");
 const volunteerController = require("./controllers/volunteerController");
