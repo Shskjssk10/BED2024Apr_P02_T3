@@ -9,7 +9,8 @@ document.addEventListener("DOMContentLoaded", async () => {
   try {
     // Get Volunteer Details
     //change the 3 cannot hard code
-    const volunteerResponse = await fetch("/volunteerProfile/3", {
+    const currentAccountID = parseInt(localStorage.getItem("userID"));
+    const volunteerResponse = await fetch(`/volunteerProfile/${currentAccountID}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -43,9 +44,20 @@ document.addEventListener("DOMContentLoaded", async () => {
     postSection.innerHTML = "";
     listingSection.innerHTML = "";
     // Appending Profile Data
+    let image = "";
+    try {
+      image = await fetch(`/image/${currentAccountID.MediaPath}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+    } catch (error) {
+      console.error(error);
+    }
     profileHeaderSection.innerHTML = `
       <img
-        src="../images/profile-pic.png"
+        src="${image.url}"
         alt="Profile Picture"
         class="profile-image"
       />
@@ -57,7 +69,9 @@ document.addEventListener("DOMContentLoaded", async () => {
           <span>${volunteer.followersAndFollowing.Followers} Followers</span> •
           <span>${volunteer.followersAndFollowing.Following} Following</span>
         </div>
-        <button class="edit-button">Edit</button>
+        <a href="userprofilemgmt.html">
+          <button class="edit-button">Edit</button>
+        </a>
       </div>
     `;
     // Apending Posts Data
@@ -81,40 +95,88 @@ document.addEventListener("DOMContentLoaded", async () => {
     savedListingContainer.classList.add("listings");
 
     //Preparing Sign Up Listings
-    for (const listing of signUpListings) {
-      const listingContainer = document.createElement("div");
-      listingContainer.classList.add("listing-item");
+    async function processSignedUpListing(listing){
+      const listingContainer = document.createElement("a");
+      listingContainer.classList.add("no-underline");
+      listingContainer.href="userviewlisting.html";
       const orgName =
         organisations.find((org) => org.id === listing.PostedBy)?.OrgName ??
         null;
+      try {
+        image = await fetch(`/image/${listing.MediaPath}`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+      } catch (error) {
+        console.error(error);
+      }
       listingContainer.innerHTML = `
-        <div class="listingimage"></div>
-        <div class="listinginfobox">
-          <p class="listingname">${listing.ListingName}</p>
-          <p class="listinginfo">${orgName}</p>
-          <p class="listinginfo">${listing.Addr}</p>
+        <div id=${listing.ListingID} class="listing-item">
+          <div class="listingimage">
+            <img src="${image.url}">
+          </div>
+          <div class="listinginfobox">
+            <p class="listingname">${listing.ListingName}</p>
+            <p class="listinginfo">${orgName}</p>
+            <p class="listinginfo">${listing.Addr}</p>
+          </div>
         </div>
       `;
       signUpListingContainer.appendChild(listingContainer);
     }
-
     // Preparing Saved Listings
-    for (const listing of savedListings) {
-      const listingContainer = document.createElement("div");
-      listingContainer.classList.add("listing-item");
+    async function processSavedListing(listing){
+      const listingContainer = document.createElement("a");
+      listingContainer.classList.add("no-underline");
+      listingContainer.href="organisationprofile.html";
       const orgName =
         organisations.find((org) => org.id === listing.PostedBy)?.OrgName ??
         null;
+      try {
+        image = await fetch(`/image/${listing.MediaPath}`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+      } catch (error) {
+        console.error(error);
+      }
       listingContainer.innerHTML = `
-        <div class="listingimage"></div>
-        <div class="listinginfobox">
-          <p class="listingname">${listing.ListingName}</p>
-          <p class="listinginfo">${orgName}</p>
-          <p class="listinginfo">${listing.Addr}</p>
+        <div id=${listing.ListingID} class="listing-item">
+          <div class="listingimage">
+            <img src="${image.url}">
+          </div>
+          <div class="listinginfobox">
+            <p class="listingname">${listing.ListingName}</p>
+            <p class="listinginfo">${orgName}</p>
+            <p class="listinginfo">${listing.Addr}</p>
+          </div>
         </div>
       `;
       savedListingContainer.appendChild(listingContainer);
     }
+
+    function updateListings(signUpListings, savedListings){
+      const promises = signUpListings.map(processSignedUpListing) && savedListings.map(processSavedListing);
+      Promise.all(promises).then(() => {
+        let allListings = document.querySelectorAll(".no-underline");
+        allListings.forEach((listing) => {
+          listing.addEventListener("click", (event) => {
+              event.preventDefault();
+              const clickedListing = event.currentTarget.querySelector('.listing-item'); 
+              const listingId = parseInt(clickedListing.id, 10); 
+              console.log("🚀 ~ listing.addEventListener ~ listingId:", listingId)
+              sessionStorage.removeItem("selectedListingID");
+              sessionStorage.setItem("selectedListingID", listingId);
+              window.location.href = "userviewlisting.html";
+          });
+        });
+      });
+    }
+    updateListings(signUpListings, savedListings);
 
     const signUpHeader = document.createElement("h2");
     signUpHeader.innerHTML = "Signed Up Listings";

@@ -87,6 +87,68 @@ app.get("/", (req, res) => {
   res.sendFile("public/html/index.html", { root: "." });
 });
 
+// Google Bucket Credentials
+const bucketName = process.env.BUCKET_NAME;
+const keyFile = process.env.KEYFILENAME
+
+const {Storage} = require('@google-cloud/storage');
+const storage = new Storage({keyFilename: keyFile});
+const googleBucketMiddleware = require("./middlewares/googleBucketMiddleware");
+
+// Google Bucket  
+app.get("/image/:mediapath", async (req, res) => {
+  try {
+    const mediaPath = req.params.mediapath;
+    const imageData = await googleBucketMiddleware.downloadIntoMemory(mediaPath);
+    res.setHeader('Content-Type', 'image/jpeg'); // Or the appropriate MIME type
+    res.send(imageData[0]); 
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to download image' });
+  }
+})
+
+app.post("/image", googleBucketMiddleware.uploadFromMemory);
+// const Busboy = require('busboy');
+
+// app.post("/image", async (req, res) => {
+//   try {
+//     const busboy = Busboy({ headers: req.headers });
+
+//     let fileBuffer;
+//     let filename;
+//     let mimetype;
+
+//     busboy.on("file", (fieldname, file, filename, encoding, mimetype) => {
+//       const chunks = [];
+//       file.on("data", (chunk) => chunks.push(chunk));
+//       file.on("end", () => {
+//         fileBuffer = Buffer.concat(chunks);
+//         console.log("File uploaded and buffered:", filename);
+//       });
+//     });
+
+//     busboy.on("finish", async () => {
+//       try {
+//         const uploadedImage = await googleBucketMiddleware.uploadFromMemory(
+//           fileBuffer
+//         );
+//         console.log("Image uploaded successfully:", uploadedImage);
+//         res.status(200).json({ message: "Success" }); // Assuming you're using Express
+//       } catch (err) {
+//         console.error("Error uploading image to GCS:", err);
+//         res.status(500).json({ error: err.message }); // Send a more specific error
+//       }
+//     });
+    
+//     // Pipe the request to Busboy
+//     req.pipe(busboy);
+
+//   } catch (err) {
+//     console.error("Unexpected error during image upload:", err);
+//     res.status(500).json({ error: 'An unexpected error occurred' });
+//   }
+// });
+
 const dbConfig = require("./dbConfig");
 const volunteerController = require("./controllers/volunteerController");
 const organisationController = require("./controllers/organisationController");
@@ -97,6 +159,8 @@ const searchPageController = require("./controllers/userSearchPageController");
 const userFeedPageController = require("./controllers/userFeedPageController");
 const userProfileController = require("./controllers/userProfileController");
 const followController = require("./controllers/followController");
+const signUpController = require("./controllers/signUpController")
+const savedListingController = require("./controllers/savedListingController");
 
 const sql = require("mssql");
 
@@ -123,6 +187,8 @@ app.get("/organisations/:OrgName", organisationController.getOrgByName);
 app.get("/listing", listingController.getAllListings);
 app.get("/listing/byOrgId/:orgID", listingController.getListingsByOrgId);
 app.get("/listing/byListingID/:id", listingController.getListingsByListingId);
+app.get("/listing/:username", listingController.getListingByListingName);
+app.post("/listing", listingController.postListing);
 
 // Caden's Parts
 app.get("/searchPage/allFollower/:id", searchPageController.getFollowersByID);
@@ -143,11 +209,19 @@ app.delete("/likes", likesController.deleteLikesById);
 app.post("/userFeedPage", userFeedPageController.postComment);
 
 // app.get("/userProfile/:id", postController.getAllPostsByAccID)
-// app.get("/userProfile/:id", volunteerController.getAllFollowersAndFollowing)
+app.get("/userProfile/:id", volunteerController.getAllFollowersAndFollowing)
 app.get("/volunteerProfile/:id", userProfileController.getAccountInfo);
 app.get("/organisationProfile/:id", userProfileController.getOrganisationInfo);
 
 app.post("/postCreation", postController.postPost);
+
+app.get("/signUp/:AccID/:ListingID", signUpController.getAllSignUpByListingID);
+app.post("/signUp", signUpController.postSignUp);
+app.delete("/signUp", signUpController.deleteSignUp);
+
+app.get("/savedListing/:AccID/:ListingID", savedListingController.getAllSavedByListingID);
+app.post("/savedListing", savedListingController.postSaved);
+app.delete("/savedListing", savedListingController.deleteSaved);
 
 app.listen(port, async () => {
   try {
