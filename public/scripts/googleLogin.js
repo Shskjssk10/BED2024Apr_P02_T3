@@ -3,7 +3,9 @@ document.addEventListener("DOMContentLoaded", async () => {
   const email = urlParams.get("email");
 
   if (!email) {
-    console.error("No email found in URL parameters.");
+    console.error(
+      "No email found in URL parameters. Google Login is required before you can access this page."
+    );
     return;
   }
 
@@ -86,7 +88,8 @@ document
       });
 
       if (!response.ok) {
-        throw new Error("Network response was not ok");
+        const result = await response.json();
+        throw new Error(result.message || "Network response was not ok");
       }
 
       const result = await response.json();
@@ -94,6 +97,6 @@ document
       window.location.href = "http://localhost:8080/public/html/index.html";
     } catch (error) {
       console.error("Error during organisation sign-up:", error);
-      alert("Error: " + error.message);
+      alert("Error during organisation sign-up: " + error.message);
     }
-  }); 
+  });

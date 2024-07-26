@@ -218,11 +218,11 @@ const createOrganisation = async (req, res) => {
     return res.status(400).json({
       message: "Phone number must be 8 digits Singaporean phone number.",
     });
-  } else if (email.length > 255) {
+  } else if (email.length > 255 || !null) {
     return res
       .status(400)
       .json({ message: "Email must be 255 characters or less." });
-  } else if (password.length > 255) {
+  } else if (password.length > 255 || !null) {
     return res
       .status(400)
       .json({ message: "Password must be 255 characters or less." });
@@ -319,9 +319,9 @@ const createOrganisation = async (req, res) => {
     organisationReq.input("description", sql.Text, description);
     organisationReq.input("address", sql.VarChar, address);
     organisationReq.input("aptFloorUnit", sql.VarChar, apt_floor_unit);
-    organisationReq.input("website", sql.VarChar, website); // Add website input
+    organisationReq.input("website", sql.VarChar, website);
     organisationReq.input("salt", sql.VarChar, salt);
-    organisationReq.input("hashedPassword", sql.VarChar, hashedPassword); // Use hashed password
+    organisationReq.input("hashedPassword", sql.VarChar, hashedPassword);
 
     await organisationReq.query(organisationSqlQuery);
 
@@ -335,15 +335,8 @@ const createOrganisation = async (req, res) => {
 };
 
 const googleSignupVolunteer = async (volunteerData) => {
-  const {
-    fname,
-    lname,
-    username,
-    email, // Ensure email is included here
-    phone_number,
-    gender,
-    bio,
-  } = volunteerData;
+  const { fname, lname, username, email, phone_number, gender, bio } =
+    volunteerData;
   const password = null; // Password is null for Google sign-up
   const salt = null; // No salt needed as no password
   const hashedPassword = null; // No hashed password needed
@@ -353,7 +346,7 @@ const googleSignupVolunteer = async (volunteerData) => {
     const request = connection.request();
     request.input("username", sql.VarChar, username);
     request.input("phoneNo", sql.VarChar, phone_number);
-    request.input("email", sql.VarChar, email); // Include email here
+    request.input("email", sql.VarChar, email);
     request.input("password", sql.VarChar, password);
 
     const accountSqlQuery = `
@@ -407,7 +400,32 @@ const googleSignupOrganisation = async (orgData) => {
 
   try {
     const connection = await sql.connect(dbConfig);
-    const request = connection.request();
+
+    // Check for existing username
+    let request = connection.request();
+    request.input("username", sql.VarChar, username);
+    let result = await request.query(
+      `SELECT COUNT(*) as count FROM Account WHERE Username = @username`
+    );
+    if (result.recordset[0].count > 0) {
+      throw new Error(
+        "This username has been taken. Please use a different username."
+      );
+    }
+
+    // Check for existing phone number
+    request = connection.request();
+    request.input("phoneNo", sql.VarChar, phone_number);
+    result = await request.query(
+      `SELECT COUNT(*) as count FROM Account WHERE PhoneNo = @phoneNo`
+    );
+    if (result.recordset[0].count > 0) {
+      throw new Error(
+        "This phone number is connected to another account. Please use a different phone number."
+      );
+    }
+
+    request = connection.request();
     request.input("username", sql.VarChar, username);
     request.input("phoneNo", sql.VarChar, phone_number);
     request.input("email", sql.VarChar, email);
