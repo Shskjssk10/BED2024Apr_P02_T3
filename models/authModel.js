@@ -343,7 +343,32 @@ const googleSignupVolunteer = async (volunteerData) => {
 
   try {
     const connection = await sql.connect(dbConfig);
-    const request = connection.request();
+
+    // Check for existing username
+    let request = connection.request();
+    request.input("username", sql.VarChar, username);
+    let result = await request.query(
+      `SELECT COUNT(*) as count FROM Account WHERE Username = @username`
+    );
+    if (result.recordset[0].count > 0) {
+      throw new Error(
+        "This username has been taken. Please use a different username."
+      );
+    }
+
+    // Check for existing phone number
+    request = connection.request();
+    request.input("phoneNo", sql.VarChar, phone_number);
+    result = await request.query(
+      `SELECT COUNT(*) as count FROM Account WHERE PhoneNo = @phoneNo`
+    );
+    if (result.recordset[0].count > 0) {
+      throw new Error(
+        "This phone number is connected to another account. Please use a different phone number."
+      );
+    }
+
+    request = connection.request();
     request.input("username", sql.VarChar, username);
     request.input("phoneNo", sql.VarChar, phone_number);
     request.input("email", sql.VarChar, email);
@@ -372,12 +397,12 @@ const googleSignupVolunteer = async (volunteerData) => {
       VALUES (@accId, @fname, @lname, @username, @gender, @bio, @salt, @hashedPassword)
     `;
     await volunteerReq.query(volunteerSqlQuery);
-    console.log(`Volunteer account created with email ${email}`);
-    res
-      .status(201)
-      .json({ message: "Volunteer account created successfully", email });
+
+    console.log(`Volunteer created with email ${email}`);
+    return { email };
   } catch (error) {
-    alert("Sign up failed: " + error.message);
+    console.error("Error creating volunteer:", error);
+    throw error;
   }
 };
 

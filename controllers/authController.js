@@ -101,21 +101,47 @@ const checkGoogleAccount = async (req, res) => {
 };
 
 const googleSignupVolunteerController = async (req, res) => {
-  try {
-    const volunteerData = req.body;
-    volunteerData.email = req.body.email || req.query.email; // Ensure email is included from the URL or body
-    console.log("Starting volunteer sign-up with Google");
-    console.log("Request body:", volunteerData);
+  const {
+    fname,
+    lname,
+    username,
+    email,
+    phone_number,
+    gender,
+    bio,
+  } = req.body;
 
-    const result = await googleSignupVolunteer(volunteerData);
-    res
-      .status(201)
-      .json({ message: "Volunteer created successfully", email: result.email });
+  // Perform validations
+  if (username.length > 15) {
+    return res
+      .status(400)
+      .json({ message: "Username must be 15 characters or less." });
+  } else if (fname.length > 20 || lname.length > 20) {
+    return res
+      .status(400)
+      .json({ message: "First and last name must be 20 characters or less." });
+  } else if (bio.length > 150) {
+    return res
+      .status(400)
+      .json({ message: "Bio must be 150 characters or less." });
+  } else if (phone_number.length > 8) {
+    return res.status(400).json({
+      message: "Phone number must be 8 digits Singaporean phone number.",
+    });
+  }
+
+  try {
+    const result = await googleSignupVolunteer(req.body);
+    res.status(201).json({
+      message: "Volunteer created successfully",
+      email: result.email,
+    });
   } catch (error) {
     console.error("Error during Google volunteer sign-up:", error);
-    res.status(500).json({ message: "Internal server error" });
+    res.status(400).json({ message: error.message });
   }
 };
+
 
 const googleSignupOrganisationController = async (req, res) => {
   const {
