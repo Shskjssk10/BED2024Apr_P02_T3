@@ -1,4 +1,4 @@
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
   const username = sessionStorage.getItem("username");
   console.log(username);
 
@@ -21,5 +21,23 @@ document.addEventListener("DOMContentLoaded", () => {
     window.location.href = "../html/login.html";
   }
 
+  try {
+    const response = await fetch("/auth/verify-token", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`,
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("Invalid or expired token");
+    }
+  } catch (error) {
+    console.error("Error verifying token:", error);
+    alert("Invalid or expired token. Please log in again.");
+    window.location.href = "../html/login.html";
+    return;
+  }
   const profileLink = document.getElementById("profile-link");
 });

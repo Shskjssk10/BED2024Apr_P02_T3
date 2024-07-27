@@ -46,6 +46,9 @@ app.post("/auth/signup/google-volunteer", googleSignupVolunteerController);
 app.post("/auth/signup/google-organisation", googleSignupOrganisationController);
 app.post("/auth/check-google-account", checkGoogleAccount);
 app.get("/auth/listings", verifyToken, getOrganisationListings);
+app.post("/auth/verify-token", verifyToken,(req, res) => {
+  res.status(200).json({message: "Token is valid"});
+});
 
 // Serve static files with the /public prefix
 app.use("/public", express.static("public"));
