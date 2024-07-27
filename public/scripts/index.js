@@ -1,4 +1,16 @@
-document.addEventListener("DOMContentLoaded", async () => {
+document.addEventListener("DOMContentLoaded", () => {
+  // Function to get a specific cookie by name
+  function getCookie(name) {
+    let matches = document.cookie.match(
+      new RegExp(
+        "(?:^|; )" +
+          name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, "\\$1") +
+          "=([^;]*)"
+      )
+    );
+    return matches ? decodeURIComponent(matches[1]) : undefined;
+  }
+
   const username = sessionStorage.getItem("username");
   console.log(username);
 
@@ -12,32 +24,20 @@ document.addEventListener("DOMContentLoaded", async () => {
     document.getElementById("profile-link").href = "./userprofilemgmt.html";
   }
 
-  const token = sessionStorage.getItem("authToken");
+  const token = getCookie("authToken");
 
-  console.log("authToken from session storage:", token);
+  console.log("authToken from cookie:", token);
 
   if (!token) {
     alert("Please log in to access this page.");
-    window.location.href = "../html/login.html";
-  }
-
-  try {
-    const response = await fetch("/auth/verify-token", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${token}`,
-      },
+    window.location.href = "login.html";
+  } else {
+    document.querySelector(".logout-button").addEventListener("click", () => {
+      document.cookie =
+        "authToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+      window.location.href = "login.html";
     });
-
-    if (!response.ok) {
-      throw new Error("Invalid or expired token");
-    }
-  } catch (error) {
-    console.error("Error verifying token:", error);
-    alert("Invalid or expired token. Please log in again.");
-    window.location.href = "../html/login.html";
-    return;
   }
+
   const profileLink = document.getElementById("profile-link");
 });

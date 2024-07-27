@@ -1,6 +1,5 @@
 const sql = require("mssql");
 const dbConfig = require("../dbConfig");
-const { hashPassword } = require("../models/authModel");
 
 class Organisation {
   constructor(
@@ -64,13 +63,14 @@ class Organisation {
   }
   static async getOrgById(id) {
     const connection = await sql.connect(dbConfig);
+    const request = connection.request();
+    request.input("id", id);
+    
     const sqlQuery = `
     SELECT O.*, A.Email, A.PhoneNo, A.Password
     FROM Organisation O INNER JOIN Account A ON O.OrgName = A.Username
     WHERE A.AccID = @id`;
 
-    const request = connection.request();
-    request.input("id", id);
     const result = await request.query(sqlQuery);
 
     connection.close();
@@ -226,10 +226,11 @@ class Organisation {
     const connection = await sql.connect(dbConfig);
 
     const sqlQuery = `
-    SELECT COUNT(Follower) AS 'No of Followers', 
-    COUNT(FollowedBy) AS 'No of Following'
-    FROM Follower
-    WHERE Follower = @id`;
+    SELECT
+      COUNT(CASE WHEN Follower = @id THEN 1 END) AS 'No of Followers',
+      COUNT(CASE WHEN FollowedBy = @id THEN 1 END) AS 'No of Following'
+    FROM
+      Follower; `;
 
     const request = connection.request();
     request.input("id", id);
@@ -242,28 +243,6 @@ class Organisation {
         "Following": result.recordset[0]["No of Following"],
       },
     ];
-  }
-  // Cheryl's part
-  static async updateOrganisationHash(id, newPassword) {
-    try {
-      const connection = await sql.connect(dbConfig);
-      const { salt, hashedPassword } = await hashPassword(newPassword); // Use hashPassword function
-
-      const organisationQuery = `UPDATE Organisation SET
-        Salt = @Salt,
-        HashedPassword = @HashedPassword
-        WHERE AccID = @AccID`;
-
-      const organisationReq = connection.request();
-      organisationReq.input("AccID", sql.SmallInt, id);
-      organisationReq.input("Salt", sql.VarChar, salt);
-      organisationReq.input("HashedPassword", sql.VarChar, hashedPassword);
-      await organisationReq.query(organisationQuery);
-
-      connection.close();
-    } catch (err) {
-      console.error(err);
-    }
   }
   static async getOrgDetails(orgId) {
     const connection = await sql.connect(dbConfig);

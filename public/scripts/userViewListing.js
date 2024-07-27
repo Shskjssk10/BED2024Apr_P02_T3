@@ -9,23 +9,24 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   try {
     // Get Listing Details
-    const listingsResponse = await fetch("/listing/byListingID/2", {
+    const listingID = sessionStorage.getItem("selectedListingID");
+    const currentAccID = localStorage.getItem("userID");
+    const listingsResponse = await fetch(`/listing/byListingID/${listingID}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
       },
     });
     console.log("Response status on LISTING:", listingsResponse.status);
-    const temp = await listingsResponse.json();
-    // console.log("Listings received:", temp);
+    let currentListing = await listingsResponse.json();
     if (!listingsResponse.ok) {
-      throw new Error(temp.message || "Failed to load listing");
+      throw new Error(currentListing.message || "Failed to load listing");
     }
-    const listing = temp[0];
+    currentListing = currentListing[0];
 
     // Get Associated Organisation
     const organisationResponse = await fetch(
-      `/organisations/${listing.PostedBy}`,
+      `/organisations/${currentListing.PostedBy}`,
       {
         method: "GET",
         headers: {
@@ -45,7 +46,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     // Get More Related Listings
     const relatedListingsResponse = await fetch(
-      `/listing/byOrgId/${organisation.id}`,
+      `/listing/byOrgId/${organisation.AccID}`,
       {
         method: "GET",
         headers: {
@@ -64,23 +65,52 @@ document.addEventListener("DOMContentLoaded", async () => {
         relatedListing.message || "Failed to load related listing"
       );
     }
-    // Get More Related Listings
-    const organisationsResponse = await fetch(`/organisations`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-    console.log(
-      "Response status on ALL ORGANISATIONS:",
-      organisationsResponse.status
+
+    let applyButtonHTML = "Unapply";
+    // Applied or Not 
+    const appliedResponse = await fetch(
+      `/signUp/${currentAccID}/${currentListing.ListingID}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
     );
-    const organisations = await organisationsResponse.json();
+    console.log("Response status on applied:",appliedResponse.status);
+    const appliedRes = await appliedResponse.json();
     // console.log("Related Listing received:", relatedListing);
-    if (!organisationsResponse.ok) {
+    if (!appliedResponse.ok) {
       throw new Error(
-        organisations.message || "Failed to load related organisations"
+        appliedRes.message || "Failed to load related listing"
       );
+    }
+    if (appliedRes.length === 0){
+      applyButtonHTML = "Apply";
+    }
+
+    let savedButtonHTML = "Unsave";
+    // Saved or not
+    const savedResponse = await fetch(
+      `/savedListing/${currentAccID}/${currentListing.ListingID}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    console.log("Response status on applied:",savedResponse.status);
+    const savedRes = await savedResponse.json();
+    // console.log("Related Listing received:", relatedListing);
+    if (!savedResponse.ok) {
+      throw new Error(
+        savedRes.message || "Failed to load related listing"
+      );
+    }
+    console.log("🚀 ~ document.addEventListener ~ savedRes:", savedRes)
+    if (savedRes.length === 0){
+      savedButtonHTML = "Save";
     }
 
     const listingHeader = document.querySelector(".listing-header");
@@ -88,10 +118,21 @@ document.addEventListener("DOMContentLoaded", async () => {
     const sideBarContainer = document.querySelector(".sidebar");
     // Apending listingHeader content
     listingHeader.innerHTML = `
-            <h1>${listing.ListingName}</h1>
-            <p class="organization">Organisation: ${organisation.OrgName}</p>
-        `;
+      <h1>${currentListing.ListingName}</h1>
+      <p class="organization">Organisation: ${organisation.OrgName}</p>
+    `;
     // Appending main content
+    let image = "";
+    try {
+      image = await fetch(`/image/${currentListing.MediaPath}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+    } catch (error) {
+      console.error(error);
+    }
     mainContentContainer.innerHTML = `
       <h2>Description:</h2>
       <p>${currentListing.About}</p>
@@ -115,30 +156,57 @@ document.addEventListener("DOMContentLoaded", async () => {
   `;
     // Adding Related Listings
     const listingsContainer = document.querySelector(".other-listings");
-    for (const relListing of relatedListing) {
-      if (relListing.ListingID !== listing.ListingID) {
-        const listingItem = document.createElement("div");
-        listingItem.classList.add("listing-item");
-        const orgName =
-          organisations.find((org) => org.id === listing.PostedBy)?.OrgName ??
-          null;
+
+    async function processListing(listing){
+      const listingItem = document.createElement("a");
+        listingItem.classList.add("no-underline");
+        listingItem.href="userviewlisting.html";
+        try {
+          image = await fetch(`/image/${listing.MediaPath}`, {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          });
+        } catch (error) {
+          console.error(error);
+        }
+        console.log(image);
         listingItem.innerHTML = `
-                <div class="listingimage"></div>
-                <div class="listinginfobox">
-                    <p class="listingname">${listing.ListingName}</p>
-                    <p class="listinginfo">${orgName}</p>
-                    <p class="listinginfo">${listing.Addr}</p>
-                </div>
-                `;
+          <div id="${listing.ListingID}" class="listing-item">
+            <div class="listingimage">
+              <img src="${image.url}">
+            </div>
+            <div class="listinginfobox">
+              <p class="listingname">${listing.ListingName}</p>
+              <p class="listinginfo">${organisation.OrgName}</p>
+              <p class="listinginfo">${listing.Addr}</p>
+            </div>
+            </div>
+            `;
         listingsContainer.appendChild(listingItem);
-      }
     }
-    if (listingsContainer.innerHTML === "") {
-      listingsContainer.innerHTML = "Please wait for more opportunities!!! :D";
+    function updateListing(relatedListing){
+      relatedListing = relatedListing.filter(listing => listing.ListingID !== currentListing.ListingID);
+      const promises = relatedListing.map(processListing);
+      Promise.all(promises).then(() => {
+      let allListings = document.querySelectorAll(".no-underline");
+      allListings.forEach((listing) => {
+        listing.addEventListener("click", (event) => {
+            event.preventDefault();
+            const clickedListing = event.currentTarget.querySelector('.listing-item'); 
+            const listingId = parseInt(clickedListing.id, 10); 
+            sessionStorage.removeItem("selectedListingID");
+            sessionStorage.setItem("selectedListingID", listingId);
+            window.location.href = "userviewlisting.html";
+          });
+        });
+      });
     }
+    updateListing(relatedListing);
 
     // Prepare cause area buttons
-    const causeAreas = listing.CauseArea;
+    const causeAreas = currentListing.CauseArea;
     // const listOfCauseAreas = causeAreas.split(",");
     // const causeAreaDisplay = "";
     // listOfCauseAreas.foreach((causeArea) => {
@@ -149,17 +217,103 @@ document.addEventListener("DOMContentLoaded", async () => {
     // })
 
     sideBarContainer.innerHTML = `
-            <h2>Cause Areas:</h2>
-            <button class="cause-area">${listing.CauseArea}</button>
-            <h2>When:</h2>
-            <p>${listing.StartDate} - ${listing.EndDate}</p>
-            <h2>Where:</h2>
-            <p>${listing.Addr}</p>
-            <h2>Skills:</h2>
-            <p>${listing.Skill}</p>
-            <h2>Looking for:</h2>
-            <p>${listing.Requirements}</p>
-        `;
+      <h2>Cause Areas:</h2>
+      <button class="cause-area">${currentListing.CauseArea}</button>
+      <h2>When:</h2>
+      <p>${currentListing.StartDate} - ${currentListing.EndDate}</p>
+      <h2>Where:</h2>
+      <p>${currentListing.Addr}</p>
+      <h2>Skills:</h2>
+      <p>${currentListing.Skill}</p>
+      <h2>Looking for:</h2>
+      <p>${currentListing.Requirements}</p>
+    `;
+
+    const applyButton = document.querySelector("#apply-button");
+    applyButton.addEventListener("click", async (event) => {
+      if (applyButton.innerHTML === "Apply"){
+        const postSignUp = {
+          "AccID" : currentAccID,
+          "ListingID" : currentListing.ListingID
+        };
+        const postSignUpResponse = await fetch(`/signUp`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(postSignUp),
+        });
+        applyButton.innerHTML = "Unapply";
+        if (!postSignUpResponse.ok) {
+          throw new Error("Failed to post Sign Up");
+        }
+        const updatedData = await postSignUpResponse.json();
+        console.log(updatedData);
+        console.log("Follow posted:", updatedData);
+      }
+      else {
+        const deleteSignUp = {
+          "AccID": currentAccID,
+          "ListingID": currentListing.ListingID,
+        };
+        const deleteSignUpResponse = await fetch(`/signUp`, {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(deleteSignUp),
+        });
+        applyButton.innerHTML = "Apply";
+        if (!deleteSignUpResponse.ok) {
+          throw new Error("Failed to post sign up");
+        }
+      }
+    })
+
+    const savedButton = document.querySelector("#saved-button");
+    savedButton.addEventListener("click", async (event) => {
+      if (savedButton.innerHTML === "Save"){
+        const postSave = {
+          "AccID" : currentAccID,
+          "ListingID" : currentListing.ListingID
+        };
+        const postSaveResponse = await fetch(`/savedListing`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(postSave),
+        });
+        savedButton.innerHTML = "Unsave";
+        if (!postSaveResponse.ok) {
+          throw new Error("Failed to post Sign Up");
+        }
+        const updatedData = await postSaveResponse.json();
+        console.log(updatedData);
+        console.log("Follow posted:", updatedData);
+      }
+      else {
+        const deleteSaved = {
+          "AccID": currentAccID,
+          "ListingID": currentListing.ListingID,
+        };
+        const deleteSavedResponse = await fetch(`/savedListing`, {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(deleteSaved),
+        });
+        savedButton.innerHTML = "Save";
+        if (!deleteSavedResponse.ok) {
+          throw new Error("Failed to post sign up");
+        }
+      }
+    })
   } catch (error) {
     console.error("Error loading listings:", error);
     alert("Error loading listings: " + error.message);
