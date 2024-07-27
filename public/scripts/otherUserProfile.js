@@ -304,7 +304,6 @@ document.addEventListener("DOMContentLoaded", async () => {
           },
           body: JSON.stringify(postComment),
         });
-        console.log("🚀 ~ button.addEventListener ~ postCommentResponse:", postCommentResponse)
         let newComment = document.createElement("div");
         newComment.className = "comment";
         targetAccount = allAccounts.find(account => account.AccID === currentAccID);
