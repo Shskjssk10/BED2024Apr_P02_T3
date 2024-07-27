@@ -20,7 +20,7 @@ document.addEventListener("DOMContentLoaded", () => {
       console.log("Login result:", result);
 
       if (response.ok) {
-        document.cookie = `authToken=${result.token}; path=/;`;
+        sessionStorage.setItem("authToken", result.token);
         alert("Login successful");
         window.location.href = "../html/index.html";
       } else {
