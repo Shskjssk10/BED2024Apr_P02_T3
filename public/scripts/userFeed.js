@@ -54,7 +54,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       const postContainer = document.createElement("div");
       let targetAccount = allAccounts.find(account => account.AccID === targetPost.PostedBy);
       postContainer.classList.add("post");
-      let pfp = await fetch(`/image/${targetAccount.MediaPath}`, {
+      let pfp = await fetch(`/image/${targetPost.MediaPath}`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
