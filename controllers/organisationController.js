@@ -1,5 +1,6 @@
 const Organisation = require("../models/organisation");
 
+//Hendrik
 const getAllOrganisations = async (req, res) => {
   try {
     const organisation = await Organisation.getAllOrganisations();
@@ -22,7 +23,7 @@ const getOrgById = async (req, res) => {
     console.error(error);
     res.status(500).send("Error retrieving Organisation");
   }
-}
+};
 
 const getOrgByName = async (req, res) => {
   const orgName = req.params.orgName;
@@ -54,9 +55,26 @@ const updateOrgProfile = async (req, res) => {
   }
 };
 
+
+// get details for organisation page listing details (name, mission, number of listings, followers, following)
+const getOrgDetails = async (req, res) => {
+  const orgId = parseInt(req.params.id);
+  try {
+    const orgDetails = await Organisation.getOrgDetails(orgId);
+    if (!orgDetails) {
+      return res.status(404).send("Organisation not found");
+    }
+    res.json(orgDetails);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Error retrieving Organisation details");
+  }
+};
+
 module.exports = {
   getAllOrganisations,
   getOrgById,
   getOrgByName,
   updateOrgProfile,
+  getOrgDetails,
 };

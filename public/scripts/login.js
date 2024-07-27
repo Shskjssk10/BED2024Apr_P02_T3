@@ -17,14 +17,50 @@ document.addEventListener("DOMContentLoaded", () => {
       });
 
       const result = await response.json();
+      const userID = result.id;
+      console.log(userID);
       console.log("Login result:", result);
-      localStorage.setItem("userID", result.id);
-      localStorage.setItem("authToken", result.token);
+      sessionStorage.setItem("userID", result.id);
+      sessionStorage.setItem("authToken", result.token);
 
-      const data = await fetch(`/volunteers/${result.id}`);
-      const indivData = await data.json();
-      console.log(indivData.Username);
-      sessionStorage.setItem("username", indivData.Username);
+      async function checkAccType(userID) {
+        try {
+          const orgResponse = await fetch(`/organisations/${userID}`);
+          if (orgResponse.ok) {
+            const orgData = await orgResponse.json();
+            console.log("Organisation data:", orgData);
+            sessionStorage.setItem("username", orgData.OrgName);
+            sessionStorage.setItem("AccType", "Organisation");
+            const accType = sessionStorage.getItem("AccType");
+            console.log(accType);
+          } else if (orgResponse.status === 404) {
+            // Organization not found, check for volunteer
+            console.log("Organization not found. Checking volunteer data...");
+            const volResponse = await fetch(`/volunteers/${userID}`);
+            if (volResponse.ok) {
+              const volData = await volResponse.json();
+              console.log("Volunteer data:", volData);
+              sessionStorage.setItem("username", volData.Username);
+              sessionStorage.setItem("AccType", "Volunteer");
+              const accType = sessionStorage.getItem("AccType");
+              console.log(accType);
+            } else {
+              // Handle the case where neither organization nor volunteer is found
+              console.warn("No matching account found for user ID:", userID);
+            }
+          } else {
+            // Handle other HTTP errors
+            console.error(
+              "Error fetching organization data:",
+              orgResponse.statusText
+            );
+          }
+        } catch (err) {
+          console.error("Error checking account type:", err);
+        }
+      }
+
+      await checkAccType(userID); // Ensure we wait for checkAccType to complete
 
       if (response.ok) {
         document.cookie = `authToken=${result.token}; path=/;`;
