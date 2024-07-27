@@ -13,7 +13,8 @@ class Organisation {
     AptFloorUnit,
     PhoneNo,
     Email,
-    Password
+    Password, 
+    MediaPath
   ) {
     this.AccID = AccID;
     this.OrgName = OrgName;
@@ -26,6 +27,7 @@ class Organisation {
     this.Email = Email;
     this.PhoneNo = PhoneNo;
     this.Password = Password;
+    this.MediaPath = MediaPath;
   }
 
   //Hendrik's Parts//
@@ -54,7 +56,8 @@ class Organisation {
           row.AptFloorUnit,
           row.PhoneNo,
           row.Email,
-          row.Password
+          row.Password,
+          row.MediaPath
         )
     );
   }
@@ -84,7 +87,8 @@ class Organisation {
           result.recordset[0].AptFloorUnit,
           result.recordset[0].PhoneNo,
           result.recordset[0].Email,
-          result.recordset[0].Password
+          result.recordset[0].Password,
+          result.recordset[0].MediaPath
         )
       : null; // Handle organisation not found
   }
@@ -116,7 +120,8 @@ class Organisation {
           result.recordset[0].AptFloorUnit,
           result.recordset[0].PhoneNo,
           result.recordset[0].Email,
-          result.recordset[0].Password
+          result.recordset[0].Password,
+          result.recordset[0].MediaPath
         )
       : null; // Handle organisation not found
   }

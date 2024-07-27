@@ -21,7 +21,7 @@ document.addEventListener("DOMContentLoaded", () => {
       localStorage.setItem("userID", result.id);
       localStorage.setItem("authToken", result.token);
 
-      const data = await fetch(`/organisations/${result.id}`);
+      const data = await fetch(`/volunteers/${result.id}`);
       const indivData = await data.json();
       console.log(indivData.Username);
       sessionStorage.setItem("username", indivData.Username);

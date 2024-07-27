@@ -10,7 +10,7 @@ class Likes {
         const connection = await sql.connect(dbConfig);
 
         const sqlQuery = `
-        SELECT COUNT(*) AS 'No. of Likes'
+        SELECT COUNT(*) AS 'NoOfLikes'
         FROM Likes
         WHERE PostID = @id`;
 

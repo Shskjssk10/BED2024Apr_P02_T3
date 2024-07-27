@@ -56,7 +56,6 @@ document.addEventListener("DOMContentLoaded", async () => {
       } catch (error) {
         console.error(error);
       }
-
       listingItem.innerHTML = `
         <div class="listings" id=${listing.ListingID}>
             <div class="listingimage">

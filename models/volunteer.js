@@ -11,7 +11,8 @@ class Volunteer {
     Bio,
     Email,
     PhoneNo,
-    Password
+    Password,
+    MediaPath
   ) {
     this.AccID = AccID;
     this.FName = FName;
@@ -22,6 +23,7 @@ class Volunteer {
     this.Email = Email;
     this.PhoneNo = PhoneNo;
     this.Password = Password;
+    this.MediaPath = MediaPath;
   }
 
   //Hendrik's Parts//
@@ -48,8 +50,8 @@ class Volunteer {
           row.Bio,
           row.Email,
           row.PhoneNo,
-
-          row.Password
+          row.Password,
+          row.MediaPath
         )
     );
   }
@@ -76,7 +78,8 @@ class Volunteer {
           result.recordset[0].Bio,
           result.recordset[0].Email,
           result.recordset[0].PhoneNo,
-          result.recordset[0].Password
+          result.recordset[0].Password,
+          result.recordset[0].MediaPath
         )
       : null; // Handle volunteer not found
   }
@@ -108,7 +111,8 @@ class Volunteer {
           result.recordset[0].Bio,
           result.recordset[0].PhoneNo,
           result.recordset[0].Email,
-          result.recordset[0].Password
+          result.recordset[0].Password,
+          result.recordset[0].MediaPath
         )
       : null; // Handle volunteer not found
   }
@@ -245,21 +249,6 @@ class Volunteer {
         Following: result.recordset[0]["No of Following"],
       },
     ];
-  }
-
-  static async postComment(postComment) {
-    //establish database connection
-    const connection = await sql.connect(dbConfig);
-    const sqlQuery = `INSERT INTO Comment (AccID, PostID, Comment) VALUES (@AccID, @PostID, @Comment); SELECT SCOPE_IDENTITY() AS id;`;
-
-    const request = connection.request();
-    request.input("AccID", postComment.AccID);
-    request.input("PostID", postComment.PostID);
-    request.input("Comment", postComment.Comment);
-
-    const result = await request.query(sqlQuery);
-
-    connection.close();
   }
 }
 module.exports = Volunteer;
