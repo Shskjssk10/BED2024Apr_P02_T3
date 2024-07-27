@@ -45,7 +45,7 @@ app.post("/auth/signup/organisation", createOrganisation);
 app.post("/auth/signup/google-volunteer", googleSignupVolunteerController);
 app.post("/auth/signup/google-organisation", googleSignupOrganisationController);
 app.post("/auth/check-google-account", checkGoogleAccount);
-app.get("/listings", verifyToken, getOrganisationListings);
+app.get("/auth/listings", verifyToken, getOrganisationListings);
 
 // Serve static files with the /public prefix
 app.use("/public", express.static("public"));

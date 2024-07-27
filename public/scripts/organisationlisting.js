@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", async () => {
-  const token = localStorage.getItem("authToken");
+  const token = sessionStorage.getItem("authToken");
   console.log("Retrieved token:", token);
 
   if (!token) {
