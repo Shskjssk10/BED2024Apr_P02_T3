@@ -33,20 +33,33 @@
             type="button"
             data-bs-toggle="collapse"
             data-bs-target="#navbarNav"
+            aria-controls="navbarNav"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
           >
             <span class="navbar-toggler-icon"></span>
           </button>
           <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto">
               <li class="nav-item">
-                <a href="#" class="nav-link">Listings</a>
+                <a href="organisationlisting.html" class="nav-link">Listings</a>
               </li>
-              <li class="nav-item"><a href="#" class="nav-link">Feed</a></li>
-              <li class="nav-item"><a href="#" class="nav-link">Search</a></li>
-              <li class="nav-item"><a href="#" class="nav-link">Create</a></li>
-              <li class="nav-item"><a href="#" class="nav-link">Message</a></li>
               <li class="nav-item">
-                <a href="#" class="nav-link"
+                <a href="organisationfeed.html" class="nav-link">Feed</a>
+              </li>
+              <li class="nav-item">
+                <a href="organisationsearch.html" class="nav-link">Search</a>
+              </li>
+              <li class="nav-item">
+                <a href="organisationpostcreationpage.html" class="nav-link"
+                  >Create</a
+                >
+              </li>
+              <li class="nav-item">
+                <a href="message.html" class="nav-link">Message</a>
+              </li>
+              <li class="nav-item">
+                <a href="selforganisationprofile.html" class="nav-link"
                   ><img src="../images/github-icon.png" alt="GitHub icon"
                 /></a>
               </li>
@@ -63,15 +76,12 @@
           class="profile-image"
         />
         <div class="profile-info">
-          <h1>EcoVolunteers</h1>
-          <p>
-            We are dedicated to promoting sustainability through
-            community-driven initiatives. Join us in making a difference!
-          </p>
+          <h1 id="orgName"></h1>
+          <p id="orgMission"></p>
           <div class="profile-stats">
             <span id="listingCount">0 Listings</span>
-            <span>1839 Followers</span>
-            <span>25 Following</span>
+            <span id="followerCount">0 Followers</span>
+            <span id="followingCount">0 Following</span>
           </div>
         </div>
       </div>
@@ -82,6 +92,40 @@
         </div>
       </div>
     </div>
+    <footer>
+      <div class="footer-wrapper">
+        <div class="brand">
+          <a href="#" class="navbar-brand mb-0 h1">
+            <span style="color: #f6ecec">Helping</span>
+            <span style="color: #ff8f80">Hearts</span>
+          </a>
+        </div>
+        <div class="footer-middle">
+          <small>HelpingHearts Copyright 2024 IT02 Team 3</small>
+        </div>
+        <div class="site-map">
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item">
+              <a href="organisationlisting.html" class="nav-link">Listings</a>
+            </li>
+            <li class="nav-item">
+              <a href="organisationfeed.html" class="nav-link">Feed</a>
+            </li>
+            <li class="nav-item">
+              <a href="organisationsearch.html" class="nav-link">Search</a>
+            </li>
+            <li class="nav-item">
+              <a href="organisationpostcreationpage.html" class="nav-link"
+                >Create</a
+              >
+            </li>
+            <li class="nav-item">
+              <a href="message.html" class="nav-link">Message</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </footer>
     <script src="../scripts/organisationlisting.js"></script>
   </body>
 </html>

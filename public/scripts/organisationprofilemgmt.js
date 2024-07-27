@@ -119,4 +119,38 @@ document.addEventListener("DOMContentLoaded", async function () {
       }
     }
   });
+
+  const deleteButton = document.getElementById("deleteButton");
+  deleteButton.addEventListener("click", async function (e) {
+    console.log("button clicked");
+    //listen for delete
+    //ask for confirmation
+    const confirmed = confirm(
+      "Are you sure you want to delete your account? This action cannot be undone."
+    );
+    if (!confirmed) {
+      return;
+    }
+
+    const userID = localStorage.getItem("userID");
+
+    //delete by user id
+    //HENDRIK DELETE
+    await fetch(`/organisations/${userID}`, {
+      method: "DELETE",
+    })
+      .then((response) => {
+        if (response.ok) {
+          alert("Account deleted successfully.");
+          //redirect the user to login page
+          window.location.href = "./login.html";
+        } else {
+          alert("Failed to delete account.");
+        }
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+        alert("An error occurred. Please try again later.");
+      });
+  });
 });

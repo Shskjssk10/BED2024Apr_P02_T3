@@ -1,5 +1,6 @@
 const Volunteer = require("../models/volunteer");
 
+//Hendrik part
 const getAllVolunteers = async (req, res) => {
   try {
     const volunteers = await Volunteer.getAllVolunteer();
@@ -14,20 +15,6 @@ const getVolunteerById = async (req, res) => {
   const id = parseInt(req.params.id);
   try {
     const volunteer = await Volunteer.getVolunteerById(id);
-    if (!volunteer) {
-      return res.status(404).send("Volunteer not found");
-    }
-    res.json(volunteer);
-  } catch (error) {
-    console.error(error);
-    res.status(500).send("Error retrieving Volunteer");
-  }
-};
-const getVolunteerByUsername = async (req, res) => {
-  const username = req.params.username;
-  console.log(username);
-  try {
-    const volunteer = await Volunteer.getVolunteerByUsername(username);
     if (!volunteer) {
       return res.status(404).send("Volunteer not found");
     }
@@ -90,6 +77,20 @@ const postComment = async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).send("Error posting commnet");
+  }
+};
+const getVolunteerByUsername = async (req, res) => {
+  const username = req.params.username;
+  console.log(username);
+  try {
+    const volunteer = await Volunteer.getVolunteerByUsername(username);
+    if (!volunteer) {
+      return res.status(404).send("Volunteer not found");
+    }
+    res.json(volunteer);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Error retrieving Volunteer");
   }
 };
 

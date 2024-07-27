@@ -125,6 +125,8 @@ app.put("/volunteers/:id/password", volunteerController.updateVolunteerHash);
 app.put("/organisations/:id/password", organisationController.updateOrganisationHash);
 
 
+app.get("/organisation/details/:id", organisationController.getOrgDetails);
+
 app.get("/volunteers", volunteerController.getAllVolunteers); //get all user
 app.get("/volunteers/:id", volunteerController.getVolunteerById); // Get user by ID
 app.get("/volunteers/:username", volunteerController.getVolunteerByUsername);
@@ -165,6 +167,7 @@ app.post("/userFeedPage", userFeedPageController.postComment);
 app.get("/volunteerProfile/:id", userProfileController.getAccountInfo);
 app.get("/organisationProfile/:id", userProfileController.getOrganisationInfo);
 
+app.get("/followedPost/:id", postController.getAllFollowedPosts);
 app.post("/postCreation", postController.postPost);
 
 app.listen(port, async () => {
