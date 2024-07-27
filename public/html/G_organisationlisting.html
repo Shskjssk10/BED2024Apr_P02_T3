@@ -70,21 +70,19 @@
           class="profile-image"
         />
         <div class="profile-info">
-          <h1>EcoVolunteers</h1>
-          <p>
-            We are dedicated to promoting sustainability through
-            community-driven initiatives. Join us in making a difference!
-          </p>
+          <h1 id="orgName"></h1>
+          <p id="orgMission"></p>
           <div class="profile-stats">
             <span id="listingCount">0 Listings</span>
-            <span>1839 Followers</span>
-            <span>25 Following</span>
+            <span id="followerCount">0 Followers</span>
+            <span id="followingCount">0 Following</span>
           </div>
         </div>
       </div>
       <div class="listings-section">
         <h2>Listings</h2>
         <div class="listings" id="listingsContainer">
+          <!-- Listings will be dynamically added here -->
           <div class="listing-item">
             <img
               src="https://storage.gignite.ai/mediaengine/model1/41096b32-b087-493f-94f3-f13aa79d2526.png"
@@ -94,7 +92,6 @@
             <div class="listing-info-box">
               <div class="listing-name">[ Insert Listing Name ]</div>
               <div class="listing-info">
-                <p>[ Insert Listing Organisation Name ]</p>
                 <p>[ Insert Address ]</p>
               </div>
             </div>
@@ -108,7 +105,6 @@
             <div class="listing-info-box">
               <div class="listing-name">[ Insert Listing Name ]</div>
               <div class="listing-info">
-                <p>[ Insert Listing Organisation Name ]</p>
                 <p>[ Insert Address ]</p>
               </div>
             </div>
@@ -122,7 +118,6 @@
             <div class="listing-info-box">
               <div class="listing-name">[ Insert Listing Name ]</div>
               <div class="listing-info">
-                <p>[ Insert Listing Organisation Name ]</p>
                 <p>[ Insert Address ]</p>
               </div>
             </div>
@@ -136,7 +131,6 @@
             <div class="listing-info-box">
               <div class="listing-name">[ Insert Listing Name ]</div>
               <div class="listing-info">
-                <p>[ Insert Listing Organisation Name ]</p>
                 <p>[ Insert Address ]</p>
               </div>
             </div>
@@ -150,7 +144,6 @@
             <div class="listing-info-box">
               <div class="listing-name">[ Insert Listing Name ]</div>
               <div class="listing-info">
-                <p>[ Insert Listing Organisation Name ]</p>
                 <p>[ Insert Address ]</p>
               </div>
             </div>
@@ -164,7 +157,6 @@
             <div class="listing-info-box">
               <div class="listing-name">[ Insert Listing Name ]</div>
               <div class="listing-info">
-                <p>[ Insert Listing Organisation Name ]</p>
                 <p>[ Insert Address ]</p>
               </div>
             </div>
@@ -207,5 +199,6 @@
       </div>
     </footer>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../scripts/organisationlisting.js"></script>
   </body>
 </html>

@@ -68,6 +68,17 @@ document.addEventListener("DOMContentLoaded", async () => {
       const listingItem = document.createElement("div");
       listingItem.classList.add("listing-item");
       listingItem.innerHTML = `
+        <img src="${listing.ImagePath || 'https://storage.gignite.ai/mediaengine/model1/41096b32-b087-493f-94f3-f13aa79d2526.png'}" alt="Listing Image" class="listing-image" />
+        <div class="listing-info-box">
+          <div class="listing-name">${listing.ListingName}</div>
+          <div class="listing-info">
+            <p>${listing.Addr}</p>
+          </div>
+        </div>
+      `;
+      listingsContainer.appendChild(listingItem);
+    });
+      /*listingItem.innerHTML = `
           <div class="listingimage">
             <div class="placeholder-image"></div>
           </div>
@@ -78,7 +89,7 @@ document.addEventListener("DOMContentLoaded", async () => {
           </div>
         `;
       listingsContainer.appendChild(listingItem);
-    });
+    });*/
 
     document.getElementById(
       "listingCount"
