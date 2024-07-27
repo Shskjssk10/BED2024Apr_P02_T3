@@ -1,155 +1,209 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>HelpingHearts</title>
-    <link rel="stylesheet" href="../styles/overlord.css">
-    <link rel="stylesheet" href="../styles/userprofilemgmt.css">
+    <link rel="stylesheet" href="../styles/overlord.css" />
+    <link rel="stylesheet" href="../styles/userprofilemgmt.css" />
     <script src="../scripts/userProfilemgmt.js"></script>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-</head>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+      crossorigin="anonymous"
+    />
+  </head>
 
-<body style="background-color: #fff8e7;">
+  <body style="background-color: #fff8e7">
     <header>
-        <nav class="navbar navbar-light navbar-expand-sm custom-navbar">
-            <div class="container-fluid">
-                <a href="./index.html" class="navbar-brand mb-0 h1"><span style="color:#F6ECEC;">Helping</span><span
-                        style="color:#FF8F80;">Hearts</span></a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarNav">
-                    <ul class="navbar-nav ms-auto">
-                        <li class="nav-item">
-                            <a href="#" class="nav-link">Listings</a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="#" class="nav-link">Feed</a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="#" class="nav-link">Search</a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="#" class="nav-link">Create</a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="../html/message.html" class="nav-link">Message</a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="#" class="nav-link"><img src="../images/github-icon.png" alt="GitHub icon"></a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
+      <nav class="navbar navbar-light navbar-expand-sm custom-navbar">
+        <div class="container-fluid">
+          <a href="#" class="navbar-brand mb-0 h1">
+            <span style="color: #f6ecec">Helping</span>
+            <span style="color: #ff8f80">Hearts</span>
+          </a>
+          <button
+            class="navbar-toggler"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#navbarNav"
+            aria-controls="navbarNav"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+          >
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+              <li class="nav-item">
+                <a href="listings.html" class="nav-link">Listings</a>
+              </li>
+              <li class="nav-item">
+                <a href="feed.html" class="nav-link">Feed</a>
+              </li>
+              <li class="nav-item">
+                <a href="search.html" class="nav-link">Search</a>
+              </li>
+              <li class="nav-item">
+                <a href="create.html" class="nav-link">Create</a>
+              </li>
+              <li class="nav-item">
+                <a href="message.html" class="nav-link">Message</a>
+              </li>
+              <li class="nav-item">
+                <a href="selfuserprofile.html" class="nav-link">
+                  <img src="../images/github-icon.png" alt="GitHub icon" />
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
     </header>
 
-    <div class="card" style="background-color: #fff8e7; border: none;">
-        <h3 style="margin: 3rem 0 1.5rem 20rem;">Edit Profile</h3>
-        <div class="card-body">
-            <div id="profile-photo"><img src="../images/github-icon.png" alt="User profile photo"
-                    onerror="this.src='../images/default-pfp.png'"></div>
-            <div class="cardnames">
-                <h4 id="username"></h4>
-                <p class="card-text" id="FName"></p>
-            </div>
-            <a href="#" class="btn btn-primary"
-                style="margin: 0 0 0 5rem; background-color: #D4A373; border: none;">Change Picture</a>
+    <div class="card" style="background-color: #fff8e7; border: none">
+      <h3 style="margin: 3rem 0 1.5rem 20rem">Edit Profile</h3>
+      <div class="card-body">
+        <div id="profile-photo">
+          <img
+            src="../images/github-icon.png"
+            alt="User profile photo"
+            onerror="this.src='../images/default-pfp.png'"
+          />
         </div>
+        <div class="cardnames">
+          <h4 id="username"></h4>
+          <p class="card-text" id="FName"></p>
+        </div>
+        <a
+          href="#"
+          class="btn btn-primary"
+          style="margin: 0 0 0 5rem; background-color: #d4a373; border: none"
+          >Change Picture</a
+        >
+      </div>
     </div>
 
     <!--need to add action to link to database for put-->
     <form method="post" action="http://localhost:8080/volunteers/:id">
-        <input type="hidden" name="_method" value="PUT">
-        <div class="fields" style="max-width: 50%; margin: 2rem 0 0 20rem;">
-            <div class="names">
-                <div class="fname">
-                    <label for="fname" class="form-label">First Name:</label>
-                    <input type="text" id="fname" class="form-control" required>
-                </div>
-                <div class="lname">
-                    <label for="lname" class="form-label">Last Name:</label>
-                    <input type="text" id="lname" class="form-control" maxlength="15" required>
-                </div>
-            </div>
-            <div class="username">
-                <div class="mb-3">
-                    <label for="form-username" class="form-label">Username:</label>
-                    <input type="text" class="form-control" id="form-username">
-                </div>
-            </div>
-            <div class="email">
-                <div class="mb-3">
-                    <label for="email" class="form-label">Email address:</label>
-                    <input type="email" class="form-control" id="email">
-                </div>
-            </div>
-            <div class="phone">
-                <label for="phonenum" class="form-label">Phone Number:</label>
-                <input type="tel" id="phonenum" class="form-control" maxlength="8" pattern="[0-9]{8}">
-            </div>
-            <div class="bio">
-                <div class="mb-3">
-                    <label for="bio" class="form-label">Bio:</label>
-                    <textarea class="form-control" id="bio" rows="3"></textarea>
-                </div>
-            </div>
-            <div class="password">
-                <label for="inputPassword5" class="form-label">Password</label>
-                <input type="password" id="password" class="form-control" aria-describedby="passwordHelpBlock">
-                <div id="password" class="form-text">
-                    Your password must be 8-20 characters long, contain letters and numbers, and must not contain
-                    spaces,
-                    special characters, or emoji.
-                </div>
-            </div>
-            <br>
-            <input type="submit" class="btn btn-primary" value="Save Changes" id="submitButton">
+      <input type="hidden" name="_method" value="PUT" />
+      <div class="fields" style="max-width: 50%; margin: 2rem 0 0 20rem">
+        <div class="names">
+          <div class="fname">
+            <label for="fname" class="form-label">First Name:</label>
+            <input type="text" id="fname" class="form-control" required />
+          </div>
+          <div class="lname">
+            <label for="lname" class="form-label">Last Name:</label>
+            <input
+              type="text"
+              id="lname"
+              class="form-control"
+              maxlength="15"
+              required
+            />
+          </div>
         </div>
-        <input style="background-color: red; border: none; margin: 0.7rem 0 0 20rem; width: 8.5rem;"
-            class="btn btn-primary" value="Delete Account" id="deleteButton">
+        <div class="username">
+          <div class="mb-3">
+            <label for="form-username" class="form-label">Username:</label>
+            <input type="text" class="form-control" id="form-username" />
+          </div>
+        </div>
+        <div class="email">
+          <div class="mb-3">
+            <label for="email" class="form-label">Email address:</label>
+            <input type="email" class="form-control" id="email" />
+          </div>
+        </div>
+        <div class="phone">
+          <label for="phonenum" class="form-label">Phone Number:</label>
+          <input
+            type="tel"
+            id="phonenum"
+            class="form-control"
+            maxlength="8"
+            pattern="[0-9]{8}"
+          />
+        </div>
+        <div class="bio">
+          <div class="mb-3">
+            <label for="bio" class="form-label">Bio:</label>
+            <textarea class="form-control" id="bio" rows="3"></textarea>
+          </div>
+        </div>
+        <div class="password">
+          <label for="inputPassword5" class="form-label">Password</label>
+          <input
+            type="password"
+            id="password"
+            class="form-control"
+            aria-describedby="passwordHelpBlock"
+          />
+          <div id="password" class="form-text">
+            Your password must be 8-20 characters long, contain letters and
+            numbers, and must not contain spaces, special characters, or emoji.
+          </div>
+        </div>
+        <br />
+        <input
+          type="submit"
+          class="btn btn-primary"
+          value="Save Changes"
+          id="submitButton"
+        />
+      </div>
+      <input
+        style="
+          background-color: red;
+          border: none;
+          margin: 0.7rem 0 0 20rem;
+          width: 8.5rem;
+        "
+        class="btn btn-primary"
+        value="Delete Account"
+        id="deleteButton"
+      />
     </form>
 
     <footer>
-        <div class="footer-wrapper">
-            <div class="brand">
-                <a href="#" class="navbar-brand mb-0 h1">
-                    <span style="color: #f6ecec">Helping</span>
-                    <span style="color: #ff8f80">Hearts</span>
-                </a>
-            </div>
-            <div class="footer-middle">
-                <small>HelpingHearts Copyright 2024 IT02 Team 3</small>
-            </div>
-            <div class="site-map">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item">
-                        <a href="organisationlisting.html" class="nav-link">Listings</a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="organisationfeed.html" class="nav-link">Feed</a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="organisationsearch.html" class="nav-link">Search</a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="organisationpostcreationpage.html" class="nav-link">Create</a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="message.html" class="nav-link">Message</a>
-                    </li>
-                </ul>
-            </div>
+      <div class="footer-wrapper">
+        <div class="brand">
+          <a href="#" class="navbar-brand mb-0 h1">
+            <span style="color: #f6ecec">Helping</span>
+            <span style="color: #ff8f80">Hearts</span>
+          </a>
         </div>
+        <div class="footer-middle">
+          <small>HelpingHearts Copyright 2024 IT02 Team 3</small>
+        </div>
+        <div class="site-map">
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item">
+              <a href="userlisting.html" class="nav-link">Listings</a>
+            </li>
+            <li class="nav-item">
+              <a href="userfeed.html" class="nav-link">Feed</a>
+            </li>
+            <li class="nav-item">
+              <a href="usersearch.html" class="nav-link">Search</a>
+            </li>
+            <li class="nav-item">
+              <a href="userpostcreationpage.html" class="nav-link">Create</a>
+            </li>
+            <li class="nav-item">
+              <a href="message.html" class="nav-link">Message</a>
+            </li>
+          </ul>
+        </div>
+      </div>
     </footer>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
-        crossorigin="anonymous"></script>
-</body>
-
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+      crossorigin="anonymous"
+    ></script>
+  </body>
 </html>
