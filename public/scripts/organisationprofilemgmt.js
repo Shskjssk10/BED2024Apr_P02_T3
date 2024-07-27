@@ -1,17 +1,11 @@
 document.addEventListener("DOMContentLoaded", async function () {
   console.log("DOM loaded");
-
-  //need to read the user cant use data[0]
-  //using data[0] now just to display
-
-  const userID = parseInt(localStorage.getItem("userID"));
-  //console.log(userID);
+  const userID = parseInt(sessionStorage.getItem("userID"));
   const response = await fetch(`/organisations/${userID}`);
   const data = await response.json();
   console.log(data);
 
-  const token = localStorage.getItem("authToken");
-  //console.log(token);
+  const token = sessionStorage.getItem("authToken");
 
   //for the top card
   var username = document.getElementById("username");
@@ -108,7 +102,7 @@ document.addEventListener("DOMContentLoaded", async function () {
       return;
     }
 
-    const userID = localStorage.getItem("userID");
+    const userID = sessionStorage.getItem("userID");
 
     //delete by user id
     //HENDRIK DELETE
