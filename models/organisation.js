@@ -239,5 +239,26 @@ class Organisation {
       },
     ];
   }
+  static async getOrgDetails(orgId) {
+    const connection = await sql.connect(dbConfig);
+    const sqlQuery = `
+      SELECT o.AccID, o.OrgName, o.Mission, 
+        COUNT(l.ListingID) AS NumListings,
+        (SELECT COUNT(*) FROM Follower WHERE Follower = o.AccID) AS NumFollowers,
+        (SELECT COUNT(*) FROM Follower WHERE FollowedBy = o.AccID) AS NumFollowing
+      FROM Organisation o
+      LEFT JOIN Listing l 
+      ON o.AccID = l.PostedBy
+      WHERE o.AccID = @orgId
+      GROUP BY o.AccID, o.OrgName, o.Mission`;
+
+    const request = connection.request();
+    request.input("orgId", sql.SmallInt, orgId);
+    const result = await request.query(sqlQuery);
+    connection.close();
+
+    return result.recordset[0];
+  }
+
 }
 module.exports = Organisation;
