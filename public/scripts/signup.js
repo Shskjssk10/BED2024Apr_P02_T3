@@ -13,6 +13,33 @@ document
       password: document.getElementById("volunteerPassword").value,
     };
 
+    const phoneRegex = /^[89]\d{7}$/;
+
+    if (volunteerData.username.length > 15) {
+      alert("Username must be 15 characters or less.");
+      return;
+    } else if (
+      volunteerData.fname.length > 20 ||
+      volunteerData.lname.length > 20
+    ) {
+      alert("First and last name must be 20 characters or less.");
+      return;
+    } else if (volunteerData.bio.length > 150) {
+      alert("Bio must be 150 characters or less.");
+      return;
+    } else if (!phoneRegex.test(volunteerData.phone_number)) {
+      alert(
+        "Phone number must be 8 digit Singaporean phone number starting with 8 or 9."
+      );
+      return;
+    } else if (volunteerData.password.length > 255) {
+      alert("Password must be 255 characters or less.");
+      return;
+    } else if (volunteerData.email.length > 255) {
+      alert("Email must be 255 characters or less.");
+      return;
+    }
+
     try {
       const response = await fetch("/auth/signup/volunteer", {
         method: "POST",
@@ -22,9 +49,11 @@ document
         body: JSON.stringify(volunteerData),
       });
       const result = await response.json();
-      console.log("Volunteer Sign Up Result:", result);
+      if (!response.ok) throw new Error(result.message);
+      alert("Volunteer signed up successfully");
+      window.location.href = "../html/login.html";
     } catch (error) {
-      console.error("Error during volunteer sign up:", error);
+      alert("Signup failed: " + error.message);
     }
   });
 
@@ -46,6 +75,33 @@ document
       website: document.getElementById("orgWebsite").value,
     };
 
+    const phoneRegex = /^[89]\d{7}$/;
+
+    if (orgData.org_name.length > 20) {
+      alert("Organisation name must be 20 characters or less.");
+      return;
+    } else if (orgData.issue_area.length > 50) {
+      alert("Issue area must be 50 characters or less.");
+      return;
+    } else if (orgData.mission.length > 255) {
+      alert("Mission must be 255 characters or less.");
+      return;
+    } else if (orgData.address.length > 255) {
+      alert("Address must be 255 characters or less.");
+      return;
+    } else if (orgData.apt_floor_unit.length > 50) {
+      alert("Apt/Floor/Unit must be 50 characters or less.");
+      return;
+    } else if (!phoneRegex.test(orgData.phone_number)) {
+      alert(
+        "Phone number must be an 8 digit Singaporean number starting with 8 or 9."
+      );
+      return;
+    } else if (orgData.email.length > 255) {
+      alert("Email must be 255 characters or less.");
+      return;
+    }
+
     try {
       const response = await fetch("/auth/signup/organisation", {
         method: "POST",
@@ -56,12 +112,10 @@ document
       });
 
       const result = await response.json();
-      if (response.ok) {
-        alert("Organisation signed up successfully");
-      } else {
-        alert("Error: " + result.message);
-      }
+      if (!response.ok) throw new Error(result.message);
+      alert("Organisation signed up successfully");
+      window.location.href = "../html/login.html";
     } catch (error) {
-      console.error("Error during sign-up:", error);
+      alert("Signup failed: " + error.message);
     }
   });

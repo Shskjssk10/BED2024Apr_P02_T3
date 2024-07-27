@@ -1,5 +1,6 @@
 const sql = require("mssql");
 const dbConfig = require("../dbConfig");
+const { hashPassword } = require("../models/authModel");
 
 class Organisation {
   constructor(
@@ -13,7 +14,7 @@ class Organisation {
     AptFloorUnit,
     PhoneNo,
     Email,
-    Password, 
+    Password,
     MediaPath
   ) {
     this.AccID = AccID;
@@ -65,7 +66,7 @@ class Organisation {
     const connection = await sql.connect(dbConfig);
     const request = connection.request();
     request.input("id", id);
-    
+
     const sqlQuery = `
     SELECT O.*, A.Email, A.PhoneNo, A.Password
     FROM Organisation O INNER JOIN Account A ON O.OrgName = A.Username
@@ -239,23 +240,47 @@ class Organisation {
     connection.close();
     return [
       {
-        "Followers": result.recordset[0]["No of Followers"],
-        "Following": result.recordset[0]["No of Following"],
+        Followers: result.recordset[0]["No of Followers"],
+        Following: result.recordset[0]["No of Following"],
       },
     ];
   }
+
+  // Cheryl's part
+  static async updateOrganisationHash(id, newPassword) {
+    try {
+      const connection = await sql.connect(dbConfig);
+      const { salt, hashedPassword } = await hashPassword(newPassword); // Use hashPassword function
+
+      const organisationQuery = `UPDATE Organisation SET
+      Salt = @Salt,
+      HashedPassword = @HashedPassword
+      WHERE AccID = @AccID`;
+
+      const organisationReq = connection.request();
+      organisationReq.input("AccID", sql.SmallInt, id);
+      organisationReq.input("Salt", sql.VarChar, salt);
+      organisationReq.input("HashedPassword", sql.VarChar, hashedPassword);
+      await organisationReq.query(organisationQuery);
+
+      connection.close();
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
   static async getOrgDetails(orgId) {
     const connection = await sql.connect(dbConfig);
     const sqlQuery = `
-      SELECT o.AccID, o.OrgName, o.Mission, 
-        COUNT(l.ListingID) AS NumListings,
-        (SELECT COUNT(*) FROM Follower WHERE Follower = o.AccID) AS NumFollowers,
-        (SELECT COUNT(*) FROM Follower WHERE FollowedBy = o.AccID) AS NumFollowing
-      FROM Organisation o
-      LEFT JOIN Listing l 
-      ON o.AccID = l.PostedBy
-      WHERE o.AccID = @orgId
-      GROUP BY o.AccID, o.OrgName, o.Mission`;
+    SELECT o.AccID, o.OrgName, o.Mission, 
+      COUNT(l.ListingID) AS NumListings,
+      (SELECT COUNT(*) FROM Follower WHERE Follower = o.AccID) AS NumFollowers,
+      (SELECT COUNT(*) FROM Follower WHERE FollowedBy = o.AccID) AS NumFollowing
+    FROM Organisation o
+    LEFT JOIN Listing l 
+    ON o.AccID = l.PostedBy
+    WHERE o.AccID = @orgId
+    GROUP BY o.AccID, o.OrgName, o.Mission`;
 
     const request = connection.request();
     request.input("orgId", sql.SmallInt, orgId);
@@ -264,6 +289,5 @@ class Organisation {
 
     return result.recordset[0];
   }
-
 }
 module.exports = Organisation;

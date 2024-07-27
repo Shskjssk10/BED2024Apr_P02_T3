@@ -2,9 +2,10 @@ const Listing = require("../models/listing");
 const sql = require("mssql");
 const dbConfig = require("../dbConfig");
 
+// Cheryl's part (GET organisation listings)
+// get all listings posted by organisation that is logged in
 const getOrganisationListings = async (req, res) => {
   const accountId = req.accountId;
-
   try {
     const connection = await sql.connect(dbConfig);
     const listingSqlQuery = `SELECT * FROM Listing WHERE PostedBy = @accountId`;
@@ -19,7 +20,9 @@ const getOrganisationListings = async (req, res) => {
     res.status(500).json({ message: "Internal server error" });
   }
 };
-const getListingByListingName = async(req, res) => {
+// end of cheryl's part
+
+const getListingByListingName = async (req, res) => {
   const username = req.params.username;
   try {
     const listings = await Listing.getListingByListingName(username);
@@ -31,7 +34,7 @@ const getListingByListingName = async(req, res) => {
     console.error(error);
     res.status(500).send("Error retrieving listings");
   }
-}
+};
 const getAllListings = async (req, res) => {
   try {
     const listings = await Listing.getAllListings();
@@ -69,7 +72,7 @@ const getSavedListingsById = async (req, res) => {
 };
 const getListingsByOrgId = async (req, res) => {
   const orgID = req.params.orgID;
-  console.log("🚀 ~ getListingsByOrgId ~ orgID:", orgID)
+  console.log("🚀 ~ getListingsByOrgId ~ orgID:", orgID);
   try {
     const listings = await Listing.getListingsByOrgId(orgID);
     if (!listings) {
@@ -132,5 +135,5 @@ module.exports = {
   getListingsByOrgId,
   postListing,
   updateListing,
-  getListingsByListingId
+  getListingsByListingId,
 };

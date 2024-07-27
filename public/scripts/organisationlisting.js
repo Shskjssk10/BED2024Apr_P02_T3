@@ -8,7 +8,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     return;
   }
 
-
   // fetch organisation details
   try {
     const orgId = sessionStorage.getItem("userID");
@@ -29,14 +28,21 @@ document.addEventListener("DOMContentLoaded", async () => {
     console.log("Organisation details received:", orgDetails);
 
     if (!response.ok) {
-      throw new Error(orgDetails.message || "Failed to load organisation details");
+      throw new Error(
+        orgDetails.message || "Failed to load organisation details"
+      );
     }
     document.getElementById("orgName").textContent = orgDetails.OrgName;
     document.getElementById("orgMission").textContent = orgDetails.Mission;
-    document.getElementById("listingCount").textContent = `${orgDetails.NumListings} Listings`;
-    document.getElementById("followerCount").textContent = `${orgDetails.NumFollowers} Followers`;
-    document.getElementById("followingCount").textContent = `${orgDetails.NumFollowing} Following`;
-
+    document.getElementById(
+      "listingCount"
+    ).textContent = `${orgDetails.NumListings} Listings`;
+    document.getElementById(
+      "followerCount"
+    ).textContent = `${orgDetails.NumFollowers} Followers`;
+    document.getElementById(
+      "followingCount"
+    ).textContent = `${orgDetails.NumFollowing} Following`;
   } catch (error) {
     console.error("Error loading organisation details:", error);
     alert("Error loading organisation details: " + error.message);
@@ -62,34 +68,28 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     const listingsContainer = document.getElementById("listingsContainer");
-    listingsContainer.innerHTML = ""; // Clear existing content
+    const noListingsMessage = document.getElementById("noListingsMessage");
+    const template = document.getElementById("listingItemTemplate");
 
-    listings.forEach((listing) => {
-      const listingItem = document.createElement("div");
-      listingItem.classList.add("listing-item");
-      listingItem.innerHTML = `
-        <img src="${listing.ImagePath || 'https://storage.gignite.ai/mediaengine/model1/41096b32-b087-493f-94f3-f13aa79d2526.png'}" alt="Listing Image" class="listing-image" />
-        <div class="listing-info-box">
-          <div class="listing-name">${listing.ListingName}</div>
-          <div class="listing-info">
-            <p>${listing.Addr}</p>
-          </div>
-        </div>
-      `;
-      listingsContainer.appendChild(listingItem);
-    });
-      /*listingItem.innerHTML = `
-          <div class="listingimage">
-            <div class="placeholder-image"></div>
-          </div>
-          <div class="listinginfobox">
-            <p class="listingname">${listing.ListingName}</p>
-            <p class="listinginfo">${listing.Addr}</p>
-            <p class="listinginfo">${listing.CauseArea}</p>
-          </div>
-        `;
-      listingsContainer.appendChild(listingItem);
-    });*/
+
+    if (listings.length === 0) {
+      noListingsMessage.style.display = "block";
+    } else {
+      noListingsMessage.style.display = "none";
+
+      listings.forEach((listing) => {
+        const listingItem = template.cloneNode(true);
+        listingItem.style.display = "flex"; 
+        listingItem.id = ""; 
+        listingItem.querySelector(".listing-image").src =
+          listing.ImagePath ||
+          "https://storage.gignite.ai/mediaengine/model1/41096b32-b087-493f-94f3-f13aa79d2526.png";
+        listingItem.querySelector(".listing-name").textContent =
+          listing.ListingName;
+        listingItem.querySelector(".listing-info p").textContent = listing.Addr;
+        listingsContainer.appendChild(listingItem);
+      });
+    }
 
     document.getElementById(
       "listingCount"

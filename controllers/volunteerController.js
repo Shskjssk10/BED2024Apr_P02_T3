@@ -93,6 +93,20 @@ const getVolunteerByUsername = async (req, res) => {
     res.status(500).send("Error retrieving Volunteer");
   }
 };
+
+// Cheryl's part
+const updateVolunteerHash = async (req, res) => {
+  const userId = parseInt(req.params.id);
+  const { newPassword } = req.body;
+  try {
+    await Volunteer.updateVolunteerHash(userId, newPassword);
+    res.status(200).send("Volunteer password updated successfully");
+  } catch (error) {
+    console.error("Error updating volunteer password:", error);
+    res.status(500).send("Error updating volunteer password");
+  }
+};
+
 module.exports = {
   getAllVolunteers,
   getVolunteerById,
@@ -101,4 +115,5 @@ module.exports = {
   deleteVolunteer,
   getAllFollowersAndFollowing,
   postComment,
+  updateVolunteerHash,
 };

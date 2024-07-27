@@ -27,9 +27,6 @@ const oauth2Client = new OAuth2Client(CLIENT_ID, CLIENT_SECRET, REDIRECT_URI);
 // Serve static files with the /public prefix
 app.use("/public", express.static("public"));
 
-// Routes
-const authRoutes = require("./routes/authRoutes");
-app.use("/auth", authRoutes);
 
 // Route to start OAuth flow
 app.get("/auth/google", (req, res) => {
@@ -80,6 +77,32 @@ app.get("/store-token", (req, res) => {
       window.location.href = '/public/html/index.html';
     </script>
   `);
+});
+
+const {
+  authAccount,
+  createVolunteer,
+  createOrganisation,
+  checkGoogleAccount,
+  googleSignupVolunteerController,
+  googleSignupOrganisationController,
+} = require("./controllers/authController.js");
+
+const { verifyToken } = require("./middlewares/authMiddleware.js");
+const {
+  getOrganisationListings,
+} = require("./controllers/listingController.js");
+
+// Cheryl's Routes
+app.post("/auth/login", authAccount);
+app.post("/auth/signup/volunteer", createVolunteer);
+app.post("/auth/signup/organisation", createOrganisation);
+app.post("/auth/signup/google-volunteer", googleSignupVolunteerController);
+app.post("/auth/signup/google-organisation", googleSignupOrganisationController);
+app.post("/auth/check-google-account", checkGoogleAccount);
+app.get("/auth/listings", verifyToken, getOrganisationListings);
+app.post("/auth/verify-token", verifyToken,(req, res) => {
+  res.status(200).json({message: "Token is valid"});
 });
 
 // Serve the main index.html file
@@ -172,7 +195,11 @@ app.use((req, res, next) => {
   next();
 });
 
+// Cheryl's Part
+app.put("/volunteers/:id/password", volunteerController.updateVolunteerHash);
+app.put("/organisations/:id/password", organisationController.updateOrganisationHash);
 app.get("/organisation/details/:id", organisationController.getOrgDetails);
+// End of Cheryl's part
 
 app.get("/volunteers", volunteerController.getAllVolunteers); //get all user
 app.get("/volunteers/:id", volunteerController.getVolunteerById); // Get user by ID
