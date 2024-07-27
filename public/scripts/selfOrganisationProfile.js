@@ -131,6 +131,15 @@ document.addEventListener("DOMContentLoaded", async () => {
     for (const post of allPosts) {
       const postItemContainer = document.createElement("div");
       postItemContainer.classList.add("post-item");
+      image = await fetch(`/image/${image.url}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      postItemContainer.innerHTML = `
+        <img src="${image.url}">
+      `;
       postSection.appendChild(postItemContainer);
     }
   } catch (error) {
