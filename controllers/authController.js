@@ -132,9 +132,11 @@ const googleSignupVolunteerController = async (req, res) => {
 
   try {
     const result = await googleSignupVolunteer(req.body);
+    const token = generateToken(result.AccID);
     res.status(201).json({
       message: "Volunteer created successfully",
       email: result.email,
+      token,
     });
   } catch (error) {
     console.error("Error during Google volunteer sign-up:", error);
@@ -195,9 +197,11 @@ const googleSignupOrganisationController = async (req, res) => {
 
   try {
     const result = await googleSignupOrganisation(req.body);
+    const token = generateToken(result.AccID);
     res.status(201).json({
       message: "Organisation created successfully",
       email: result.email,
+      token
     });
   } catch (error) {
     console.error("Error during Google organisation sign-up:", error);

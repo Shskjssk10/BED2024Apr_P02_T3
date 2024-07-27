@@ -25,7 +25,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const result = await response.json();
 
     if (result.exists) {
-      localStorage.setItem("authToken", result.token);
+      sessionStorage.setItem("authToken", result.token);
       window.location.href = "/public/html/index.html";
     } else {
       document.getElementById("orgSignUpForm").style.display = "block";
@@ -61,6 +61,7 @@ document
       }
 
       const result = await response.json();
+      sessionStorage.setItem("authToken", result.token);
       alert("Volunteer sign-up successful!");
       window.location.href = "/public/html/index.html";
     } catch (error) {
@@ -90,6 +91,7 @@ document
 
       if (!response.ok) {
         const result = await response.json();
+        sessionStorage.setItem("authToken", result.token);
         throw new Error(result.message || "Network response was not ok");
       }
 
