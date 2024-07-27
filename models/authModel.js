@@ -88,6 +88,8 @@ const createVolunteer = async (req, res) => {
   // check if google sign up
   const isGoogleSignUp = !password;
 
+  const passwordRegex = /^(?=.*\d).{10,}$/; // At least 10 characters and at least one number
+
   // Validate input fields
   if (username.length > 15) {
     return res
@@ -109,10 +111,16 @@ const createVolunteer = async (req, res) => {
     return res
       .status(400)
       .json({ message: "Email must be 255 characters or less." });
-  } else if (!isGoogleSignUp && password.length > 255) {
+  } else if (
+    !isGoogleSignUp &&
+    (password.length > 255 || !passwordRegex.test(password))
+  ) {
     return res
       .status(400)
-      .json({ message: "Password must be 255 characters or less." });
+      .json({
+        message:
+          "Password must be in a range of 10-255 characters and include at least one number.",
+      });
   } else if (bio.length > 150) {
     return res
       .status(400)
@@ -216,25 +224,28 @@ const createOrganisation = async (req, res) => {
   // check if google sign up
   const isGoogleSignUp = !password;
 
+  const passwordRegex = /^(?=.*\d).{10,}$/; // At least 10 characters and at least one number
+
   // Validate input fields
   if (org_name.length > 20) {
     return res
       .status(400)
       .json({ message: "Organisation name must be 20 characters or less." });
   } else if (phone_number.length > 8) {
-    return res
-      .status(400)
-      .json({
-        message: "Phone number must be 8 digits Singaporean phone number.",
-      });
+    return res.status(400).json({
+      message: "Phone number must be 8 digits Singaporean phone number.",
+    });
   } else if (!isGoogleSignUp && email.length > 255) {
     return res
       .status(400)
       .json({ message: "Email must be 255 characters or less." });
-  } else if (!isGoogleSignUp && password.length > 255) {
+  } else if (
+    !isGoogleSignUp &&
+    (password.length > 255 || !passwordRegex.test(password))
+  ) {
     return res
       .status(400)
-      .json({ message: "Password must be 255 characters or less." });
+      .json({ message: "Password must be in a range of 10-255 characters and include at least one number.", });
   } else if (issue_area.length > 50) {
     return res
       .status(400)

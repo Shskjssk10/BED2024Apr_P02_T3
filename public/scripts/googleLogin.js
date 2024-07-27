@@ -36,6 +36,13 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 });
 
+// validate that phone number is 8 digits long and starts with 8 or 9
+const validatePhoneNumber = (phoneNumber) => {
+  const phoneNumberRegex = /^[89]\d{7}$/;
+  return phoneNumberRegex.test(phoneNumber);
+};
+
+
 document
   .getElementById("volunteerSignUpForm")
   .addEventListener("submit", async (event) => {
@@ -43,6 +50,10 @@ document
     const formData = new FormData(event.target);
     const data = Object.fromEntries(formData.entries());
     data.email = new URLSearchParams(window.location.search).get("email"); // Add email to data
+    if (!validatePhoneNumber(data.phone_number)) {
+      alert("Phone number must be an 8 digit Singaporean phone number starting with 8 or 9.");
+      return;
+    }
 
     console.log("Volunteer sign-up data:", data); // Log form data to verify
 
@@ -77,6 +88,10 @@ document
     const formData = new FormData(event.target);
     const data = Object.fromEntries(formData.entries());
     data.email = new URLSearchParams(window.location.search).get("email"); // Add email to data
+    if (!validatePhoneNumber(data.phone_number)) {
+      alert("Phone number must be an 8 digit Singaporean phone number starting with 8 or 9.");
+      return;
+    }
 
     console.log("Organisation sign-up data:", data); // Log form data to verify
 

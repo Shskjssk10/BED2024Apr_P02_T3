@@ -13,6 +13,8 @@ document
       password: document.getElementById("volunteerPassword").value,
     };
 
+    const phoneRegex = /^[89]\d{7}$/;
+
     if (volunteerData.username.length > 15) {
       alert("Username must be 15 characters or less.");
       return;
@@ -25,8 +27,8 @@ document
     } else if (volunteerData.bio.length > 150) {
       alert("Bio must be 150 characters or less.");
       return;
-    } else if (volunteerData.phone_number.length > 8) {
-      alert("Phone number must be 8 digit Singaporean phone number.");
+    } else if (!phoneRegex.test(volunteerData.phone_number)) {
+      alert("Phone number must be 8 digit Singaporean phone number starting with 8 or 9.");
       return;
     } else if (volunteerData.password.length > 255) {
       alert("Password must be 255 characters or less.");
@@ -47,6 +49,7 @@ document
       const result = await response.json();
       if (!response.ok) throw new Error(result.message);
       alert("Volunteer signed up successfully");
+      window.location.href = "../html/login.html";
     } catch (error) {
       alert("Signup failed: " + error.message);
     }
@@ -70,6 +73,8 @@ document
       website: document.getElementById("orgWebsite").value,
     };
 
+    const phoneRegex = /^[89]\d{7}$/;
+
     if (orgData.org_name.length > 20) {
       alert("Organisation name must be 20 characters or less.");
       return;
@@ -84,6 +89,9 @@ document
       return;
     } else if (orgData.apt_floor_unit.length > 50) {
       alert("Apt/Floor/Unit must be 50 characters or less.");
+      return;
+    } else if (!phoneRegex.test(orgData.phone_number)) {
+      alert("Phone number must be an 8 digit Singaporean number starting with 8 or 9.");
       return;
     } else if (orgData.email.length > 255) {
       alert("Email must be 255 characters or less.");
@@ -102,6 +110,7 @@ document
       const result = await response.json();
       if (!response.ok) throw new Error(result.message);
       alert("Organisation signed up successfully");
+      window.location.href = "../html/login.html";
     } catch (error) {
       alert("Signup failed: " + error.message);
     }
