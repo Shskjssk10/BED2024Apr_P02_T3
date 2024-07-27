@@ -7,8 +7,10 @@ document.addEventListener("DOMContentLoaded", async () => {
     return;
   }
   try {
-    // Get Volunteer Details
-    const organisationResponse = await fetch("/organisationProfile/2", {
+    // Get Organisation Details
+    // const currentAccountID = parseInt(localStorage.getItem("userID"));
+    const currentAccountID = 2
+    const organisationResponse = await fetch(`/organisationProfile/${currentAccountID}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -29,26 +31,39 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     listingSecetion.innerHTML = "";
     postSection.innerHTML = "";
-
+    let image = "";
+    let mediaPath = "Shskjssk10-pfp.jpg";
+    try {
+      image = await fetch(`/image/${mediaPath}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+    } catch (error) {
+      console.error(error);
+    }
     profileSection.innerHTML = `
-    <img
-      src="path/to/profile-image.jpg"
-      alt="Profile Image"
-      class="profile-image"
-    />
-    <div class="profile-info">
-      <h1>${organisation.info.OrgName}</h1>
-      <p>
-        ${organisation.info.Mission}
-      </p>
-      <div class="profile-stats">
-        <span>${organisation.listings.length} Listings</span>
-        <span>${organisation.followersAndFollowing.Followers} Followers</span>
-        <span>${organisation.followersAndFollowing.Following} Following</span>
+      <img
+        src="${image.url}"
+        alt="Profile Image"
+        class="profile-image"
+      />
+      <div class="profile-info">
+        <h1>${organisation.info.OrgName}</h1>
+        <p>
+          ${organisation.info.Mission}
+        </p>
+        <div class="profile-stats">
+          <span>${organisation.listings.length} Listings</span>
+          <span>${organisation.followersAndFollowing.Followers} Followers</span>
+          <span>${organisation.followersAndFollowing.Following} Following</span>
+        </div>
+        <a href="organisationprofilemgmt.html"
+          <button href="organisationprofilemgmt.html" class="edit-button">Edit</button>
+        </a>
       </div>
-      <button href="organisationprofilemgmt.html" class="edit-button">Edit</button>
-    </div>
-  `;
+    `;
 
     // Apending Listings Data
     const listingsContainer = document.createElement("div");
@@ -56,14 +71,26 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     const allListings = organisation.listings;
     for (const listing of allListings) {
+      try {
+        image = await fetch(`/image/${listing.MediaPath}`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+      } catch (error) {
+        console.error(error);
+      }
       const indivListingContainer = document.createElement("div");
       indivListingContainer.classList.add("listing-item");
 
       indivListingContainer.innerHTML = `
-      <div class="listingimage"></div>
+      <div class="listingimage">
+        <img src="${image.url}">
+      </div>
       <div class="listinginfobox">
         <p class="listingname">${listing.ListingName}</p>
-        <p class="listinginfo">${organisation.OrgName}</p>
+        <p class="listinginfo">${organisation.info.OrgName}</p>
         <p class="listinginfo">${listing.Addr}</p>
       </div>
     `;
@@ -77,8 +104,12 @@ document.addEventListener("DOMContentLoaded", async () => {
     const listingFooter = document.createElement("div");
     listingFooter.classList.add("listings-footer");
     listingFooter.innerHTML = `
-    <button class="add-button">+</button>
-    <button class="view-all-button">View all</button>
+      <a href="organisationcreatelisting.html">
+        <button s="add-button">+</button>
+      </a>
+      <a href="organisationlisting.html">
+        <button class="view-all-button">View all</button>
+      </a>
   `;
 
     listingSecetion.appendChild(listingHeader);
@@ -91,6 +122,15 @@ document.addEventListener("DOMContentLoaded", async () => {
     for (const post of allPosts) {
       const postItemContainer = document.createElement("div");
       postItemContainer.classList.add("post-item");
+      image = await fetch(`/image/${post.MediaPath}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      postItemContainer.innerHTML = `
+        <img src="${image.url}">
+      `;
       postSection.appendChild(postItemContainer);
     }
   } catch (error) {

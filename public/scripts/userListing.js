@@ -44,8 +44,19 @@ document.addEventListener("DOMContentLoaded", async () => {
       const listingItem = document.createElement("div");
       listingItem.classList.add("listings");
       const orgName =
-        organisations.find((org) => org.id === listing.PostedBy)?.OrgName ??
-        null;
+        organisations.find((org) => org.AccID === listing.PostedBy)?.OrgName ?? null;
+      let image = "";
+
+      try {
+        image = await fetch(`/image/${listing.MediaPath}`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+      } catch (error) {
+        console.error(error);
+      }
       listingItem.innerHTML = `
             <div class="listingimage"></div>
             <div class="listinginfobox">

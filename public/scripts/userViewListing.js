@@ -93,21 +93,26 @@ document.addEventListener("DOMContentLoaded", async () => {
         `;
     // Appending main content
     mainContentContainer.innerHTML = `
-            <h2>Description:</h2>
-            <p>${listing.About}</p>
-            <div class="image-placeholder"></div>
-            <div class="applybookmark">
-                <button class="apply-button">Apply</button>
-                <img src="../images/bookmark.png" alt="Bookmark Icon" class="bookmark-icon"/>
-            </div>
-            <h3>Other opportunities with EcoVolunteers</h3>
-            <div class="other-listings"></div>
-            <h3>More about EcoVolunteers:</h3>
-            <p>Location: ${organisation.Addr}</p>
-            <p>
-            Description: ${organisation.Mission}
-            </p>
-        `;
+      <h2>Description:</h2>
+      <p>${currentListing.About}</p>
+      <div class="image-placeholder">
+        <img src="${image.url}">
+      </div>
+      <div class="applybookmark">
+        <a href="userlisting.html">
+          <button class="apply-button">Back</button>
+        </a>
+        <button id="apply-button" class="apply-button">${applyButtonHTML}</button>
+        <button id="saved-button" class="apply-button">${savedButtonHTML}</button>
+      </div>
+      <h3>Other opportunities with EcoVolunteers</h3>
+      <div class="other-listings"></div>
+      <h3>More about EcoVolunteers:</h3>
+      <p>Location: ${organisation.Addr}</p>
+      <p>
+      Description: ${organisation.Mission}
+      </p>
+  `;
     // Adding Related Listings
     const listingsContainer = document.querySelector(".other-listings");
     for (const relListing of relatedListing) {
