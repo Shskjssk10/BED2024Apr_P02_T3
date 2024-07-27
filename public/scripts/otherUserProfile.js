@@ -8,7 +8,21 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
   try {
     // const currentAccountID = localStorage.getItem("userID");
-    const currentAccountID = 2
+    const currentAccountID = 1;
+    // Get Current Account
+    const volunteerResponse = await fetch(`/volunteerProfile/${currentAccountID}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    console.log("Response status on VOLUNTEER:", volunteerResponse.status);
+    const volunteer = await volunteerResponse.json();
+    console.log("🚀 ~ document.addEventListener ~ volunteer:", volunteer)
+    // console.log("Volunteer received:", temp);
+    if (!volunteerResponse.ok) {
+      throw new Error(volunteer.message || "Failed to load volunteer");
+    }
     // Get all Accounts
     const accountsResponse = await fetch(`/userFeedPage`, {
       method: "GET",
@@ -22,32 +36,17 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (!accountsResponse.ok) {
       throw new Error(allAccounts.message || "Failed to load Accounts");
     }
-    // Get Organisation Details
-    const organisationResponse = await fetch(`/organisationProfile/${currentAccountID}`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-    console.log(
-      "Response status on ORGANISATION:",
-      organisationResponse.status
-    );
-    const organisation = await organisationResponse.json();
-    if (!organisationResponse.ok) {
-      throw new Error(organisation.message || "Failed to load organisation");
-    }
 
 
     const profileSection = document.querySelector(".profile-header");
-    const listingSecetion = document.querySelector(".listings-section");
+    const listingSection = document.querySelector(".listing-section");
     const postSection = document.querySelector(".posts");
 
-    listingSecetion.innerHTML = "";
+    listingSection.innerHTML = "";
     postSection.innerHTML = "";
     let image = "";
     try {
-      image = await fetch(`/image/${organisation.info.MediaPath}`, {
+      image = await fetch(`/image/${volunteer.info.MediaPath}`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -63,92 +62,41 @@ document.addEventListener("DOMContentLoaded", async () => {
         class="profile-image"
       />
       <div class="profile-info">
-        <h1>${organisation.info.OrgName}</h1>
+        <h1>${volunteer.info.Username}</h1>
         <p>
-          ${organisation.info.Mission}
+          ${volunteer.info.Bio}
         </p>
         <div class="profile-stats">
-          <span>${organisation.listings.length} Listings</span>
-          <span>${organisation.followersAndFollowing.Followers} Followers</span>
-          <span>${organisation.followersAndFollowing.Following} Following</span>
+          <span>${volunteer.followersAndFollowing.Followers} Followers</span>
+          <span>${volunteer.followersAndFollowing.Following} Following</span>
         </div>
       </div>
     `;
 
-    // Apending Listings Data
-    const listingsContainer = document.createElement("div");
-    listingsContainer.classList.add("listings");
-    
-    const allListings = organisation.listings;
-    for (const listing of allListings) {
-      try {
-        image = await fetch(`/image/${listing.MediaPath}`, {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
-      } catch (error) {
-        console.error(error);
-      }
-      const indivListingContainer = document.createElement("a");
-      indivListingContainer.classList.add("no-underline");
-      indivListingContainer.href = "userviewlisting.html"
-      indivListingContainer.id = listing.ListingID;
-      indivListingContainer.innerHTML = `
-        <div class="listing-item">
-          <div class="listingimage">
-            <img src="${image.url}">
-          </div>
-          <div class="listinginfobox">
-            <p class="listingname">${listing.ListingName}</p>
-            <p class="listinginfo">${organisation.info.OrgName}</p>
-            <p class="listinginfo">${listing.Addr}</p>
-          </div>
-        </div>
-    `;
-    listingsContainer.appendChild(indivListingContainer);
-    }
-
-    const listingHeader = document.createElement("h2");
-    listingHeader.innerHTML = "Listings";
-    const listingSubHeader = document.createElement("p");
-    listingSubHeader.innerHTML = "Your most recent Listings:";
-    const listingFooter = document.createElement("div");
-    listingFooter.classList.add("listings-footer");
-
-
-    listingSecetion.appendChild(listingHeader);
-    listingSecetion.appendChild(listingSubHeader);
-    listingSecetion.appendChild(listingsContainer);
-
-    // Posts Data
-    const allPosts = organisation.posts;
     const postModalContainer = document.querySelector(".post-modal-container");
     postModalContainer.innerHTML = "";
-    for (const post of allPosts) {
-      // Appending Post data to page
-      const postItemContainer = document.createElement("div");
-      postItemContainer.classList.add("post-item");
-      postItemContainer.id = `${post.PostID}`;
-      let MediaPath = post.MediaPath;
-      image = await fetch(`/image/${MediaPath}`, {
+    const volunteerPosts = volunteer.posts;
+    for (const post of volunteerPosts) {
+      const postContainer = document.createElement("div");
+      postContainer.classList.add("post-item");
+      postContainer.id = post.PostID;
+      image = await fetch(`/image/${post.MediaPath}`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
         },
       });
-      postItemContainer.innerHTML = `
-        <img src="${image.url}">
-      `;
-      postSection.appendChild(postItemContainer);
+      const imageContainer = document.createElement("img");
+      imageContainer.src = image.url;
+      postContainer.appendChild(imageContainer);
+      postSection.appendChild(postContainer);
 
       //Appending Post Modal data
       const indivPostModalContainer = document.createElement("div");
       indivPostModalContainer.classList.add(`modal`);
       indivPostModalContainer.id = `modal${post.PostID}`;
       let pfp = "";
-      pfp = await fetch(`/image/${organisation.info.MediaPath}`, {
+      pfp = await fetch(`/image/${volunteer.info.MediaPath}`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -165,7 +113,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                     alt="Profile Picture"
                     class="profile-pic"
                   />
-                  <span class="username">${organisation.info.OrgName}</span>
+                  <span class="username">${volunteer.info.OrgName}</span>
                 </div>
               </a>
               <img
@@ -259,6 +207,106 @@ document.addEventListener("DOMContentLoaded", async () => {
         })
       }
     }
+    // Appending Sign Up Listings Data
+    const signUpListings = volunteer.signUpListings;
+    const savedListings = volunteer.savedListings;
+
+    const signUpListingContainer = document.createElement("div");
+    const savedListingContainer = document.createElement("div");
+    signUpListingContainer.classList.add("listings");
+    savedListingContainer.classList.add("listings");
+
+    //Preparing Sign Up Listings
+    async function processSignedUpListing(listing){
+      const listingContainer = document.createElement("a");
+      listingContainer.classList.add("no-underline");
+      listingContainer.href="userviewlisting.html";
+      const orgName =
+        allAccounts.find((org) => org.AccID === listing.PostedBy).OrgName;
+      try {
+        image = await fetch(`/image/${listing.MediaPath}`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+      } catch (error) {
+        console.error(error);
+      }
+      listingContainer.innerHTML = `
+        <div id=${listing.ListingID} class="listing-item">
+          <div class="listingimage">
+            <img src="${image.url}">
+          </div>
+          <div class="listinginfobox">
+            <p class="listingname">${listing.ListingName}</p>
+            <p class="listinginfo">${orgName}</p>
+            <p class="listinginfo">${listing.Addr}</p>
+          </div>
+        </div>
+      `;
+      signUpListingContainer.appendChild(listingContainer);
+    }
+    // Preparing Saved Listings
+    async function processSavedListing(listing){
+      const listingContainer = document.createElement("a");
+      listingContainer.classList.add("no-underline");
+      listingContainer.href="organisationprofile.html";
+      const targetOrganisation = allAccounts.find((org) => org.AccID === listing.PostedBy);
+      let username = targetOrganisation.OrgName
+      try {
+        image = await fetch(`/image/${listing.MediaPath}`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+      } catch (error) {
+        console.error(error);
+      }
+      listingContainer.innerHTML = `
+        <div id=${listing.ListingID} class="listing-item">
+          <div class="listingimage">
+            <img src="${image.url}">
+          </div>
+          <div class="listinginfobox">
+            <p class="listingname">${listing.ListingName}</p>
+            <p class="listinginfo">${username}</p>
+            <p class="listinginfo">${listing.Addr}</p>
+          </div>
+        </div>
+      `;
+      savedListingContainer.appendChild(listingContainer);
+    }
+
+    function updateListings(signUpListings, savedListings){
+      const promises = signUpListings.map(processSignedUpListing) && savedListings.map(processSavedListing);
+      Promise.all(promises).then(() => {
+        let allListings = document.querySelectorAll(".no-underline");
+        allListings.forEach((listing) => {
+          listing.addEventListener("click", (event) => {
+              event.preventDefault();
+              const clickedListing = event.currentTarget.querySelector('.listing-item'); 
+              const listingId = parseInt(clickedListing.id, 10); 
+              console.log("🚀 ~ listing.addEventListener ~ listingId:", listingId)
+              sessionStorage.removeItem("selectedListingID");
+              sessionStorage.setItem("selectedListingID", listingId);
+              window.location.href = "userviewlisting.html";
+          });
+        });
+      });
+    }
+    updateListings(signUpListings, savedListings);
+
+    const signUpHeader = document.createElement("h2");
+    signUpHeader.innerHTML = "Signed Up Listings";
+    const savedListingHeader = document.createElement("h2");
+    savedListingHeader.innerHTML = "Saved Listings";
+
+    listingSection.appendChild(signUpHeader);
+    listingSection.appendChild(signUpListingContainer);
+    listingSection.appendChild(savedListingHeader);
+    listingSection.appendChild(savedListingContainer);
     // Linking listings
     const listings = document.querySelectorAll(".no-underline");
     listings.forEach((listing) => {
@@ -281,7 +329,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     allPost.forEach((post) => {
       post.addEventListener("click", (event) => {
         const currentPostID = post.id;
-        console.log("🚀 ~ post.addEventListener ~ currentPostID:", currentPostID)
         openModal(`#modal${currentPostID}`);
       }) 
     })
@@ -291,7 +338,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         const postButtonID = event.target.id;
         const userComment = document.querySelector(`#commentInput-${postButtonID}`).value;
         const postComment = {
-          AccID : currentAccID,
+          AccID : currentAccountID,
           PostID: postButtonID,
           Comment: userComment
         };
