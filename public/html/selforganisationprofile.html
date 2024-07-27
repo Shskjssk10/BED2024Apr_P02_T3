@@ -223,39 +223,6 @@
         </div>
       </div>
     </footer>
-    <script>
-      function openModal(postId) {
-        document.getElementById("postModal").style.display = "block";
-        var posts = document.getElementsByClassName("post-content");
-        for (var i = 0; i < posts.length; i++) {
-          posts[i].style.display = "none";
-        }
-        document.getElementById(postId).style.display = "block";
-      }
-
-      function closeModal(event) {
-        if (event.target.id === "postModal") {
-          document.getElementById("postModal").style.display = "none";
-        }
-      }
-
-      function addComment() {
-        var commentInput = document.getElementById("commentInput");
-        var commentText = commentInput.value;
-
-        if (commentText.trim() !== "") {
-          var newComment = document.createElement("div");
-          newComment.className = "comment";
-          newComment.innerHTML =
-            '<img src="../images/default-user.png" alt="User" class="profile-pic small" /><p><strong>You:</strong> ' +
-            commentText +
-            "</p>";
-
-          var commentsSection = document.querySelector("#postModal .comments");
-          commentsSection.appendChild(newComment);
-          commentInput.value = "";
-        }
-      }
-    </script>
+    <script src="../scripts/selfOrganisationProfile.js"></script>
   </body>
 </html>

@@ -161,6 +161,7 @@ const userProfileController = require("./controllers/userProfileController");
 const followController = require("./controllers/followController");
 const signUpController = require("./controllers/signUpController")
 const savedListingController = require("./controllers/savedListingController");
+const commentController = require("./controllers/commentController");
 
 const sql = require("mssql");
 
@@ -208,6 +209,8 @@ app.get("/likes/:id", likesController.getAllLikesById);
 app.post("/likes", likesController.postLikeById);
 app.delete("/likes", likesController.deleteLikesById);
 
+app.get("/userFeedPage", userFeedPageController.getAllAccounts);
+app.get("/comment/:id", commentController.getAllCommentsByPostID);
 app.post("/userFeedPage", userFeedPageController.postComment);
 
 // app.get("/userProfile/:id", postController.getAllPostsByAccID)
