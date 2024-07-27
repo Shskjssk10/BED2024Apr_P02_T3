@@ -20,7 +20,7 @@ HelpingHearts
 
 HelpingHearts aims to provide a comprehensive volunteer listing service that ensures quality and accessible volunteer opportunities for individuals. By facilitating easy sign-ups for volunteer events and providing a social media-like experience, HelpingHearts ensures that volunteering is engaging and impactful.
 
-## Setting Up the Messaging Function
+## Setting Up the program
 
 To enable the messaging function for this project, follow these steps:
 
