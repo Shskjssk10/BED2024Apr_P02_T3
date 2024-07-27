@@ -60,13 +60,14 @@ class Organisation {
   }
   static async getOrgById(id) {
     const connection = await sql.connect(dbConfig);
+    const request = connection.request();
+    request.input("id", id);
+    
     const sqlQuery = `
     SELECT O.*, A.Email, A.PhoneNo, A.Password
     FROM Organisation O INNER JOIN Account A ON O.OrgName = A.Username
     WHERE A.AccID = @id`;
 
-    const request = connection.request();
-    request.input("id", id);
     const result = await request.query(sqlQuery);
 
     connection.close();
@@ -220,10 +221,11 @@ class Organisation {
     const connection = await sql.connect(dbConfig);
 
     const sqlQuery = `
-    SELECT COUNT(Follower) AS 'No of Followers', 
-    COUNT(FollowedBy) AS 'No of Following'
-    FROM Follower
-    WHERE Follower = @id`;
+    SELECT
+      COUNT(CASE WHEN Follower = @id THEN 1 END) AS 'No of Followers',
+      COUNT(CASE WHEN FollowedBy = @id THEN 1 END) AS 'No of Following'
+    FROM
+      Follower; `;
 
     const request = connection.request();
     request.input("id", id);

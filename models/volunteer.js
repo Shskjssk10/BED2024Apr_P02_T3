@@ -228,10 +228,11 @@ class Volunteer {
     const connection = await sql.connect(dbConfig);
 
     const sqlQuery = `
-    SELECT COUNT(Follower) AS 'No of Followers', 
-    COUNT(FollowedBy) AS 'No of Following'
-    FROM Follower
-    WHERE Follower = @id`;
+    SELECT
+      COUNT(CASE WHEN Follower = @id THEN 1 END) AS 'No of Followers',
+      COUNT(CASE WHEN FollowedBy = @id THEN 1 END) AS 'No of Following'
+    FROM
+      Follower; `;
 
     const request = connection.request();
     request.input("id", id);
