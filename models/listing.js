@@ -43,7 +43,6 @@ class Listing {
           row.ListingID,
           row.PostedBy,
           row.ListingName,
-          row.Addr,
           row.StartDate,
           row.EndDate,
           row.CauseArea,
@@ -53,58 +52,6 @@ class Listing {
           row.MediaPath
         )
     );
-  }
-  static async getListingByListingName(username) {
-    const connection = await sql.connect(dbConfig);
-    const sqlQuery = `
-    SELECT *
-    FROM Listing
-    WHERE ListingName LIKE '%' + @username + '%'
-      OR SOUNDEX(ListingName) = SOUNDEX(@username)
-      OR DIFFERENCE(ListingName, @username) > 2 
-    ORDER BY DIFFERENCE(ListingName, @username) DESC;
-  `;
-  const request = connection.request();
-  request.input("username", username);
-  const result = await request.query(sqlQuery);
-
-  connection.close();
-  if (result.recordset.length === 1) {
-    return [
-      new Listing(
-        result.recordset[0].ListingID,
-        result.recordset[0].PostedBy,
-        result.recordset[0].ListingName,
-        result.recordset[0].Addr,
-        result.recordset[0].StartDate,
-        result.recordset[0].EndDate,
-        result.recordset[0].CauseArea,
-        result.recordset[0].Skill,
-        result.recordset[0].Requirements,
-        result.recordset[0].About,
-        result.recordset[0].MediaPath
-      ),
-    ]; // Wrap the single Post object in an array
-  } else {
-    // 2. Map multiple posts to Post objects if needed
-    const posts = result.recordset.map(
-      (row) =>
-        new Listing(
-          row.ListingID,
-          row.PostedBy,
-          row.ListingName,
-          row.Addr,
-          row.StartDate,
-          row.EndDate,
-          row.CauseArea,
-          row.Skill,
-          row.Requirements,
-          row.About,
-          row.MediaPath
-        )
-    );
-    return posts;
-    }
   }
   static async getSignUpListingsById(id) {
     const connection = await sql.connect(dbConfig);
@@ -126,7 +73,6 @@ class Listing {
           result.recordset[0].ListingID,
           result.recordset[0].PostedBy,
           result.recordset[0].ListingName,
-          result.recordset[0].Addr,
           result.recordset[0].StartDate,
           result.recordset[0].EndDate,
           result.recordset[0].CauseArea,
@@ -144,7 +90,6 @@ class Listing {
             row.ListingID,
             row.PostedBy,
             row.ListingName,
-            row.Addr,
             row.StartDate,
             row.EndDate,
             row.CauseArea,
@@ -177,7 +122,6 @@ class Listing {
           result.recordset[0].ListingID,
           result.recordset[0].PostedBy,
           result.recordset[0].ListingName,
-          result.recordset[0].Addr,
           result.recordset[0].StartDate,
           result.recordset[0].EndDate,
           result.recordset[0].CauseArea,
@@ -195,7 +139,6 @@ class Listing {
             row.ListingID,
             row.PostedBy,
             row.ListingName,
-            row.Addr,
             row.StartDate,
             row.EndDate,
             row.CauseArea,
@@ -308,6 +251,7 @@ class Listing {
     Requirements, 
     About, 
     MediaPath)  
+     
     VALUES (@PostedBy, 
     @ListingName, 
     @Addr,  

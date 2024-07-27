@@ -19,19 +19,7 @@ const getOrganisationListings = async (req, res) => {
     res.status(500).json({ message: "Internal server error" });
   }
 };
-const getListingByListingName = async(req, res) => {
-  const username = req.params.username;
-  try {
-    const listings = await Listing.getListingByListingName(username);
-    if (!listings) {
-      return res.status(404).send("There are no listings");
-    }
-    res.json(listings);
-  } catch (error) {
-    console.error(error);
-    res.status(500).send("Error retrieving listings");
-  }
-}
+
 const getAllListings = async (req, res) => {
   try {
     const listings = await Listing.getAllListings();
@@ -69,7 +57,6 @@ const getSavedListingsById = async (req, res) => {
 };
 const getListingsByOrgId = async (req, res) => {
   const orgID = req.params.orgID;
-  console.log("🚀 ~ getListingsByOrgId ~ orgID:", orgID)
   try {
     const listings = await Listing.getListingsByOrgId(orgID);
     if (!listings) {
@@ -125,7 +112,6 @@ const updateListing = async (req, res) => {
 };
 module.exports = {
   getOrganisationListings,
-  getListingByListingName,
   getAllListings,
   getSignUpListingsById,
   getSavedListingsById,

@@ -1,5 +1,6 @@
 const sql = require("mssql");
 const dbConfig = require("../dbConfig");
+const { hashPassword } = require("../models/authModel");
 
 class Volunteer {
   constructor(
@@ -265,11 +266,10 @@ class Volunteer {
     const connection = await sql.connect(dbConfig);
 
     const sqlQuery = `
-    SELECT
-      COUNT(CASE WHEN Follower = @id THEN 1 END) AS 'No of Followers',
-      COUNT(CASE WHEN FollowedBy = @id THEN 1 END) AS 'No of Following'
-    FROM
-      Follower; `;
+    SELECT COUNT(Follower) AS 'No of Followers', 
+    COUNT(FollowedBy) AS 'No of Following'
+    FROM Follower
+    WHERE Follower = @id`;
 
     const request = connection.request();
     request.input("id", id);
@@ -283,5 +283,49 @@ class Volunteer {
       },
     ];
   }
+
+  static async postComment(postComment) {
+    //establish database connection
+    const connection = await sql.connect(dbConfig);
+    const sqlQuery = `INSERT INTO Comment (AccID, PostID, Comment) VALUES (@AccID, @PostID, @Comment); SELECT SCOPE_IDENTITY() AS id;`;
+
+    const request = connection.request();
+    request.input("AccID", postComment.AccID);
+    request.input("PostID", postComment.PostID);
+    request.input("Comment", postComment.Comment);
+
+    const result = await request.query(sqlQuery);
+
+    connection.close();
+  }
+
+  // Cheryl's part
+  static async updateVolunteerHash(id, newPassword) {
+    try {
+      console.log("trying method");
+      const connection = await sql.connect(dbConfig);
+      const { salt, hashedPassword } = await hashPassword(newPassword); // Use hashPassword function
+
+      console.log("New generated salt:", salt);
+      console.log("New generated hashed password:", hashedPassword);
+
+      const volunteerQuery = `UPDATE Volunteer SET
+        Salt = @Salt,
+        HashedPassword = @HashedPassword
+        WHERE AccID = @AccID`;
+
+      const volunteerReq = connection.request();
+      volunteerReq.input("AccID", sql.SmallInt, id);
+      volunteerReq.input("Salt", sql.VarChar, salt);
+      volunteerReq.input("HashedPassword", sql.VarChar, hashedPassword);
+      await volunteerReq.query(volunteerQuery);
+
+      connection.close();
+    } catch (err) {
+      console.error(err);
+    }
+  }
 }
+
+
 module.exports = Volunteer;

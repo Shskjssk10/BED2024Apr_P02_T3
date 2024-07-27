@@ -82,6 +82,28 @@ document.addEventListener("DOMContentLoaded", async function () {
     } catch (error) {
       console.error("Error updating user data:", error);
     }
+    
+    if (password.value) {
+      try {
+        const updatePasswordResponse = await fetch(`/volunteers/${userID}/password`, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ newPassword: password.value }),
+        });
+
+        if (!updatePasswordResponse.ok) {
+          throw new Error("Failed to update password");
+        }
+
+        const passwordData = await updatePasswordResponse.json();
+        console.log("Password updated successfully:", passwordData);
+      } catch (error) {
+        console.error("Error updating password:", error);
+      }
+    }
   });
 
   const deleteButton = document.getElementById("deleteButton");

@@ -101,45 +101,111 @@ const checkGoogleAccount = async (req, res) => {
 };
 
 const googleSignupVolunteerController = async (req, res) => {
-  try {
-    const volunteerData = req.body;
-    volunteerData.email = req.body.email || req.query.email; // Ensure email is included from the URL or body
-    console.log("Starting volunteer sign-up with Google");
-    console.log("Request body:", volunteerData);
+  const {
+    fname,
+    lname,
+    username,
+    email,
+    phone_number,
+    gender,
+    bio,
+  } = req.body;
 
-    const result = await googleSignupVolunteer(volunteerData);
-    res
-      .status(201)
-      .json({ message: "Volunteer created successfully", email: result.email });
+  // Perform validations
+  if (username.length > 15) {
+    return res
+      .status(400)
+      .json({ message: "Username must be 15 characters or less." });
+  } else if (fname.length > 20 || lname.length > 20) {
+    return res
+      .status(400)
+      .json({ message: "First and last name must be 20 characters or less." });
+  } else if (bio.length > 150) {
+    return res
+      .status(400)
+      .json({ message: "Bio must be 150 characters or less." });
+  } else if (phone_number.length > 8) {
+    return res.status(400).json({
+      message: "Phone number must be 8 digits Singaporean phone number.",
+    });
+  }
+
+  try {
+    const result = await googleSignupVolunteer(req.body);
+    const token = generateToken(result.AccID);
+    res.status(201).json({
+      message: "Volunteer created successfully",
+      email: result.email,
+      token,
+    });
   } catch (error) {
     console.error("Error during Google volunteer sign-up:", error);
-    res.status(500).json({ message: "Internal server error" });
+    res.status(400).json({ message: error.message });
   }
 };
 
-const googleSignupOrganisationController = async (req, res) => {
-  try {
-    const organisationData = req.body;
-    console.log("Starting organisation sign-up with Google");
-    console.log("Request body:", organisationData);
 
-    const result = await googleSignupOrganisation(organisationData);
-    res
-      .status(201)
+const googleSignupOrganisationController = async (req, res) => {
+  const {
+    org_name,
+    email,
+    phone_number,
+    issue_area,
+    mission,
+    description,
+    address,
+    apt_floor_unit,
+    website,
+  } = req.body;
+
+  // Perform validations
+  if (org_name.length > 15) {
+    return res
+      .status(400)
+      .json({ message: "Organisation name must be 15 characters or less." });
+  } else if (phone_number.length > 8) {
+    return res
+      .status(400)
       .json({
-        message: "Organisation created successfully",
-        email: result.email,
+        message: "Phone number must be 8 digits Singaporean phone number.",
       });
+  } else if (org_name.length > 20) {
+    return res
+      .status(400)
+      .json({ message: "Organisation name must be 20 characters or less." });
+  } else if (issue_area.length > 50) {
+    return res
+      .status(400)
+      .json({ message: "Issue area must be 50 characters or less." });
+  } else if (mission.length > 255) {
+    return res
+      .status(400)
+      .json({ message: "Mission must be 255 characters or less." });
+  } else if (address.length > 255) {
+    return res
+      .status(400)
+      .json({ message: "Address must be 255 characters or less." });
+  } else if (apt_floor_unit.length > 50) {
+    return res
+      .status(400)
+      .json({ message: "Apt/Floor/Unit must be 50 characters or less." });
+  } else if (website.length > 255) {
+    return res
+      .status(400)
+      .json({ message: "Website must be 255 characters or less." });
+  }
+
+  try {
+    const result = await googleSignupOrganisation(req.body);
+    const token = generateToken(result.AccID);
+    res.status(201).json({
+      message: "Organisation created successfully",
+      email: result.email,
+      token
+    });
   } catch (error) {
     console.error("Error during Google organisation sign-up:", error);
-
-    if (error.number === 2627 || error.number === 2601) { // SQL error code for violating unique constraints
-      res
-        .status(400)
-        .json({ message: "Username is already taken. Please try again." });
-    } else {
-      res.status(500).json({ message: "Internal server error" });
-    }
+    res.status(400).json({ message: error.message });
   }
 };
 
@@ -150,4 +216,4 @@ module.exports = {
   checkGoogleAccount,
   googleSignupOrganisationController,
   googleSignupVolunteerController,
-}; 
+};

@@ -8,9 +8,9 @@ document.addEventListener("DOMContentLoaded", async () => {
       return;
   }
   const listingInformation = JSON.parse(sessionStorage.getItem("listingInformation"));
-  console.log(listingInformation);
+    
   try {
-    const organisationResponse = await fetch(`/organisations/${listingInformation.PostedBy}`, {
+    const organisationResponse = await fetch(`http://localhost:8080/organisations/${listingInformation.PostedBy}`, {
       method: "GET",
       headers: {
       "Content-Type": "application/json",
@@ -22,6 +22,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (!organisationResponse.ok) {
         throw new Error(organisation.message || "Failed to load listing");
     }
+
     console.log(listingInformation);
 
     const listingHeaderSection = document.querySelector(".listing-header");
@@ -48,9 +49,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     imagePlaceHolder.classList.add("image-placeholder");
 
     const buttonContainer = document.createElement("div");
-    const imageContainer = document.createElement("img");
-    imageContainer.src =  image.dataUrl;
-    imagePlaceHolder.appendChild(imageContainer);
     buttonContainer.classList.add("button-container")
     buttonContainer.innerHTML = `
       <a href="organisationcreatelisting.html">
@@ -115,7 +113,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const requirementHeader = document.createElement("h2");
     requirementHeader.innerHTML = "Requirements:"
 
-    const allRequirements = listingInformation.Requirement.split(",")
+    const allRequirements = listingInformation.Requirements.split(",")
     const allRequirementContainer = document.createElement("ul");
     count = 0;
     allRequirements.forEach((requirement) => {
@@ -132,53 +130,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     sideBarSection.innerHTML = "";
     sideBarSection.appendChild(causeAreaContainer);
     sideBarSection.appendChild(detailsContainer);
-
-    // const createButton = document.querySelector("#create-button");
-    // console.log("🚀 ~ document.addEventListener ~ createButton:", createButton)
-    // createButton.addEventListener("click", async (event) => {
-    //   event.preventDefault();
-    // })
-    try {
-      const formData = new FormData();
-      formData.append('image', image)
-      const response = await fetch(`/image`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "image/jpeg",
-        },
-        body: formData
-      });
-      console.log(response);
-      // const postListing = {
-      //   ListingName: listingInformation.ListingName,
-      //   Addr: listingInformation.Addr,
-      //   StartDate: listingInformation.StartDate,
-      //   EndDate: listingInformation.EndDate,
-      //   CauseArea: listingInformation.CauseArea,
-      //   Skill: listingInformation.Skill,
-      //   Requirements: listingInformation.Requirement,
-      //   About: listingInformation.About,
-      //   MediaPath: image.name
-      // };
-      // console.log(postListing);
-      // const postListingResponse = await fetch(`/searchPage/postFollow`, {
-      //   method: "POST",
-      //   headers: {
-      //     "Content-Type": "application/json",
-      //     Authorization: `Bearer ${token}`,
-      //   },
-      //   body: JSON.stringify(postListing),
-      // });
-      // if (!postListingResponse.ok) {
-      //   throw new Error("Failed to post follow");
-      // }
-
-      // const updatedData = await postListingResponse.json();
-      // console.log(updatedData);
-      // console.log("Follow posted:", updatedData);
-    } catch (error) {
-      console.error("Error in posted:", error);
-    }
 
   } catch (error) {
     console.error("Error loading SOMETHING:", error);

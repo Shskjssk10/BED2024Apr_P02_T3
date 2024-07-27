@@ -24,13 +24,34 @@ const CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
 const REDIRECT_URI = process.env.GOOGLE_REDIRECT_URI;
 const oauth2Client = new OAuth2Client(CLIENT_ID, CLIENT_SECRET, REDIRECT_URI);
 
+const {
+  authAccount,
+  createVolunteer,
+  createOrganisation,
+  checkGoogleAccount,
+  googleSignupVolunteerController,
+  googleSignupOrganisationController,
+} = require("./controllers/authController.js");
+
+const { verifyToken } = require("./middlewares/authMiddleware.js");
+const {
+  getOrganisationListings,
+} = require("./controllers/listingController.js");
+
+// Cheryl's Routes
+app.post("/auth/login", authAccount);
+app.post("/auth/signup/volunteer", createVolunteer);
+app.post("/auth/signup/organisation", createOrganisation);
+app.post("/auth/signup/google-volunteer", googleSignupVolunteerController);
+app.post("/auth/signup/google-organisation", googleSignupOrganisationController);
+app.post("/auth/check-google-account", checkGoogleAccount);
+app.get("/auth/listings", verifyToken, getOrganisationListings);
+app.post("/auth/verify-token", verifyToken,(req, res) => {
+  res.status(200).json({message: "Token is valid"});
+});
+
 // Serve static files with the /public prefix
 app.use("/public", express.static("public"));
-
-// Routes
-const authRoutes = require("./routes/authRoutes");
-app.use("/auth", authRoutes);
-
 // Route to start OAuth flow
 app.get("/auth/google", (req, res) => {
   const authUrl = oauth2Client.generateAuthUrl({
@@ -39,17 +60,14 @@ app.get("/auth/google", (req, res) => {
   });
   res.redirect(authUrl);
 });
-
 // OAuth2 callback route
 app.get("/oauth2callback", async (req, res) => {
   try {
     const { code } = req.query;
     const { tokens } = await oauth2Client.getToken(code);
     oauth2Client.setCredentials(tokens);
-
     // Log tokens to ensure they are being retrieved correctly
     console.log("Tokens received:", tokens);
-
     // Verify ID token
     const ticket = await oauth2Client.verifyIdToken({
       idToken: tokens.id_token,
@@ -57,13 +75,10 @@ app.get("/oauth2callback", async (req, res) => {
     });
     const payload = ticket.getPayload();
     const email = payload.email;
-
     // Save tokens in a cookie
     res.cookie("authToken", tokens.id_token, { httpOnly: false });
-
     // Log the cookies to ensure they are being set correctly
     console.log("Cookies set:", req.cookies);
-
     // Redirect to googleLogin.html with email as URL parameter
     res.redirect(`/public/html/googleLogin.html?email=${email}`);
   } catch (error) {
@@ -87,67 +102,7 @@ app.get("/", (req, res) => {
   res.sendFile("public/html/index.html", { root: "." });
 });
 
-// Google Bucket Credentials
-const bucketName = process.env.BUCKET_NAME;
-const keyFile = process.env.KEYFILENAME
 
-const {Storage} = require('@google-cloud/storage');
-const storage = new Storage({keyFilename: keyFile});
-const googleBucketMiddleware = require("./middlewares/googleBucketMiddleware");
-
-// Google Bucket  
-app.get("/image/:mediapath", async (req, res) => {
-  try {
-    const mediaPath = req.params.mediapath;
-    const imageData = await googleBucketMiddleware.downloadIntoMemory(mediaPath);
-    res.setHeader('Content-Type', 'image/jpeg'); // Or the appropriate MIME type
-    res.send(imageData[0]); 
-  } catch (err) {
-    res.status(500).json({ error: 'Failed to download image' });
-  }
-})
-
-app.post("/image", googleBucketMiddleware.uploadFromMemory);
-// const Busboy = require('busboy');
-
-// app.post("/image", async (req, res) => {
-//   try {
-//     const busboy = Busboy({ headers: req.headers });
-
-//     let fileBuffer;
-//     let filename;
-//     let mimetype;
-
-//     busboy.on("file", (fieldname, file, filename, encoding, mimetype) => {
-//       const chunks = [];
-//       file.on("data", (chunk) => chunks.push(chunk));
-//       file.on("end", () => {
-//         fileBuffer = Buffer.concat(chunks);
-//         console.log("File uploaded and buffered:", filename);
-//       });
-//     });
-
-//     busboy.on("finish", async () => {
-//       try {
-//         const uploadedImage = await googleBucketMiddleware.uploadFromMemory(
-//           fileBuffer
-//         );
-//         console.log("Image uploaded successfully:", uploadedImage);
-//         res.status(200).json({ message: "Success" }); // Assuming you're using Express
-//       } catch (err) {
-//         console.error("Error uploading image to GCS:", err);
-//         res.status(500).json({ error: err.message }); // Send a more specific error
-//       }
-//     });
-    
-//     // Pipe the request to Busboy
-//     req.pipe(busboy);
-
-//   } catch (err) {
-//     console.error("Unexpected error during image upload:", err);
-//     res.status(500).json({ error: 'An unexpected error occurred' });
-//   }
-// });
 
 const dbConfig = require("./dbConfig");
 const volunteerController = require("./controllers/volunteerController");
@@ -171,6 +126,10 @@ app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Headers", "Content-Type"); // Add other allowed headers
   next();
 });
+// Cheryl's Parts
+app.put("/volunteers/:id/password", volunteerController.updateVolunteerHash);
+app.put("/organisations/:id/password", organisationController.updateOrganisationHash);
+
 
 app.get("/organisation/details/:id", organisationController.getOrgDetails);
 
@@ -190,8 +149,6 @@ app.get("/organisations/:OrgName", organisationController.getOrgByName);
 app.get("/listing", listingController.getAllListings);
 app.get("/listing/byOrgId/:orgID", listingController.getListingsByOrgId);
 app.get("/listing/byListingID/:id", listingController.getListingsByListingId);
-app.get("/listing/:username", listingController.getListingByListingName);
-app.post("/listing", listingController.postListing);
 
 // Caden's Parts
 app.get("/searchPage/allFollower/:id", searchPageController.getFollowersByID);
@@ -214,20 +171,12 @@ app.get("/comment/:id", commentController.getAllCommentsByPostID);
 app.post("/userFeedPage", userFeedPageController.postComment);
 
 // app.get("/userProfile/:id", postController.getAllPostsByAccID)
-app.get("/userProfile/:id", volunteerController.getAllFollowersAndFollowing)
+// app.get("/userProfile/:id", volunteerController.getAllFollowersAndFollowing)
 app.get("/volunteerProfile/:id", userProfileController.getAccountInfo);
 app.get("/organisationProfile/:id", userProfileController.getOrganisationInfo);
 
 app.get("/followedPost/:id", postController.getAllFollowedPosts);
 app.post("/postCreation", postController.postPost);
-
-app.get("/signUp/:AccID/:ListingID", signUpController.getAllSignUpByListingID);
-app.post("/signUp", signUpController.postSignUp);
-app.delete("/signUp", signUpController.deleteSignUp);
-
-app.get("/savedListing/:AccID/:ListingID", savedListingController.getAllSavedByListingID);
-app.post("/savedListing", savedListingController.postSaved);
-app.delete("/savedListing", savedListingController.deleteSaved);
 
 app.listen(port, async () => {
   try {
