@@ -20,7 +20,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const userID = result.id;
       console.log(userID);
       console.log("Login result:", result);
-      localStorage.setItem("userID", result.id);
+      sessionStorage.setItem("userID", result.id);
       localStorage.setItem("authToken", result.token);
 
       async function checkAccType(userID) {
@@ -30,6 +30,9 @@ document.addEventListener("DOMContentLoaded", () => {
             const orgData = await orgResponse.json();
             console.log("Organisation data:", orgData);
             sessionStorage.setItem("username", orgData.OrgName);
+            sessionStorage.setItem("AccType", "Organisation");
+            const accType = sessionStorage.getItem("AccType");
+            console.log(accType);
           } else if (orgResponse.status === 404) {
             // Organization not found, check for volunteer
             console.log("Organization not found. Checking volunteer data...");
@@ -38,6 +41,9 @@ document.addEventListener("DOMContentLoaded", () => {
               const volData = await volResponse.json();
               console.log("Volunteer data:", volData);
               sessionStorage.setItem("username", volData.Username);
+              sessionStorage.setItem("AccType", "Volunteer");
+              const accType = sessionStorage.getItem("AccType");
+              console.log(accType);
             } else {
               // Handle the case where neither organization nor volunteer is found
               console.warn("No matching account found for user ID:", userID);
