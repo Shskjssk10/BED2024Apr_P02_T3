@@ -21,7 +21,7 @@ document.addEventListener("DOMContentLoaded", () => {
       console.log(userID);
       console.log("Login result:", result);
       sessionStorage.setItem("userID", result.id);
-      localStorage.setItem("authToken", result.token);
+      sessionStorage.setItem("authToken", result.token);
 
       async function checkAccType(userID) {
         try {
