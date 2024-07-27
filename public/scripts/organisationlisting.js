@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", async () => {
-  const token = localStorage.getItem("authToken");
+  const token = sessionStorage.getItem("authToken");
   console.log("Retrieved token:", token);
 
   if (!token) {
@@ -8,6 +8,41 @@ document.addEventListener("DOMContentLoaded", async () => {
     return;
   }
 
+
+  // fetch organisation details
+  try {
+    const orgId = sessionStorage.getItem("userID");
+    if (!orgId) {
+      throw new Error("Organisation ID not found");
+    }
+    const response = await fetch(`/organisation/details/${orgId}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    console.log("Response status:", response.status);
+
+    const orgDetails = await response.json();
+    console.log("Organisation details received:", orgDetails);
+
+    if (!response.ok) {
+      throw new Error(orgDetails.message || "Failed to load organisation details");
+    }
+    document.getElementById("orgName").textContent = orgDetails.OrgName;
+    document.getElementById("orgMission").textContent = orgDetails.Mission;
+    document.getElementById("listingCount").textContent = `${orgDetails.NumListings} Listings`;
+    document.getElementById("followerCount").textContent = `${orgDetails.NumFollowers} Followers`;
+    document.getElementById("followingCount").textContent = `${orgDetails.NumFollowing} Following`;
+
+  } catch (error) {
+    console.error("Error loading organisation details:", error);
+    alert("Error loading organisation details: " + error.message);
+  }
+
+  // fetch listings from organisation logged in
   try {
     const response = await fetch("/auth/listings", {
       method: "GET",
