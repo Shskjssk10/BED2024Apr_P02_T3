@@ -1,10 +1,12 @@
 document.addEventListener("DOMContentLoaded", function () {
   console.log("DOM loaded");
 
+  //initialise socket connection
   const socket = io("http://localhost:3000");
-  let currentChatRecipient = null; // Track the current chat recipient
-  let chatHistory = {}; // Object to store chat history for each user
+  let currentChatRecipient = null; //track the current chat recipient
+  let chatHistory = {}; //object to store chat history for each user
 
+  //socket connection event
   socket.on("connect", () => {
     console.log(`Connected with socket id: ${socket.id}`);
     const username = sessionStorage.getItem("username");
@@ -16,10 +18,12 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });
 
+  //handle event for updating list of online users
   socket.on("onlineUsers", (users) => {
     updateOnlineUsers(users);
   });
 
+  //handle receiving message
   socket.on("message", (data) => {
     console.log("Received message:", data);
     const { message, from } = data;
@@ -35,13 +39,14 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });
 
+  //handle private message
   socket.on("privateMessage", (data) => {
     const { message, from } = data;
     if (currentChatRecipient === from) {
-      // Display message if it is from the current chat recipient
+      //display message if it is from the current chat recipient
       outputMessage(message, false);
     }
-    // Save private messages to history if chat is not active
+    //save private messages to history if chat is not active
     if (!chatHistory[from]) {
       chatHistory[from] = [];
     }
@@ -56,10 +61,11 @@ document.addEventListener("DOMContentLoaded", function () {
   const messageInput = document.getElementById("messageInput");
   messageInput.addEventListener("keypress", function (event) {
     if (event.key === "Enter") {
-      sendMessage(); // Send message on Enter key press
+      sendMessage(); //send message on Enter key press
     }
   });
 
+  //function to send message
   function sendMessage() {
     const message = messageInput.value;
     if (message.trim() !== "") {
@@ -87,6 +93,7 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   function outputMessage(message, isOutgoing) {
+    //styling
     const messageList = document.getElementById("message");
     const messageBubble = document.createElement("li");
     messageBubble.style.listStyle = "none";
@@ -114,17 +121,20 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   function formatTimestamp(date) {
+    //for time stamp
     const hours = date.getHours().toString().padStart(2, "0");
     const minutes = date.getMinutes().toString().padStart(2, "0");
     return `${hours}:${minutes}`;
   }
 
   function scrollToBottom() {
+    //so that chat always shows the newest
     const messageList = document.getElementById("message");
     messageList.scrollTop = messageList.scrollHeight;
   }
 
   function createChat(username) {
+    //creation of chat
     var chats = document.getElementById("chats");
     var chatBox = document.createElement("div");
 
@@ -182,6 +192,7 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   function updateOnlineUsers(users) {
+    //create new chat for each online user
     const chats = document.getElementById("chats");
     chats.innerHTML = ""; // Clear existing chatboxes
     const currentUsername = sessionStorage.getItem("username");

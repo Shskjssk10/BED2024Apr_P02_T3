@@ -1,5 +1,6 @@
 const Organisation = require("../models/organisation");
 
+//Hendrik
 const getAllOrganisations = async (req, res) => {
   try {
     const organisation = await Organisation.getAllOrganisations();
@@ -22,7 +23,7 @@ const getOrgById = async (req, res) => {
     console.error(error);
     res.status(500).send("Error retrieving Organisation");
   }
-}
+};
 
 const getOrgByName = async (req, res) => {
   const orgName = req.params.orgName;
