@@ -8,8 +8,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
   try {
     // Get Organisation Details
-    // const currentAccountID = parseInt(localStorage.getItem("userID"));
-    const currentAccountID = 2
+    const currentAccountID = parseInt(localStorage.getItem("userID"));
     const organisationResponse = await fetch(`/organisationProfile/${currentAccountID}`, {
       method: "GET",
       headers: {
@@ -32,9 +31,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     listingSecetion.innerHTML = "";
     postSection.innerHTML = "";
     let image = "";
-    let mediaPath = "Shskjssk10-pfp.jpg";
     try {
-      image = await fetch(`/image/${mediaPath}`, {
+      image = await fetch(`/image/${organisation.info.MediaPath}`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -43,6 +41,10 @@ document.addEventListener("DOMContentLoaded", async () => {
     } catch (error) {
       console.error(error);
     }
+
+    const profilePicture = document.querySelector("#profile-link");
+    profilePicture.src = image.url
+
     profileSection.innerHTML = `
       <img
         src="${image.url}"
