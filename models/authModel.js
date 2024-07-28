@@ -190,8 +190,8 @@ const createVolunteer = async (req, res) => {
     const accId = accountResult.recordset[0].AccID;
     console.log(accId);
     const volunteerSqlQuery = `
-        INSERT INTO Volunteer (AccID, FName, LName, Username, Gender, Bio, MediaPath, Salt, HashedPassword)
-        VALUES (@accId, @fname, @lname, @username, @gender, @bio, @mediapath, @salt, @hashedPassword)
+        INSERT INTO Volunteer (AccID, FName, LName, Username, Gender, Bio, Salt, HashedPassword, MediaPath)
+        VALUES (@accId, @fname, @lname, @username, @gender, @bio, @salt, @hashedPassword, @mediapath)
       `;
     const volunteerReq = connection.request();
     volunteerReq.input("accId", sql.SmallInt, accId);
@@ -338,9 +338,9 @@ const createOrganisation = async (req, res) => {
     const accId = accountResult.recordset[0].AccID;
 
     const organisationSqlQuery = `
-      INSERT INTO Organisation (AccID, OrgName, IssueArea, Mission, Descr, Addr, AptFloorUnit, Website, MediaPath Salt, HashedPassword)
-      VALUES (@accId, @orgName, @issueArea, @mission, @description, @address, @aptFloorUnit, @website, @mediapath, @salt, @hashedPassword)
-    `; //
+      INSERT INTO Organisation (AccID, OrgName, IssueArea, Mission, Descr, Addr, AptFloorUnit, Website, Salt, HashedPassword, MediaPath)
+      VALUES (@accId, @orgName, @issueArea, @mission, @description, @address, @aptFloorUnit, @website, @salt, @hashedPassword, @mediapath)
+    `;
     const organisationReq = connection.request();
     organisationReq.input("accId", sql.SmallInt, accId);
     organisationReq.input("orgName", sql.VarChar, org_name);
@@ -350,9 +350,9 @@ const createOrganisation = async (req, res) => {
     organisationReq.input("address", sql.VarChar, address);
     organisationReq.input("aptFloorUnit", sql.VarChar, apt_floor_unit);
     organisationReq.input("website", sql.VarChar, website);
-    organisationReq.input("mediapath", sql.VarChar, mediapath);
     organisationReq.input("salt", sql.VarChar, salt);
     organisationReq.input("hashedPassword", sql.VarChar, hashedPassword);
+    organisationReq.input("mediapath", sql.VarChar, mediapath);
 
     await organisationReq.query(organisationSqlQuery);
 
@@ -365,9 +365,23 @@ const createOrganisation = async (req, res) => {
   }
 };
 
+const getRandomMediaPath = () => {
+  const randomInt = Math.floor(Math.random() * 3) + 1;
+  return `random${randomInt}-pfp.jpg`;
+};
+
 const googleSignupVolunteer = async (volunteerData) => {
-  const { fname, lname, username, email, phone_number, gender, bio } =
-    volunteerData;
+  const {
+    fname,
+    lname,
+    username,
+    email,
+    phone_number,
+    gender,
+    bio,
+  } = volunteerData;
+
+  const mediapath = getRandomMediaPath(); // random image path for profile picture
   const password = null; // Password is null for Google sign-up
   const salt = null; // No salt needed as no password
   const hashedPassword = null; // No hashed password needed
@@ -420,13 +434,13 @@ const googleSignupVolunteer = async (volunteerData) => {
     volunteerReq.input("username", sql.VarChar, username);
     volunteerReq.input("gender", sql.VarChar, gender);
     volunteerReq.input("bio", sql.VarChar, bio);
-    volunteerReq.input("mediapath", sql.VarChar, mediapath);
     volunteerReq.input("salt", sql.VarChar, salt);
     volunteerReq.input("hashedPassword", sql.VarChar, hashedPassword);
+    volunteerReq.input("mediapath", sql.VarChar, mediapath);
 
     const volunteerSqlQuery = `
-      INSERT INTO Volunteer (AccID, FName, LName, Username, Gender, Bio, MediaPath, Salt, HashedPassword)
-      VALUES (@accId, @fname, @lname, @username, @gender, @bio, @mediapath, @salt, @hashedPassword)
+      INSERT INTO Volunteer (AccID, FName, LName, Username, Gender, Bio, Salt, HashedPassword, MediaPath)
+      VALUES (@accId, @fname, @lname, @username, @gender, @bio, @salt, @hashedPassword, @mediapath)
     `;
     await volunteerReq.query(volunteerSqlQuery);
 
@@ -449,8 +463,8 @@ const googleSignupOrganisation = async (orgData) => {
     address,
     apt_floor_unit,
     website,
-    mediapath,
   } = orgData;
+  const mediapath = getRandomMediaPath();
   const password = null; // Password is null for Google sign-up
   const salt = null; // No salt needed as no password
   const hashedPassword = null; // No hashed password needed
@@ -506,13 +520,13 @@ const googleSignupOrganisation = async (orgData) => {
     organisationReq.input("address", sql.VarChar, address);
     organisationReq.input("aptFloorUnit", sql.VarChar, apt_floor_unit);
     organisationReq.input("website", sql.VarChar, website);
-    organisationReq.input("mediapath", sql.VarChar, mediapath);
     organisationReq.input("salt", sql.VarChar, salt);
     organisationReq.input("hashedPassword", sql.VarChar, hashedPassword);
+    organisationReq.input("mediapath", sql.VarChar, mediapath);
 
     const organisationSqlQuery = `
-      INSERT INTO Organisation (AccID, OrgName, IssueArea, Mission, Descr, Addr, AptFloorUnit, Website, MediaPath, Salt, HashedPassword)
-      VALUES (@accId, @orgName, @issueArea, @mission, @description, @address, @aptFloorUnit, @website, @mediapath, @salt, @hashedPassword)
+      INSERT INTO Organisation (AccID, OrgName, IssueArea, Mission, Descr, Addr, AptFloorUnit, Website, Salt, HashedPassword, MediaPath)
+      VALUES (@accId, @orgName, @issueArea, @mission, @description, @address, @aptFloorUnit, @website, @salt, @hashedPassword, @mediapath) 
     `;
     await organisationReq.query(organisationSqlQuery);
 

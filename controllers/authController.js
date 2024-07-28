@@ -109,6 +109,7 @@ const googleSignupVolunteerController = async (req, res) => {
     phone_number,
     gender,
     bio,
+    mediapath,
   } = req.body;
 
   // Perform validations
@@ -156,6 +157,7 @@ const googleSignupOrganisationController = async (req, res) => {
     address,
     apt_floor_unit,
     website,
+    mediapath,
   } = req.body;
 
   // Perform validations
