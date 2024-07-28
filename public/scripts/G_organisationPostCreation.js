@@ -8,8 +8,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     return;
   }
   try {
-    // const accountID = localStorage.getItem("userID");
-    const accountID = 2;
+    const accountID = localStorage.getItem("userID");
     let account = "";
     try {
       const accountResponse = await fetch(`/organisations/${accountID}`, {
