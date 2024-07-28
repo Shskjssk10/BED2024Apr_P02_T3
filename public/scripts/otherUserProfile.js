@@ -7,7 +7,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     return;
   }
   try {
-    const currentAccountID = localStorage.getItem("userID");
+    const currentAccountID = sessionStorage.getItem("viewAccID");
     // Get Current Account
     const volunteerResponse = await fetch(`/volunteerProfile/${currentAccountID}`, {
       method: "GET",
