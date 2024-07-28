@@ -20,6 +20,20 @@ HelpingHearts
 
 HelpingHearts aims to provide a comprehensive volunteer listing service that ensures quality and accessible volunteer opportunities for individuals. By facilitating easy sign-ups for volunteer events and providing a social media-like experience, HelpingHearts ensures that volunteering is engaging and impactful.
 
+## Setting Up the program
+
+To enable the messaging function for this project, follow these steps:
+
+1. **Clone the Repository:**
+
+   ```bash
+   git clone https://github.com/Shskjssk10/BED2024Apr_P02_T3.git
+
+2. **Change directory into where your repository is located**
+3. **In your vs code terminal do npm start**
+4. **Open command prompt and cd into the repository**
+5. **In the command prompt terminal do node server.js**
+
 ### Target Audience
 
 HelpingHearts is designed for individuals who are looking to contribute to their communities through volunteering. This service caters to both volunteers and organizations, making it easier for both parties to connect and collaborate.

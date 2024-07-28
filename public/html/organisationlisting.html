@@ -116,17 +116,73 @@
               <a href="organisationsearch.html" class="nav-link">Search</a>
             </li>
             <li class="nav-item">
-              <a href="organisationpostcreationpage.html" class="nav-link"
-                >Create</a
-              >
+              <a href="organisationpostcreationpage.html" class="nav-link">Create</a>
             </li>
             <li class="nav-item">
               <a href="message.html" class="nav-link">Message</a>
             </li>
+            <li class="nav-item">
+              <a href="selforganisationprofile.html" class="nav-link"><img src="../images/github-icon.png"
+                  alt="GitHub icon" /></a>
+            </li>
           </ul>
         </div>
       </div>
-    </footer>
-    <script src="../scripts/organisationlisting.js"></script>
-  </body>
+    </nav>
+  </header>
+  <div class="profile-container">
+    <div class="profile-header">
+      <img src="../images/default-pfp.png" alt="Profile Image" class="profile-image" />
+      <div class="profile-info">
+        <h1 id="orgName"></h1>
+        <p id="orgMission"></p>
+        <div class="profile-stats">
+          <span id="listingCount">0 Listings</span>
+          <span id="followerCount">0 Followers</span>
+          <span id="followingCount">0 Following</span>
+        </div>
+      </div>
+    </div>
+    <div class="listings-section">
+      <h2>Listings</h2>
+      <div class="listings" id="listingsContainer">
+        <!-- Listings will be dynamically added here -->
+      </div>
+    </div>
+  </div>
+  <footer>
+    <div class="footer-wrapper">
+      <div class="brand">
+        <a href="#" class="navbar-brand mb-0 h1">
+          <span style="color: #f6ecec">Helping</span>
+          <span style="color: #ff8f80">Hearts</span>
+        </a>
+      </div>
+      <div class="footer-middle">
+        <small>HelpingHearts Copyright 2024 IT02 Team 3</small>
+      </div>
+      <div class="site-map">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item">
+            <a href="organisationlisting.html" class="nav-link">Listings</a>
+          </li>
+          <li class="nav-item">
+            <a href="organisationfeed.html" class="nav-link">Feed</a>
+          </li>
+          <li class="nav-item">
+            <a href="organisationsearch.html" class="nav-link">Search</a>
+          </li>
+          <li class="nav-item">
+            <a href="organisationpostcreationpage.html" class="nav-link">Create</a>
+          </li>
+          <li class="nav-item">
+            <a href="message.html" class="nav-link">Message</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </footer>
+  <script src="../scripts/organisationlisting.js"></script>
+</body>
+
 </html>

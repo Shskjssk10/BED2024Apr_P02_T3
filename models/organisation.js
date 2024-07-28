@@ -13,7 +13,7 @@ class Organisation {
     AptFloorUnit,
     PhoneNo,
     Email,
-    Password, 
+    Password,
     MediaPath
   ) {
     this.AccID = AccID;
@@ -61,70 +61,43 @@ class Organisation {
         )
     );
   }
+
   static async getOrgById(id) {
-    const connection = await sql.connect(dbConfig);
-    const request = connection.request();
-    request.input("id", id);
-    
-    const sqlQuery = `
+    try {
+      const connection = await sql.connect(dbConfig);
+      const request = connection.request();
+      request.input("id", id);
+
+      const sqlQuery = `
     SELECT O.*, A.Email, A.PhoneNo, A.Password
     FROM Organisation O INNER JOIN Account A ON O.OrgName = A.Username
     WHERE A.AccID = @id`;
 
-    const result = await request.query(sqlQuery);
+      const result = await request.query(sqlQuery);
 
-    connection.close();
+      connection.close();
 
-    return result.recordset[0]
-      ? new Organisation(
-          result.recordset[0].AccID,
-          result.recordset[0].OrgName,
-          result.recordset[0].Website,
-          result.recordset[0].IssueArea,
-          result.recordset[0].Mission,
-          result.recordset[0].Descr,
-          result.recordset[0].Addr,
-          result.recordset[0].AptFloorUnit,
-          result.recordset[0].PhoneNo,
-          result.recordset[0].Email,
-          result.recordset[0].Password,
-          result.recordset[0].MediaPath
-        )
-      : null; // Handle organisation not found
+      return result.recordset[0]
+        ? new Organisation(
+            result.recordset[0].AccID,
+            result.recordset[0].OrgName,
+            result.recordset[0].Website,
+            result.recordset[0].IssueArea,
+            result.recordset[0].Mission,
+            result.recordset[0].Descr,
+            result.recordset[0].Addr,
+            result.recordset[0].AptFloorUnit,
+            result.recordset[0].PhoneNo,
+            result.recordset[0].Email,
+            result.recordset[0].Password,
+            result.recordset[0].MediaPath
+          )
+        : null; // Handle organisation not found
+    } catch (err) {
+      console.error(err);
+    }
   }
-  static async getOrgByName(OrgName) {
-    const connection = await sql.connect(dbConfig);
-    // Sql query that returns account similar to the one entered
-    const sqlQuery = `
-    SELECT O.*, A.Email, A.PhoneNo 
-    FROM Organisation O
-    INNER JOIN Account A ON O.OrgName = A.Username
-    WHERE O.OrgName LIKE '%' + @OrgName + '%'
-      OR SOUNDEX(O.OrgName) = SOUNDEX(@OrgName)
-      OR DIFFERENCE(O.OrgName, @OrgName) > 2
-    ORDER BY DIFFERENCE(O.OrgName, @OrgName) DESC;
-  `;
-    const request = connection.request();
-    request.input("OrgName", OrgName);
-    const result = await request.query(sqlQuery);
 
-    connection.close();
-    return result.recordset[0]
-      ? new Organisation(
-          result.recordset[0].AccID,
-          result.recordset[0].OrgName,
-          result.recordset[0].IssueArea,
-          result.recordset[0].Mission,
-          result.recordset[0].Descr,
-          result.recordset[0].Addr,
-          result.recordset[0].AptFloorUnit,
-          result.recordset[0].PhoneNo,
-          result.recordset[0].Email,
-          result.recordset[0].Password,
-          result.recordset[0].MediaPath
-        )
-      : null; // Handle organisation not found
-  }
   static async updateOrgProfile(id, updatedOrg) {
     try {
       //establish database connection
@@ -140,7 +113,6 @@ class Organisation {
       // console.log(updatedOrg[0].OrgName);
 
       const request = connection.request();
-      // console.log("id", id); //2
       request.input("id", id);
       const selectAllResult = await request.query(selectAllQuery);
       // console.log("here", selectAllResult.recordset[0]);
@@ -157,7 +129,6 @@ class Organisation {
     `;
 
       const orgReq = connection.request();
-      //console.log("L116", selectAllResult.recordset[0].AccID); //2
       orgReq.input("AccID", selectAllResult.recordset[0].AccID);
       orgReq.input(
         "OrgName",
@@ -222,6 +193,34 @@ class Organisation {
       console.error(err);
     }
   }
+
+  static async deleteOrganisation(id) {
+    try {
+      const connection = await sql.connect(dbConfig);
+
+      //sql query to delete from org table
+      const organisationQuery = `DELETE FROM Organisation
+      WHERE AccID = @id`;
+
+      const request = connection.request();
+      request.input("id", sql.Int, id);
+      const oResult = await request.query(organisationQuery);
+
+      const accountQuery = `DELETE FROM Account 
+      WHERE AccID = @id`;
+
+      //update acc table also
+      const accountReq = connection.request();
+      accountReq.input("id", sql.Int, id);
+      const aResult = await accountReq.query(accountQuery);
+
+      connection.close(); // Close the connection after queries are done
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  //caden//
   static async getAllFollowersAndFollowing(id) {
     const connection = await sql.connect(dbConfig);
 
@@ -239,11 +238,45 @@ class Organisation {
     connection.close();
     return [
       {
-        "Followers": result.recordset[0]["No of Followers"],
-        "Following": result.recordset[0]["No of Following"],
+        Followers: result.recordset[0]["No of Followers"],
+        Following: result.recordset[0]["No of Following"],
       },
     ];
   }
+
+  static async getOrgByName(OrgName) {
+    const connection = await sql.connect(dbConfig);
+    // Sql query that returns account similar to the one entered
+    const sqlQuery = `
+    SELECT O.*, A.Email, A.PhoneNo 
+    FROM Organisation O
+    INNER JOIN Account A ON O.OrgName = A.Username
+    WHERE O.OrgName LIKE '%' + @OrgName + '%'
+      OR SOUNDEX(O.OrgName) = SOUNDEX(@OrgName)
+      OR DIFFERENCE(O.OrgName, @OrgName) > 2
+    ORDER BY DIFFERENCE(O.OrgName, @OrgName) DESC;
+  `;
+    const request = connection.request();
+    request.input("OrgName", OrgName);
+    const result = await request.query(sqlQuery);
+
+    connection.close();
+    return result.recordset[0]
+      ? new Organisation(
+          result.recordset[0].AccID,
+          result.recordset[0].OrgName,
+          result.recordset[0].IssueArea,
+          result.recordset[0].Mission,
+          result.recordset[0].Descr,
+          result.recordset[0].Addr,
+          result.recordset[0].AptFloorUnit,
+          result.recordset[0].PhoneNo,
+          result.recordset[0].Email,
+          result.recordset[0].Password
+        )
+      : null; // Handle organisation not found
+  }
+
   static async getOrgDetails(orgId) {
     const connection = await sql.connect(dbConfig);
     const sqlQuery = `
@@ -264,6 +297,5 @@ class Organisation {
 
     return result.recordset[0];
   }
-
 }
 module.exports = Organisation;

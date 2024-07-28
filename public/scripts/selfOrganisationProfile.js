@@ -61,8 +61,8 @@ document.addEventListener("DOMContentLoaded", async () => {
           <span>${organisation.followersAndFollowing.Followers} Followers</span>
           <span>${organisation.followersAndFollowing.Following} Following</span>
         </div>
-        <a href="organisationprofilemgmt.html"
-          <button href="organisationprofilemgmt.html" class="edit-button">Edit</button>
+        <a href="G_organisationprofilemgmt.html"
+          <button href="G_organisationprofilemgmt.html" class="edit-button">Edit</button>
         </a>
       </div>
     `;
@@ -106,10 +106,10 @@ document.addEventListener("DOMContentLoaded", async () => {
     const listingFooter = document.createElement("div");
     listingFooter.classList.add("listings-footer");
     listingFooter.innerHTML = `
-      <a href="organisationcreatelisting.html">
+      <a href="G_organisationcreatelisting.html">
         <button s="add-button">+</button>
       </a>
-      <a href="organisationlisting.html">
+      <a href="G_organisationlisting.html">
         <button class="view-all-button">View all</button>
       </a>
   `;

@@ -107,7 +107,7 @@ document.addEventListener("DOMContentLoaded", async function () {
       return;
     }
 
-    const userID = localStorage.getItem("userID");
+    const userID = sessionStorage.getItem("userID");
 
     //delete by user id
     //HENDRIK DELETE

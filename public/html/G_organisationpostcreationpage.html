@@ -5,7 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>HelpingHearts</title>
     <link rel="stylesheet" href="../styles/overlord.css" />
-    <link rel="stylesheet" href="../styles/organisationpostcreationpage.css" />
+    <link
+      rel="stylesheet"
+      href="../styles/G_organisationpostcreationpage.css"
+    />
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
       rel="stylesheet"
@@ -54,7 +57,7 @@
               </li>
               <li class="nav-item">
                 <a href="selforganisationprofile.html" class="nav-link"
-                  ><img id="profile-link" src="../images/github-icon.png" alt="GitHub icon"
+                  ><img src="../images/github-icon.png" alt="GitHub icon"
                 /></a>
               </li>
             </ul>
@@ -63,20 +66,57 @@
       </nav>
     </header>
 
-    <div class="form-container">
-      <form action="http://localhost:8080/postCreation" method="post">
-        <div class="form-group">
-          <label for="caption">Caption</label>
-          <textarea
-            id="caption"
-            name="caption"
-            placeholder="Caption..."
-          ></textarea>
+    <div class="container form-container">
+      <div class="upload-section">
+        <div
+          class="upload-box"
+          onclick="document.getElementById('mediaInput').click();"
+        >
+          <svg
+            class="upload-icon"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path
+              d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"
+            />
+            <polyline points="14 2 14 8 20 8" />
+            <line x1="12" y1="18" x2="12" y2="12" />
+            <line x1="15" y1="15" x2="12" y2="12" />
+            <line x1="9" y1="15" x2="12" y2="12" />
+          </svg>
+          <p class="upload-text">Add Photo/Video</p>
+          <input
+            type="file"
+            class="upload-input"
+            accept="image/*,video/*"
+            id="mediaInput"
+          />
         </div>
-        <div class="form-group">
-          <button type="submit" class="post-button">Post</button>
-        </div>
-      </form>
+        <p class="upload-info">JPG, PNG, MP4 accepted</p>
+      </div>
+      <div class="caption-section">
+        <input
+          type="text"
+          placeholder="Add a caption..."
+          class="caption-input"
+        />
+        <button class="post-button">Post</button>
+      </div>
+      <div class="form-group" id="mediaPreviewContainer" style="display: none">
+        <label for="mediaPreview">Media Preview</label>
+        <img
+          id="mediaPreview"
+          src="#"
+          alt="Media Preview"
+          style="max-width: 100%"
+        />
+      </div>
     </div>
 
     <footer>
@@ -113,7 +153,6 @@
         </div>
       </div>
     </footer>
-    <script src="../scripts/userPostCreation.js"></script>
     <script>
       document
         .getElementById("mediaInput")

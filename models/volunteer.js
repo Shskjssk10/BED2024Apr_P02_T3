@@ -28,65 +28,92 @@ class Volunteer {
 
   //Hendrik's Parts
   static async getAllVolunteer() {
-    const connection = await sql.connect(dbConfig);
+    try {
+      // try catch
+      // awaiting connection
+      const connection = await sql.connect(dbConfig);
 
-    const sqlQuery = `SELECT v.*, a.PhoneNo, a.Email, a.Password
+      //sql query to query the database
+      const sqlQuery = `SELECT v.*, a.PhoneNo, a.Email, a.Password
     FROM Volunteer v
     INNER JOIN Account a 
     ON a.Username = v.Username`;
-    const request = connection.request();
-    const result = await request.query(sqlQuery);
 
-    connection.close();
+      //create req obj to execute sql query
+      const request = connection.request();
+      //execute sql query and await result
+      const result = await request.query(sqlQuery);
 
-    return result.recordset.map(
-      (row) =>
-        new Volunteer(
-          row.AccID,
-          row.FName,
-          row.LName,
-          row.Username,
-          row.Gender,
-          row.Bio,
-          row.Email,
-          row.PhoneNo,
-          row.Password,
-          row.MediaPath
-        )
-    );
+      //close database conenction
+      connection.close();
+
+      //map the result recordset to an array of Volunteer instances
+      return result.recordset.map(
+        (row) =>
+          new Volunteer(
+            row.AccID,
+            row.FName,
+            row.LName,
+            row.Username,
+            row.Gender,
+            row.Bio,
+            row.Email,
+            row.PhoneNo,
+            row.Password,
+            row.MediaPath
+          )
+      );
+    } catch (err) {
+      console.error(err);
+    }
   }
+
   static async getVolunteerById(id) {
-    const connection = await sql.connect(dbConfig);
-    const sqlQuery = `
+    try {
+      //establish connection
+      const connection = await sql.connect(dbConfig);
+      //sql query
+      const sqlQuery = `
     SELECT V.*, A.Email, A.PhoneNo, A.Password
     FROM Volunteer V INNER JOIN Account A ON V.Username = A.Username
     WHERE A.AccID = @id`;
 
-    const request = connection.request();
-    request.input("id", id);
-    const result = await request.query(sqlQuery);
+      const request = connection.request();
+      // Add the parameter to the SQL query
+      request.input("id", id);
+      const result = await request.query(sqlQuery);
 
-    connection.close();
+      //close connection
+      connection.close();
 
-    return result.recordset[0]
-      ? new Volunteer(
-          result.recordset[0].AccID,
-          result.recordset[0].FName,
-          result.recordset[0].LName,
-          result.recordset[0].Username,
-          result.recordset[0].Gender,
-          result.recordset[0].Bio,
-          result.recordset[0].Email,
-          result.recordset[0].PhoneNo,
-          result.recordset[0].Password,
-          result.recordset[0].MediaPath
-        )
-      : null; // Handle volunteer not found
+      // Check if a record is found and return a Volunteer instance
+      // If no record is found, return null
+      return result.recordset[0]
+        ? new Volunteer(
+            result.recordset[0].AccID,
+            result.recordset[0].FName,
+            result.recordset[0].LName,
+            result.recordset[0].Username,
+            result.recordset[0].Gender,
+            result.recordset[0].Bio,
+            result.recordset[0].Email,
+            result.recordset[0].PhoneNo,
+            result.recordset[0].Password,
+            result.recordset[0].MediaPath
+          )
+        : null; // Handle volunteer not found
+    } catch (err) {
+      console.error(err);
+    }
   }
+
   static async updateVolunteerProfile(id, updatedVolunteer) {
     //establish database connection
     try {
       const connection = await sql.connect(dbConfig);
+
+      //sql query to select all from the account table and the volunteer table
+      //account tables holds common information for volunteer and org like phone number, username, email and password
       const selectAllQuery = `
     SELECT V.*, A.Email, A.PhoneNo, A.Password
     FROM Volunteer V
@@ -94,15 +121,15 @@ class Volunteer {
     WHERE V.AccID = @id;
     `;
 
-      // console.log("here", updatedVolunteer); //gets tommy
-      // console.log(updatedVolunteer[0].FName); //only get those put into json
-
+      //create req and set input parameter id
       const request = connection.request();
       // console.log("id", id);
       request.input("id", id);
+      //execute query to retrieve the current volunteer details
       const selectAllResult = await request.query(selectAllQuery);
       // console.log("select res", selectAllResult.recordset[0]);
 
+      //updating volunteer table
       const volunteerQuery = `UPDATE Volunteer SET
       FName = @FName,
       LName = @LName,
@@ -111,8 +138,12 @@ class Volunteer {
       WHERE AccID = ${selectAllResult.recordset[0].AccID}
       `;
 
+      //new req obj for volunteer to update and set input parameters
       const volunteerReq = connection.request();
       volunteerReq.input("AccID", selectAllResult.recordset[0].AccID);
+
+      //this takes either the new updated FName or it retains the old FName
+      //this is so that the user have the option to just update 1 field (FName, LName etc)
       volunteerReq.input(
         "FName",
         updatedVolunteer[0].FName || selectAllResult.recordset[0].FName
@@ -130,8 +161,10 @@ class Volunteer {
         updatedVolunteer[0].Bio || selectAllResult.recordset[0].Bio
       );
 
+      //execute sql query
       await volunteerReq.query(volunteerQuery);
 
+      //update account
       const accountQuery = `UPDATE Account SET
       Username = @Username,
       PhoneNo = @PhoneNo,
@@ -161,12 +194,15 @@ class Volunteer {
 
       await accountReq.query(accountQuery);
 
+      //close database connection
       connection.close();
+      //return the updated data of the volunteer
       return this.getVolunteerById(id);
     } catch (err) {
       console.error(err);
     }
   }
+
   static async deleteVolunteer(id) {
     try {
       const connection = await sql.connect(dbConfig);
@@ -176,9 +212,11 @@ class Volunteer {
       WHERE AccID = @id`;
 
       const request = connection.request();
+      //sql.int is the data type
       request.input("id", sql.Int, id); // Specify the parameter type
       const vResult = await request.query(volunteerQuery);
 
+      //sql query to delete the account
       const accountQuery = `DELETE FROM Account 
       WHERE AccID = @id`;
 
@@ -187,10 +225,10 @@ class Volunteer {
       accountReq.input("id", sql.Int, id); // Specify the parameter type again
       const aResult = await accountReq.query(accountQuery);
 
-      connection.close(); // Close the connection after queries are done
+      //close connection
+      connection.close();
     } catch (err) {
       console.log(err);
-      // Optionally, you can handle errors more gracefully here
     }
   }
 

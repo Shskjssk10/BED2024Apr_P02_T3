@@ -1,12 +1,8 @@
 document.addEventListener("DOMContentLoaded", async function () {
   console.log("DOM loaded");
-
-  //need to read the user cant use data[0]
-  //using data[0] now just to display
-
-  const userID = parseInt(localStorage.getItem("userID"));
-  //console.log(userID);
+  const userID = parseInt(sessionStorage.getItem("userID"));
   const response = await fetch(`/organisations/${userID}`);
+  console.log(userID);
   const data = await response.json();
   console.log(data);
 
@@ -120,7 +116,8 @@ document.addEventListener("DOMContentLoaded", async function () {
       return;
     }
 
-    const userID = localStorage.getItem("userID");
+    // const userID = sessionStorage.getItem("userID");
+    // console.log(userID);
 
     //delete by user id
     //HENDRIK DELETE
