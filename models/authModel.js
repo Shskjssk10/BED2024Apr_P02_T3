@@ -361,7 +361,8 @@ const createOrganisation = async (req, res) => {
       .status(201)
       .json({ message: "Organisation account created successfully", email });
   } catch (error) {
-    alert("Signup failed: " + error.message);
+    console.error(error);
+    // alert("Signup failed: " + error.message);
   }
 };
 

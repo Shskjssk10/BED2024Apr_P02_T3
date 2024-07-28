@@ -9,8 +9,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
   try {
     // Getting current account ID
-    // const currentAccountID = parseInt(localStorage.getItem("userID"));
-    const currentAccountID = 2;
+    const currentAccountID = parseInt(sessionStorage.getItem("userID"));
 
 
     // Get All Accounts
