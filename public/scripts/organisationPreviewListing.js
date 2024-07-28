@@ -25,6 +25,30 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
     console.log(listingInformation);
 
+    let account = "";
+    try {
+      const accountResponse = await fetch(`/organisations/${organisationID}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      console.log("Response status on VOLUNTEER:", accountResponse.status);
+      account = await accountResponse.json();
+    } catch (error) {
+      console.error(error);
+    }
+  
+    const profilePictureContainer = document.querySelector("#profile-link");
+    console.log("🚀 ~ document.addEventListener ~ profilePictureContainer:", profilePictureContainer)
+    let profilePicture = await fetch(`/image/${account.MediaPath}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    profilePictureContainer.src = profilePicture.url;
+
     const listingHeaderSection = document.querySelector(".listing-header");
     const mainContentSection = document.querySelector(".main-content");
     const sideBarSection = document.querySelector(".sidebar");
