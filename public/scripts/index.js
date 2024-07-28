@@ -1,4 +1,12 @@
 document.addEventListener("DOMContentLoaded", async () => {
+  const token = sessionStorage.getItem("authToken");
+  console.log("authToken from cookie:", token);
+
+  if (!token) {
+    alert("Please log in to access this page.");
+    window.location.href = "login.html";
+  } 
+  
   const username = sessionStorage.getItem("username");
   console.log(username);
 
@@ -16,7 +24,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
   let account = "";
   try {
-    const currentAccountID = parseInt(localStorage.getItem("userID"));
+    const currentAccountID = parseInt(sessionStorage.getItem("userID"));
     const accountResponse = await fetch(`${fetchPath}/${currentAccountID}`, {
       method: "GET",
       headers: {
@@ -28,6 +36,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   } catch (error) {
     console.error(error);
   }
+  console.log(account);
   const profilePictureContainer = document.querySelector("#profile-link");
   console.log("🚀 ~ document.addEventListener ~ profilePictureContainer:", profilePictureContainer)
   let pfp = await fetch(`/image/${account.MediaPath}`, {
@@ -37,12 +46,4 @@ document.addEventListener("DOMContentLoaded", async () => {
     },
   });
   profilePictureContainer.src = pfp.url;
-  const token = getCookie("authToken");
-
-  console.log("authToken from cookie:", token);
-
-  if (!token) {
-    alert("Please log in to access this page.");
-    window.location.href = "login.html";
-  } 
 });

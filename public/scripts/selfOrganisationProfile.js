@@ -8,7 +8,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
   try {
     // Get Organisation Details
-    const currentAccountID = parseInt(localStorage.getItem("userID"));
+    const currentAccountID = parseInt(sessionStorage.getItem("userID"));
     const organisationResponse = await fetch(`/organisationProfile/${currentAccountID}`, {
       method: "GET",
       headers: {

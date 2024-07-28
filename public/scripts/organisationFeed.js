@@ -7,7 +7,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     return;
   }
   try {
-    const currentAccID = parseInt(localStorage.getItem("userID"));
+    const currentAccID = parseInt(sessionStorage.getItem("userID"));
 
     // Get all posts from followed acounts
     const postResponse = await fetch(`/followedPost/${currentAccID}`, {
@@ -58,16 +58,31 @@ document.addEventListener("DOMContentLoaded", async () => {
     } catch (error) {
       console.error(error);
     }
-  
+    
+    // Get specific account 
+
+    try {
+      const currentAccountResponse = await fetch(`/organisations/${currentAccID}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      console.log("Response status on VOLUNTEER:", currentAccountResponse.status);
+      currentAccount = await currentAccountResponse.json();
+    } catch (error) {
+      console.error(error);
+    }
+
     const profilePictureContainer = document.querySelector("#profile-link");
-    console.log("🚀 ~ document.addEventListener ~ profilePictureContainer:", profilePictureContainer)
-    let profilePicture = await fetch(`/image/${account.MediaPath}`, {
+    console.log(account);
+    let pfppp = await fetch(`/image/${currentAccount.MediaPath}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
       },
     });
-    profilePictureContainer.src = profilePicture.url;
+    profilePictureContainer.src = pfppp.url;
 
     const feedContainer = document.querySelector(".feed-container");
     const postModalContainer = document.querySelector(".post-modal-container");
@@ -84,12 +99,12 @@ document.addEventListener("DOMContentLoaded", async () => {
           "Content-Type": "application/json",
         },
       });
-      // let postImage = await fetch(`/image/${post.MediaPath}`, {
-      //   method: "GET",
-      //   headers: {
-      //     "Content-Type": "application/json",
-      //   },
-      // });
+      let postImage = await fetch(`/image/${targetPost.MediaPath}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
       let noOfLikesResponse = await fetch(`/likes/${targetPost.PostID}`, {
         method: "GET",
         headers: {
@@ -109,7 +124,7 @@ document.addEventListener("DOMContentLoaded", async () => {
           </div>
         </a>
         <img
-          src="${pfp.url}"
+          src="${postImage.url}"
           alt="Post Image"
           class="post-image"
         />
