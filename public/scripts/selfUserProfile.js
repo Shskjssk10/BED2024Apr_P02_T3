@@ -8,8 +8,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
   try {
     // Get Volunteer Details
-    // const currentAccountID = parseInt(localStorage.getItem("userID"));
-    const currentAccountID = 1;
+    const currentAccountID = parseInt(localStorage.getItem("userID"));
     const volunteerResponse = await fetch(`/volunteerProfile/${currentAccountID}`, {
       method: "GET",
       headers: {
@@ -38,6 +37,16 @@ document.addEventListener("DOMContentLoaded", async () => {
       throw new Error(organisations.message || "Failed to load organisation");
     }
 
+    const profilePictureContainer = document.querySelector("#profile-picture");
+    let pfp = await fetch(`/image/${volunteer.info.MediaPath}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    console.log("🚀 ~ document.addEventListener ~ pfp:", pfp)
+    
+    profilePictureContainer.src = pfp.url;
     const profileHeaderSection = document.querySelector(".profile-header");
     const postSection = document.querySelector(".posts");
     const listingSection = document.querySelector(".listings-section");
