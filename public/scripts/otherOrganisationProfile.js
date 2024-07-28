@@ -173,7 +173,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                 </div>
               </a>
               <img
-                src="${pfp.url}"
+                src="${image.url}"
                 alt="Post Image"
                 class="modal-image"
               />
