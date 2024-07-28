@@ -107,10 +107,10 @@ document.addEventListener("DOMContentLoaded", async () => {
     const listingFooter = document.createElement("div");
     listingFooter.classList.add("listings-footer");
     listingFooter.innerHTML = `
-      <a href="organisationcreatelisting.html">
+      <a href="G_organisationcreatelisting.html">
         <button s="add-button">+</button>
       </a>
-      <a href="organisationlisting.html">
+      <a href="G_organisationlisting.html">
         <button class="view-all-button">View all</button>
       </a>
   `;
