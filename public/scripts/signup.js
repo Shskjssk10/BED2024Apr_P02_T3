@@ -63,6 +63,7 @@ document
   .getElementById("orgSignUpForm")
   .addEventListener("submit", async (event) => {
     event.preventDefault();
+    const randomInt = Math.floor(Math.random() * 3) + 1;
 
     const orgData = {
       org_name: document.getElementById("orgName").value,
