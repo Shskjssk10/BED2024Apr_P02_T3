@@ -6,20 +6,8 @@ document.addEventListener("DOMContentLoaded", async function () {
   const data = await response.json();
   console.log(data);
 
-  const profilePictureContainer = document.querySelector("#profile-link");
-    let profilePicture = await fetch(`/image/${data.MediaPath}`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-  profilePictureContainer.src = profilePicture.url;
-
   const token = localStorage.getItem("authToken");
   //console.log(token);
-  
-  var profilePhoto = document.querySelector("#card-photo");
-  profilePhoto.src = profilePicture.url;
 
   //for the top card
   var username = document.getElementById("username");
@@ -128,7 +116,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         console.error("Error updating password:", error);
       }
     } // end of Cheryl's part
-  }); 
+  });
 
   const deleteButton = document.getElementById("deleteButton");
   deleteButton.addEventListener("click", async function (e) {
