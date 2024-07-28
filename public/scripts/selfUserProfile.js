@@ -36,7 +36,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       throw new Error(organisations.message || "Failed to load organisation");
     }
 
-    const profilePictureContainer = document.querySelector("#profile-picture");
+    const profilePictureContainer = document.querySelector("#profile-link");
     let pfp = await fetch(`/image/${volunteer.info.MediaPath}`, {
       method: "GET",
       headers: {
@@ -47,7 +47,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     
     const profileHeaderSection = document.querySelector(".profile-header");
     const postSection = document.querySelector(".posts");
-    const listingSection = document.querySelector(".listings-section");
+    const listingSection = document.querySelector(".listing-section");
     postSection.innerHTML = "";
     listingSection.innerHTML = "";
     // Appending Profile Data
@@ -67,9 +67,6 @@ document.addEventListener("DOMContentLoaded", async () => {
         console.error(error);
       }
     }
-
-    const profilePicture = document.querySelector("#profile-picture");
-    profilePicture.src = image;
 
     profileHeaderSection.innerHTML = `
       <img
