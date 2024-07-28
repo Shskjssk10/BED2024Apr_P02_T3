@@ -11,7 +11,8 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   // fetch organisation details
   try {
-    const orgId = sessionStorage.getItem("userID");
+    const orgId = 2
+    // const orgId = sessionStorage.getItem("userID");
     if (!orgId) {
       throw new Error("Organisation ID not found");
     }
@@ -28,9 +29,32 @@ document.addEventListener("DOMContentLoaded", async () => {
     const orgDetails = await response.json();
     console.log("Organisation details received:", orgDetails);
 
+    try {
+      const accountResponse = await fetch(`/organisations/${orgId}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      console.log("Response status on VOLUNTEER:", accountResponse.status);
+      account = await accountResponse.json();
+    } catch (error) {
+      console.error(error);
+    }
+  
+
+    const profilePictureContainer = document.querySelector("#profile-link");
+    let profilePicture = await fetch(`/image/${account.MediaPath}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    profilePictureContainer.src = profilePicture.url;
     if (!response.ok) {
       throw new Error(orgDetails.message || "Failed to load organisation details");
     }
+    document.getElementById("profile-image").src = profilePicture.url
     document.getElementById("orgName").textContent = orgDetails.OrgName;
     document.getElementById("orgMission").textContent = orgDetails.Mission;
     document.getElementById("listingCount").textContent = `${orgDetails.NumListings} Listings`;
