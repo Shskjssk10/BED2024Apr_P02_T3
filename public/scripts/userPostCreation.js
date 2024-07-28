@@ -8,18 +8,19 @@ document.addEventListener("DOMContentLoaded", async () => {
     return;
   }
   try {
-    const accountID = 6;
-    const imageName = "/post/imageName.jpg";
+    const accountID = localStorage.getItem("userID");
     const submittonButton = document.querySelector(".post-button");
     submittonButton.addEventListener('click', async (event) => {
       event.preventDefault();
+      const randomInt = Math.floor(Math.random() * 3) + 1;
       console.log("Post has been clicked!!!")
       const caption = document.querySelector("#caption").value;
       const postPost = {
         "PostedBy" : accountID,
-        "MediaPath" : imageName,
+        "MediaPath" : `random${randomInt}-post.jpg`,
         "Caption" : caption
       }
+      alert("Post has been created!")
       const postPostResponse = await fetch(
         `http://localhost:8080/postCreation`,
         {
@@ -35,7 +36,6 @@ document.addEventListener("DOMContentLoaded", async () => {
       console.log(updatedData);
       console.log("Post posted:", updatedData);
     })
-
   } catch (error) {
     console.error("Error deleting follow:", error);
     alert("Error deleting follow: " + error.message);
