@@ -4,6 +4,24 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   if (!token) {
     alert("Please log in to access this page.");
+    window.location.href = "login.html";
+  }
+
+  try {
+    const response = await fetch("/auth/verify-token", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("Invalid or expired token");
+    }
+  } catch (error) {
+    console.error("Error verifying token:", error);
+    alert("Invalid or expired token. Please log in again.");
     window.location.href = "../html/login.html";
     return;
   }
@@ -39,7 +57,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     } catch (error) {
       console.error(error);
     }
-  
 
     const profilePictureContainer = document.querySelector("#profile-link");
     let profilePicture = await fetch(`/image/${account.MediaPath}`, {
@@ -54,7 +71,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         orgDetails.message || "Failed to load organisation details"
       );
     }
-    document.getElementById("profile-image").src = profilePicture.url
+    document.getElementById("profile-image").src = profilePicture.url;
     document.getElementById("orgName").textContent = orgDetails.OrgName;
     document.getElementById("orgMission").textContent = orgDetails.Mission;
     document.getElementById(
@@ -94,7 +111,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     const noListingsMessage = document.getElementById("noListingsMessage");
     const template = document.getElementById("listingItemTemplate");
 
-
     if (listings.length === 0) {
       noListingsMessage.style.display = "block";
     } else {
@@ -102,8 +118,8 @@ document.addEventListener("DOMContentLoaded", async () => {
 
       listings.forEach((listing) => {
         const listingItem = template.cloneNode(true);
-        listingItem.style.display = "flex"; 
-        listingItem.id = ""; 
+        listingItem.style.display = "flex";
+        listingItem.id = "";
         listingItem.querySelector(".listing-image").src =
           listing.ImagePath ||
           "https://storage.gignite.ai/mediaengine/model1/41096b32-b087-493f-94f3-f13aa79d2526.png";

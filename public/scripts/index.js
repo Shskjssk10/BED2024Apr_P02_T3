@@ -28,14 +28,33 @@ document.addEventListener("DOMContentLoaded", async () => {
   } catch (error) {
     console.error(error);
   }
-  const token = getCookie("authToken");
+  const token = sessionStorage.getItem("authToken");
 
-  console.log("authToken from cookie:", token);
+  console.log("authToken from session storage:", token);
 
   if (!token) {
     alert("Please log in to access this page.");
     window.location.href = "login.html";
   } 
+
+  try {
+    const response = await fetch("/auth/verify-token", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`,
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("Invalid or expired token");
+    }
+  } catch (error) {
+    console.error("Error verifying token:", error);
+    alert("Invalid or expired token. Please log in again.");
+    window.location.href = "../html/login.html";
+    return;
+  }
 
   const profilePictureContainer = document.querySelector("#profile-link");
   console.log("🚀 ~ document.addEventListener ~ profilePictureContainer:", profilePictureContainer)
