@@ -8,6 +8,18 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
   try {
     // Get Organisation Details
+<<<<<<< HEAD
+    const currentAccountID = parseInt(localStorage.getItem("userID"));
+    const organisationResponse = await fetch(
+      `/organisationProfile/${currentAccountID}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+=======
     const currentAccountID = parseInt(sessionStorage.getItem("userID"));
     const organisationResponse = await fetch(`/organisationProfile/${currentAccountID}`, {
       method: "GET",
@@ -15,6 +27,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         "Content-Type": "application/json",
       },
     });
+>>>>>>> 2d2ac61aff6439cb968e900b7871df618e1db59f
     console.log(
       "Response status on ORGANISATION:",
       organisationResponse.status
@@ -43,7 +56,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     const profilePicture = document.querySelector("#profile-link");
-    profilePicture.src = image.url
+    profilePicture.src = image.url;
 
     profileSection.innerHTML = `
       <img
