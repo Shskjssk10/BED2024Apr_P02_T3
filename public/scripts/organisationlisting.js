@@ -11,8 +11,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   // fetch organisation details
   try {
-    const orgId = 2
-    // const orgId = sessionStorage.getItem("userID");
+    const orgId = sessionStorage.getItem("userID");
     if (!orgId) {
       throw new Error("Organisation ID not found");
     }
