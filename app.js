@@ -163,6 +163,7 @@ const userProfileController = require("./controllers/userProfileController");
 const followController = require("./controllers/followController");
 const signUpController = require("./controllers/signUpController");
 const savedListingController = require("./controllers/savedListingController");
+const commentController = require("./controllers/commentController");
 
 const sql = require("mssql");
 
@@ -172,6 +173,8 @@ app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Headers", "Content-Type"); // Add other allowed headers
   next();
 });
+
+app.get("/organisation/details/:id", organisationController.getOrgDetails);
 
 app.get("/volunteers", volunteerController.getAllVolunteers); //get all user
 app.get("/volunteers/:id", volunteerController.getVolunteerById); // Get user by ID
@@ -209,6 +212,8 @@ app.get("/likes/:id", likesController.getAllLikesById);
 app.post("/likes", likesController.postLikeById);
 app.delete("/likes", likesController.deleteLikesById);
 
+app.get("/userFeedPage", userFeedPageController.getAllAccounts);
+app.get("/comment/:id", commentController.getAllCommentsByPostID);
 app.post("/userFeedPage", userFeedPageController.postComment);
 
 // app.get("/userProfile/:id", postController.getAllPostsByAccID)

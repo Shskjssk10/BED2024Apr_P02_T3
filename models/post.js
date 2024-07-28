@@ -13,11 +13,12 @@ class Post {
     const connection = await sql.connect(dbConfig);
 
     const sqlQuery = `
-      SELECT * 
-      FROM POST
+      SELECT p.*, a.Username 
+      FROM POST p 
+      INNER JOIN Account a ON p.PostedBy = a.AccID
       WHERE PostedBy IN (SELECT Follower 
-                          FROM Follower 
-                          WHERE FollowedBy = @id)
+                FROM Follower 
+                WHERE FollowedBy = @id)
     `;
 
     const request = connection.request();
@@ -33,7 +34,7 @@ class Post {
           result.recordset[0].CreatedAt,
           result.recordset[0].MediaPath,
           result.recordset[0].Caption
-        ),
+        )
       ]; // Wrap the single Post object in an array
     } else {
       // 2. Map multiple posts to Post objects if needed
@@ -45,7 +46,7 @@ class Post {
             row.CreatedAt,
             row.MediaPath,
             row.Caption
-          )
+          ),
       );
       return posts;
     }

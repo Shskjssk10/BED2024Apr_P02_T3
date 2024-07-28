@@ -8,6 +8,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
   try {
     // Get Organisation Details
+    // const currentAccountID = parseInt(localStorage.getItem("userID"));
     const currentAccountID = 2
     const organisationResponse = await fetch(`/organisationProfile/${currentAccountID}`, {
       method: "GET",
@@ -20,19 +21,9 @@ document.addEventListener("DOMContentLoaded", async () => {
       organisationResponse.status
     );
     const organisation = await organisationResponse.json();
-    console.log("🚀 ~ document.addEventListener ~ organisation:", organisation)
     if (!organisationResponse.ok) {
       throw new Error(organisation.message || "Failed to load organisation");
     }
-
-    const indivOrgResponse = await fetch(`/organisations/${currentAccountID}`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-    const indivOrganisation = await indivOrgResponse.json();
-
 
     const profileSection = document.querySelector(".profile-header");
     const listingSecetion = document.querySelector(".listings-section");
@@ -131,6 +122,15 @@ document.addEventListener("DOMContentLoaded", async () => {
     for (const post of allPosts) {
       const postItemContainer = document.createElement("div");
       postItemContainer.classList.add("post-item");
+      image = await fetch(`/image/${post.MediaPath}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      postItemContainer.innerHTML = `
+        <img src="${image.url}">
+      `;
       postSection.appendChild(postItemContainer);
     }
   } catch (error) {

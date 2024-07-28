@@ -13,7 +13,8 @@ class Organisation {
     AptFloorUnit,
     PhoneNo,
     Email,
-    Password
+    Password, 
+    MediaPath
   ) {
     this.AccID = AccID;
     this.OrgName = OrgName;
@@ -26,6 +27,7 @@ class Organisation {
     this.Email = Email;
     this.PhoneNo = PhoneNo;
     this.Password = Password;
+    this.MediaPath = MediaPath;
   }
 
   //Hendrik's Parts//
@@ -54,7 +56,8 @@ class Organisation {
           row.AptFloorUnit,
           row.PhoneNo,
           row.Email,
-          row.Password
+          row.Password,
+          row.MediaPath
         )
     );
   }
@@ -84,10 +87,12 @@ class Organisation {
           result.recordset[0].AptFloorUnit,
           result.recordset[0].PhoneNo,
           result.recordset[0].Email,
-          result.recordset[0].Password
+          result.recordset[0].Password,
+          result.recordset[0].MediaPath
         )
       : null; // Handle organisation not found
   }
+  
   static async updateOrgProfile(id, updatedOrg) {
     try {
       //establish database connection
@@ -235,6 +240,7 @@ class Organisation {
       },
     ];
   }
+
   static async getOrgByName(OrgName) {
     const connection = await sql.connect(dbConfig);
     // Sql query that returns account similar to the one entered
@@ -267,5 +273,27 @@ class Organisation {
         )
       : null; // Handle organisation not found
   }
+
+  static async getOrgDetails(orgId) {
+    const connection = await sql.connect(dbConfig);
+    const sqlQuery = `
+      SELECT o.AccID, o.OrgName, o.Mission, 
+        COUNT(l.ListingID) AS NumListings,
+        (SELECT COUNT(*) FROM Follower WHERE Follower = o.AccID) AS NumFollowers,
+        (SELECT COUNT(*) FROM Follower WHERE FollowedBy = o.AccID) AS NumFollowing
+      FROM Organisation o
+      LEFT JOIN Listing l 
+      ON o.AccID = l.PostedBy
+      WHERE o.AccID = @orgId
+      GROUP BY o.AccID, o.OrgName, o.Mission`;
+
+    const request = connection.request();
+    request.input("orgId", sql.SmallInt, orgId);
+    const result = await request.query(sqlQuery);
+    connection.close();
+
+    return result.recordset[0];
+  }
+
 }
 module.exports = Organisation;

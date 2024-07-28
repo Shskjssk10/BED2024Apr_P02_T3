@@ -92,7 +92,7 @@
             <div class="post-item" onclick="openModal('post6')"></div>
           </div>
         </div>
-        <div class="listings-section">
+        <div class="listing-section">
           <h2>Signed Up Listings</h2>
           <div class="listings">
             <div class="listing-item">
@@ -155,54 +155,56 @@
       </div>
     </main>
     <!-- Modal -->
-    <div id="postModal" class="modal" onclick="closeModal(event)">
-      <div class="modal-content" onclick="event.stopPropagation()">
-        <div class="modal-body">
-          <div class="modal-left">
-            <div class="modal-header">
-              <img
-                src="../images/github-icon.png"
-                alt="Profile Picture"
-                class="profile-pic"
-              />
-              <span class="username">EcoVolunteers</span>
-            </div>
-            <img
-              src="../images/userfeedexample.jpg"
-              alt="Post Image"
-              class="modal-image"
-            />
-          </div>
-          <div class="modal-right">
-            <div class="comments-container">
-              <div class="comments">
-                <div class="comment">
-                  <img
-                    src="../images/user1.png"
-                    alt="User1"
-                    class="profile-pic small"
-                  />
-                  <p><strong>User1:</strong> Great post!</p>
-                </div>
-                <div class="comment">
-                  <img
-                    src="../images/user2.png"
-                    alt="User2"
-                    class="profile-pic small"
-                  />
-                  <p><strong>User2:</strong> Love this!</p>
-                </div>
-                <!-- Repeat for other comments -->
+    <div class="post-modal-container">
+      <div id="postModal" class="modal" onclick="closeModal(event)">
+        <div class="modal-content" onclick="event.stopPropagation()">
+          <div class="modal-body">
+            <div class="modal-left">
+              <div class="modal-header">
+                <img
+                  src="../images/github-icon.png"
+                  alt="Profile Picture"
+                  class="profile-pic"
+                />
+                <span class="username">EcoVolunteers</span>
               </div>
-            </div>
-            <hr />
-            <div class="comment-form">
-              <input
-                type="text"
-                id="commentInput"
-                placeholder="Add a comment..."
+              <img
+                src="../images/userfeedexample.jpg"
+                alt="Post Image"
+                class="modal-image"
               />
-              <button onclick="addComment()">Post</button>
+            </div>
+            <div class="modal-right">
+              <div class="comments-container">
+                <div class="comments">
+                  <div class="comment">
+                    <img
+                      src="../images/user1.png"
+                      alt="User1"
+                      class="profile-pic small"
+                    />
+                    <p><strong>User1:</strong> Great post!</p>
+                  </div>
+                  <div class="comment">
+                    <img
+                      src="../images/user2.png"
+                      alt="User2"
+                      class="profile-pic small"
+                    />
+                    <p><strong>User2:</strong> Love this!</p>
+                  </div>
+                  <!-- Repeat for other comments -->
+                </div>
+              </div>
+              <hr />
+              <div class="comment-form">
+                <input
+                  type="text"
+                  id="commentInput"
+                  placeholder="Add a comment..."
+                />
+                <button onclick="addComment()">Post</button>
+              </div>
             </div>
           </div>
         </div>
@@ -275,5 +277,6 @@
         }
       }
     </script>
+    <script src="../scripts/otherUserProfile.js"></script>
   </body>
 </html>

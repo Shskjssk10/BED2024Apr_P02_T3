@@ -55,6 +55,7 @@ const updateOrgProfile = async (req, res) => {
   }
 };
 
+
 const deleteOrg = async (req, res) => {
   const id = parseInt(req.params.id);
   try {
@@ -65,6 +66,22 @@ const deleteOrg = async (req, res) => {
     console.error("Error deleting organisation:", error);
     res.status(500).send("Error deleting organisation");
   }
+}
+
+
+// get details for organisation page listing details (name, mission, number of listings, followers, following)
+const getOrgDetails = async (req, res) => {
+  const orgId = parseInt(req.params.id);
+  try {
+    const orgDetails = await Organisation.getOrgDetails(orgId);
+    if (!orgDetails) {
+      return res.status(404).send("Organisation not found");
+    }
+    res.json(orgDetails);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Error retrieving Organisation details");
+  }
 };
 
 module.exports = {
@@ -73,4 +90,5 @@ module.exports = {
   deleteOrg,
   getOrgByName,
   updateOrgProfile,
+  getOrgDetails,
 };

@@ -137,7 +137,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       <h2>Description:</h2>
       <p>${currentListing.About}</p>
       <div class="image-placeholder">
-        <img>
+        <img src="${image.url}">
       </div>
       <div class="applybookmark">
         <a href="userlisting.html">
