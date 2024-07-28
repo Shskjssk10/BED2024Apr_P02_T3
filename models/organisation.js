@@ -1,5 +1,6 @@
 const sql = require("mssql");
 const dbConfig = require("../dbConfig");
+const { hashPassword } = require("../models/authModel");
 
 class Organisation {
   constructor(
@@ -277,18 +278,46 @@ class Organisation {
       : null; // Handle organisation not found
   }
 
+
+  // Cheryl's part
+  static async updateOrganisationHash(id, newPassword) {
+    try {
+      console.log("Updating password for organisation with ID:", id);
+      const connection = await sql.connect(dbConfig);
+      const { salt, hashedPassword } = await hashPassword(newPassword); // Use hashPassword function
+
+      console.log("New generated salt:", salt);
+      console.log("New generated hashed password:", hashedPassword)
+
+      const organisationQuery = `UPDATE Organisation SET
+      Salt = @Salt,
+      HashedPassword = @HashedPassword
+      WHERE AccID = @AccID`;
+
+      const organisationReq = connection.request();
+      organisationReq.input("AccID", sql.SmallInt, id);
+      organisationReq.input("Salt", sql.VarChar, salt);
+      organisationReq.input("HashedPassword", sql.VarChar, hashedPassword);
+      await organisationReq.query(organisationQuery);
+
+      connection.close();
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
   static async getOrgDetails(orgId) {
     const connection = await sql.connect(dbConfig);
     const sqlQuery = `
-      SELECT o.AccID, o.OrgName, o.Mission, 
-        COUNT(l.ListingID) AS NumListings,
-        (SELECT COUNT(*) FROM Follower WHERE Follower = o.AccID) AS NumFollowers,
-        (SELECT COUNT(*) FROM Follower WHERE FollowedBy = o.AccID) AS NumFollowing
-      FROM Organisation o
-      LEFT JOIN Listing l 
-      ON o.AccID = l.PostedBy
-      WHERE o.AccID = @orgId
-      GROUP BY o.AccID, o.OrgName, o.Mission`;
+    SELECT o.AccID, o.OrgName, o.Mission, 
+      COUNT(l.ListingID) AS NumListings,
+      (SELECT COUNT(*) FROM Follower WHERE Follower = o.AccID) AS NumFollowers,
+      (SELECT COUNT(*) FROM Follower WHERE FollowedBy = o.AccID) AS NumFollowing
+    FROM Organisation o
+    LEFT JOIN Listing l 
+    ON o.AccID = l.PostedBy
+    WHERE o.AccID = @orgId
+    GROUP BY o.AccID, o.OrgName, o.Mission`;
 
     const request = connection.request();
     request.input("orgId", sql.SmallInt, orgId);
