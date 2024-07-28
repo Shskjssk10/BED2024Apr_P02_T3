@@ -8,7 +8,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       return;
   }
 
-  const currentAccountID = parseInt(localStorage.getItem("userID"));
+  const currentAccountID = parseInt(sessionStorage.getItem("userID"));
   const listingInformation = JSON.parse(sessionStorage.getItem("listingInformation"));
   let listingNameInput = document.querySelector("#listing-name").value;
   let addrInput = document.querySelector("#address").value;
@@ -30,7 +30,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   try {
-    const currentAccountID = parseInt(localStorage.getItem("userID"));
+    const currentAccountID = parseInt(sessionStorage.getItem("userID"));
     const accountResponse = await fetch(`/organisations/${currentAccountID}`, {
       method: "GET",
       headers: {
@@ -78,7 +78,9 @@ document.addEventListener("DOMContentLoaded", async () => {
     const isValidStartDate = startDate > today;
     const isValidEndDate = endDate >= startDate;
     // Enable/disable preview button based on filled fields AND valid dates
+    
     previewButton.disabled = !(allFieldsFilled && isValidStartDate && isValidEndDate);
+    console.log("🚀 ~ form.addEventListener ~ previewButton.disabled:", previewButton.disabled)
   });
   previewButton.addEventListener("click", async (event) => {
     event.preventDefault();
@@ -95,6 +97,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     listing.About = aboutInput;
     listing.MediaPath = `random${randomInt}-listing.jpg`;
     sessionStorage.setItem("listingInformation", JSON.stringify(listing));
-    window.location.href="organisationpreviewlisting.html";
+    console.log("This is logged");
+    window.location ="organisationpreviewlisting.html";
   });
 });
