@@ -55,20 +55,6 @@ const updateOrgProfile = async (req, res) => {
   }
 };
 
-// Cheryl's part
-// update salt and hash after updating password
-const updateOrganisationHash = async (req, res) => {
-  const orgId = parseInt(req.params.id);
-  const { newPassword } = req.body;
-  try {
-    await Organisation.updateOrganisationHash(orgId, newPassword);
-    res.status(200).send("Organisation password updated successfully");
-  } catch (error) {
-    console.error("Error updating organisation password:", error);
-    res.status(500).send("Error updating organisation password");
-  }
-};
-
 const deleteOrg = async (req, res) => {
   const id = parseInt(req.params.id);
   try {
@@ -81,6 +67,19 @@ const deleteOrg = async (req, res) => {
   }
 }
 
+// Cheryl's part
+// update salt and hash after updating password
+const updateOrganisationHash = async (req, res) => {
+  const id = parseInt(req.params.id);
+  const { newPassword } = req.body;
+  try {
+    await Organisation.updateOrganisationHash(id, newPassword);
+    res.status(200).send("Organisation password updated successfully");
+  } catch (error) {
+    console.error("Error updating organisation password:", error);
+    res.status(500).send("Error updating organisation password");
+  }
+};
 
 // get details for organisation page listing details (name, mission, number of listings, followers, following)
 const getOrgDetails = async (req, res) => {

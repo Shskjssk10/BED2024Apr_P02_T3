@@ -94,7 +94,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     if (password.value) {
       try {
         const updatePasswordResponse = await fetch(
-          `/volunteers/${userID}/password`,
+          `/organisations/${userID}/password`,
           {
             method: "PUT",
             headers: {

@@ -282,8 +282,12 @@ class Organisation {
   // Cheryl's part
   static async updateOrganisationHash(id, newPassword) {
     try {
+      console.log("Updating password for organisation with ID:", id);
       const connection = await sql.connect(dbConfig);
       const { salt, hashedPassword } = await hashPassword(newPassword); // Use hashPassword function
+
+      console.log("New generated salt:", salt);
+      console.log("New generated hashed password:", hashedPassword)
 
       const organisationQuery = `UPDATE Organisation SET
       Salt = @Salt,
