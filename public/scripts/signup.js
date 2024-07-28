@@ -2,6 +2,7 @@ document
   .getElementById("volunteerSignUpForm")
   .addEventListener("submit", async (event) => {
     event.preventDefault();
+    const randomInt = Math.floor(Math.random() * 3) + 1;
     const volunteerData = {
       fname: document.getElementById("volunteerFirstName").value,
       lname: document.getElementById("volunteerLastName").value,
@@ -11,6 +12,7 @@ document
       gender: document.getElementById("volunteerGender").value,
       bio: document.getElementById("volunteerBio").value,
       password: document.getElementById("volunteerPassword").value,
+      mediapath: `random${randomInt}-pfp.jpg`
     };
 
     try {
@@ -44,6 +46,7 @@ document
       address: document.getElementById("orgAddress").value,
       apt_floor_unit: document.getElementById("orgAddress2").value,
       website: document.getElementById("orgWebsite").value,
+      mediapath: `random${randomInt}-pfp.jpg`
     };
 
     try {
