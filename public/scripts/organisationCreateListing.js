@@ -18,7 +18,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   let skillsInput = document.querySelector("#skills").value;
   let requirementsInput = document.querySelector("#requirements").value;
   let aboutInput = document.querySelector("#description").value;
-  try {
+  if (listingInformation){
     document.querySelector("#listing-name").value = listingInformation.ListingName || "";
     document.querySelector("#address").value = listingInformation.Addr
     document.querySelector("#start-date").value = listingInformation.StartDate
@@ -27,33 +27,11 @@ document.addEventListener("DOMContentLoaded", async () => {
     document.querySelector("#skills").value = listingInformation.Skill
     document.querySelector("#requirements").value = listingInformation.Requirement
     document.querySelector("#description").value = listingInformation.About
-  } finally {
-    console.log("life goes on")
   }
 
   const form = document.querySelector('.form-container form');
   const previewButton = document.querySelector('.preview-button');
   previewButton.disabled = true;
-
-  let filePath = "";
-  let file = "";
-  document
-  .getElementById("mediaInput")
-  .addEventListener("change", function (event) {
-    file = event.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = function (e) {
-        const mediaPreview = document.getElementById("mediaPreview");
-        mediaPreview.src = e.target.result;
-        filePath = mediaPreview.src;
-        document.getElementById("mediaPreviewContainer").style.display = "block";
-        sessionStorage.removeItem("tempImage");
-        sessionStorage.setItem("tempImage", JSON.stringify(file));
-      };
-      reader.readAsDataURL(file);
-    }
-  });
 
   form.addEventListener('input', () => {
     const allFieldsFilled = Array.from(form.elements)
@@ -80,6 +58,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   });
   previewButton.addEventListener("click", async (event) => {
     event.preventDefault();
+    const randomInt = Math.floor(Math.random() * 3) + 1;
     listing = new Object();
     listing.PostedBy = currentAccountID;
     listing.ListingName = listingNameInput;
@@ -90,8 +69,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     listing.Skill = skillsInput;
     listing.Requirement = requirementsInput;
     listing.About = aboutInput;
-    listing.File = JSON.stringify(file);
-    sessionStorage.removeItem("listingInformation")
+    listing.MediaPath = `random${randomInt}-listing.jpg`;
     sessionStorage.setItem("listingInformation", JSON.stringify(listing));
     window.location.href="organisationpreviewlisting.html";
   });

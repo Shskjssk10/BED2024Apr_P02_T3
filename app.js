@@ -108,46 +108,6 @@ app.get("/image/:mediapath", async (req, res) => {
 })
 
 app.post("/image", googleBucketMiddleware.uploadFromMemory);
-// const Busboy = require('busboy');
-
-// app.post("/image", async (req, res) => {
-//   try {
-//     const busboy = Busboy({ headers: req.headers });
-
-//     let fileBuffer;
-//     let filename;
-//     let mimetype;
-
-//     busboy.on("file", (fieldname, file, filename, encoding, mimetype) => {
-//       const chunks = [];
-//       file.on("data", (chunk) => chunks.push(chunk));
-//       file.on("end", () => {
-//         fileBuffer = Buffer.concat(chunks);
-//         console.log("File uploaded and buffered:", filename);
-//       });
-//     });
-
-//     busboy.on("finish", async () => {
-//       try {
-//         const uploadedImage = await googleBucketMiddleware.uploadFromMemory(
-//           fileBuffer
-//         );
-//         console.log("Image uploaded successfully:", uploadedImage);
-//         res.status(200).json({ message: "Success" }); // Assuming you're using Express
-//       } catch (err) {
-//         console.error("Error uploading image to GCS:", err);
-//         res.status(500).json({ error: err.message }); // Send a more specific error
-//       }
-//     });
-    
-//     // Pipe the request to Busboy
-//     req.pipe(busboy);
-
-//   } catch (err) {
-//     console.error("Unexpected error during image upload:", err);
-//     res.status(500).json({ error: 'An unexpected error occurred' });
-//   }
-// });
 
 const dbConfig = require("./dbConfig");
 const volunteerController = require("./controllers/volunteerController");
