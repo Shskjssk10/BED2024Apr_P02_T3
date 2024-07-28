@@ -8,14 +8,17 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
   try {
     // Get Volunteer Details
-    // const currentAccountID = parseInt(localStorage.getItem("userID"));
-    const currentAccountID = 1;
-    const volunteerResponse = await fetch(`/volunteerProfile/${currentAccountID}`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+    const currentAccountID = parseInt(sessionStorage.getItem("userID"));
+
+    const volunteerResponse = await fetch(
+      `/volunteerProfile/${currentAccountID}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
     console.log("Response status on VOLUNTEER:", volunteerResponse.status);
     const volunteer = await volunteerResponse.json();
     // console.log("Volunteer received:", temp);
@@ -45,10 +48,9 @@ document.addEventListener("DOMContentLoaded", async () => {
     listingSection.innerHTML = "";
     // Appending Profile Data
     let image = "";
-    if (volunteer.info.MediaPath === null){
-      image = "/public/images/default-pfp.png"
-    }
-    else {
+    if (volunteer.info.MediaPath === null) {
+      image = "/public/images/default-pfp.png";
+    } else {
       try {
         image = await fetch(`/image/${volunteer.info.MediaPath}`, {
           method: "GET",
@@ -56,7 +58,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             "Content-Type": "application/json",
           },
         });
-        image = image.url
+        image = image.url;
       } catch (error) {
         console.error(error);
       }
@@ -107,10 +109,10 @@ document.addEventListener("DOMContentLoaded", async () => {
     savedListingContainer.classList.add("listings");
 
     //Preparing Sign Up Listings
-    async function processSignedUpListing(listing){
+    async function processSignedUpListing(listing) {
       const listingContainer = document.createElement("a");
       listingContainer.classList.add("no-underline");
-      listingContainer.href="userviewlisting.html";
+      listingContainer.href = "userviewlisting.html";
       const orgName =
         organisations.find((org) => org.id === listing.PostedBy)?.OrgName ??
         null;
@@ -139,12 +141,14 @@ document.addEventListener("DOMContentLoaded", async () => {
       signUpListingContainer.appendChild(listingContainer);
     }
     // Preparing Saved Listings
-    async function processSavedListing(listing){
+    async function processSavedListing(listing) {
       const listingContainer = document.createElement("a");
       listingContainer.classList.add("no-underline");
-      listingContainer.href="organisationprofile.html";
-      const targetOrganisation = organisations.find((org) => org.AccID === listing.PostedBy);
-      let username = targetOrganisation.OrgName
+      listingContainer.href = "organisationprofile.html";
+      const targetOrganisation = organisations.find(
+        (org) => org.AccID === listing.PostedBy
+      );
+      let username = targetOrganisation.OrgName;
       try {
         image = await fetch(`/image/${listing.MediaPath}`, {
           method: "GET",
@@ -170,19 +174,25 @@ document.addEventListener("DOMContentLoaded", async () => {
       savedListingContainer.appendChild(listingContainer);
     }
 
-    function updateListings(signUpListings, savedListings){
-      const promises = signUpListings.map(processSignedUpListing) && savedListings.map(processSavedListing);
+    function updateListings(signUpListings, savedListings) {
+      const promises =
+        signUpListings.map(processSignedUpListing) &&
+        savedListings.map(processSavedListing);
       Promise.all(promises).then(() => {
         let allListings = document.querySelectorAll(".no-underline");
         allListings.forEach((listing) => {
           listing.addEventListener("click", (event) => {
-              event.preventDefault();
-              const clickedListing = event.currentTarget.querySelector('.listing-item'); 
-              const listingId = parseInt(clickedListing.id, 10); 
-              console.log("🚀 ~ listing.addEventListener ~ listingId:", listingId)
-              sessionStorage.removeItem("selectedListingID");
-              sessionStorage.setItem("selectedListingID", listingId);
-              window.location.href = "userviewlisting.html";
+            event.preventDefault();
+            const clickedListing =
+              event.currentTarget.querySelector(".listing-item");
+            const listingId = parseInt(clickedListing.id, 10);
+            console.log(
+              "🚀 ~ listing.addEventListener ~ listingId:",
+              listingId
+            );
+            sessionStorage.removeItem("selectedListingID");
+            sessionStorage.setItem("selectedListingID", listingId);
+            window.location.href = "userviewlisting.html";
           });
         });
       });

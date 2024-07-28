@@ -9,13 +9,16 @@ document.addEventListener("DOMContentLoaded", async () => {
   try {
     // Get Organisation Details
     // const currentAccountID = parseInt(localStorage.getItem("userID"));
-    const currentAccountID = 2
-    const organisationResponse = await fetch(`/organisationProfile/${currentAccountID}`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+    const currentAccountID = 2;
+    const organisationResponse = await fetch(
+      `/organisationProfile/${currentAccountID}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
     console.log(
       "Response status on ORGANISATION:",
       organisationResponse.status
@@ -59,8 +62,8 @@ document.addEventListener("DOMContentLoaded", async () => {
           <span>${organisation.followersAndFollowing.Followers} Followers</span>
           <span>${organisation.followersAndFollowing.Following} Following</span>
         </div>
-        <a href="organisationprofilemgmt.html"
-          <button href="organisationprofilemgmt.html" class="edit-button">Edit</button>
+        <a href="G_organisationprofilemgmt.html"
+          <button href="G_organisationprofilemgmt.html" class="edit-button">Edit</button>
         </a>
       </div>
     `;
