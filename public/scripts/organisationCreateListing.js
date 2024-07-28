@@ -29,6 +29,30 @@ document.addEventListener("DOMContentLoaded", async () => {
     document.querySelector("#description").value = listingInformation.About
   }
 
+  try {
+    const currentAccountID = parseInt(localStorage.getItem("userID"));
+    const accountResponse = await fetch(`/organisations/${currentAccountID}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    console.log("Response status on VOLUNTEER:", accountResponse.status);
+    account = await accountResponse.json();
+  } catch (error) {
+    console.error(error);
+  }
+
+  const profilePictureContainer = document.querySelector("#profile-link");
+  console.log("🚀 ~ document.addEventListener ~ profilePictureContainer:", profilePictureContainer)
+  let pfp = await fetch(`/image/${account.MediaPath}`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+  profilePictureContainer.src = pfp.url;
+
   const form = document.querySelector('.form-container form');
   const previewButton = document.querySelector('.preview-button');
   previewButton.disabled = true;
