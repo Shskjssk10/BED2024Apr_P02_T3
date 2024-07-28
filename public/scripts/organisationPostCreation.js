@@ -8,8 +8,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     return;
   }
   try {
-    const accountID = localStorage.getItem("userID");
-
+    // const accountID = localStorage.getItem("userID");
+    const accountID = 2;
     let account = "";
     try {
       const accountResponse = await fetch(`/organisations/${accountID}`, {
@@ -18,14 +18,13 @@ document.addEventListener("DOMContentLoaded", async () => {
           "Content-Type": "application/json",
         },
       });
-      console.log("Response status on VOLUNTEER:", accountResponse.status);
+      console.log("Response status on ORGANISATIONS:", accountResponse.status);
       account = await accountResponse.json();
     } catch (error) {
       console.error(error);
     }
   
     const profilePictureContainer = document.querySelector("#profile-link");
-    console.log("🚀 ~ document.addEventListener ~ profilePictureContainer:", profilePictureContainer)
     let profilePicture = await fetch(`/image/${account.MediaPath}`, {
       method: "GET",
       headers: {
