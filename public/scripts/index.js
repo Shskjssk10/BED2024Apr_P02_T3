@@ -28,15 +28,6 @@ document.addEventListener("DOMContentLoaded", async () => {
   } catch (error) {
     console.error(error);
   }
-  const token = getCookie("authToken");
-
-  console.log("authToken from cookie:", token);
-
-  if (!token) {
-    alert("Please log in to access this page.");
-    window.location.href = "login.html";
-  } 
-
   const profilePictureContainer = document.querySelector("#profile-link");
   console.log("🚀 ~ document.addEventListener ~ profilePictureContainer:", profilePictureContainer)
   let pfp = await fetch(`/image/${account.MediaPath}`, {
@@ -46,4 +37,12 @@ document.addEventListener("DOMContentLoaded", async () => {
     },
   });
   profilePictureContainer.src = pfp.url;
+  const token = getCookie("authToken");
+
+  console.log("authToken from cookie:", token);
+
+  if (!token) {
+    alert("Please log in to access this page.");
+    window.location.href = "login.html";
+  } 
 });
