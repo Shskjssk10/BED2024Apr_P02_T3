@@ -7,11 +7,11 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   let fetchPath = "";
   if (accType === "Organisation"){ 
-    document.getElementById("profile-link").href =
-      "./organisationprofilemgmt.html";
+    document.getElementById("pfp-navbar").href =
+      "selforganisationprofile.html";
     fetchPath = "/organisations"
   } else if (accType === "Volunteer") {
-    document.getElementById("profile-link").href = "./userprofilemgmt.html";
+    document.getElementById("pfp-navbar").href = "selfuserprofile.html";
     fetchPath = "/volunteers"
   }
   let account = "";
