@@ -1,8 +1,8 @@
 document.addEventListener("DOMContentLoaded", async function () {
-  //retrieve the user id from local storage
+  //retrieve the user id from session storage
   const userID = parseInt(sessionStorage.getItem("userID"));
   //HENDRIK GET
-  //GET request using the user id from local storage
+  //GET request using the user id from session storage
   const response = await fetch(`/volunteers/${userID}`);
   const data = await response.json();
   const token = sessionStorage.getItem("authToken");
