@@ -8,9 +8,9 @@ document.addEventListener("DOMContentLoaded", async () => {
       return;
   }
   const listingInformation = JSON.parse(sessionStorage.getItem("listingInformation"));
-  console.log(listingInformation);
   try {
-    const organisationID = listingInformation.PostedBy;
+    const organisationID = sessionStorage.getItem("userID");
+    console.log("🚀 ~ document.addEventListener ~ organisationID:", organisationID)
     const organisationResponse = await fetch(`/organisations/${organisationID}`, {
       method: "GET",
       headers: {
@@ -41,7 +41,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   
     const profilePictureContainer = document.querySelector("#profile-link");
     console.log("🚀 ~ document.addEventListener ~ profilePictureContainer:", profilePictureContainer)
-    let profilePicture = await fetch(`/image/${account.MediaPath}`, {
+    let profilePicture = await fetch(`/image/${organisation.MediaPath}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -168,9 +168,11 @@ document.addEventListener("DOMContentLoaded", async () => {
     console.log("🚀 ~ document.addEventListener ~ createButton:", createButton)
     createButton.addEventListener("click", async (event) => {
       event.preventDefault();
+      console.log(listingInformation.PostedBy);
       try {
         const postListing = {
           ListingName: listingInformation.ListingName,
+          PostedBy: listingInformation.PostedBy,
           Addr: listingInformation.Addr,
           StartDate: listingInformation.StartDate,
           EndDate: listingInformation.EndDate,
