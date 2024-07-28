@@ -8,7 +8,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     return;
   }
   try {
-    const accountID = localStorage.getItem("userID");
+    // const accountID = localStorage.getItem("userID");
+    const accountID = 1
 
     let account = "";
     try {
@@ -25,7 +26,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
   
     const profilePictureContainer = document.querySelector("#profile-link");
-    console.log("🚀 ~ document.addEventListener ~ profilePictureContainer:", profilePictureContainer)
     let profilePicture = await fetch(`/image/${account.MediaPath}`, {
       method: "GET",
       headers: {
