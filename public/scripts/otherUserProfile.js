@@ -116,11 +116,11 @@ document.addEventListener("DOMContentLoaded", async () => {
                     alt="Profile Picture"
                     class="profile-pic"
                   />
-                  <span class="username">${volunteer.info.OrgName}</span>
+                  <span class="username">${volunteer.info.Username}</span>
                 </div>
               </a>
               <img
-                src="${pfp.url}"
+                src="${image.url}"
                 alt="Post Image"
                 class="modal-image"
               />
