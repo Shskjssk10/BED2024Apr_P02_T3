@@ -13,12 +13,11 @@
       crossorigin="anonymous"
     />
   </head>
-
   <body style="background-color: #fff8e7">
     <header>
       <nav class="navbar navbar-light navbar-expand-sm custom-navbar">
         <div class="container-fluid">
-          <a href="index.html" class="navbar-brand mb-0 h1">
+          <a href="#" class="navbar-brand mb-0 h1">
             <span style="color: #f6ecec">Helping</span>
             <span style="color: #ff8f80">Hearts</span>
           </a>
@@ -54,7 +53,11 @@
               </li>
               <li class="nav-item">
                 <a href="selfuserprofile.html" class="nav-link">
-                  <img src="../images/github-icon.png" alt="GitHub icon" />
+                  <img
+                    id="profile-link"
+                    src="../images/github-icon.png"
+                    alt="GitHub icon"
+                  />
                 </a>
               </li>
             </ul>
@@ -71,56 +74,26 @@
             class="profile-image"
           />
           <div class="profile-info">
-            <h1></h1>
-            <p></p>
-            <p></p>
+            <h1>jeremiahtan_02</h1>
+            <p>Jeremiah Tan</p>
+            <p>I love helping others!</p>
             <div class="profile-stats">
-              <span></span> •
-              <span></span>
+              <span>58 Followers</span> •
+              <span>183 Following</span>
             </div>
-            <a href="userprofilemgmt.html">
-              <button class="edit-button">Edit</button>
-            </a>
-            <button
-              class="navbar-toggler"
-              type="button"
-              data-bs-toggle="collapse"
-              data-bs-target="#navbarNav"
-              aria-controls="navbarNav"
-              aria-expanded="false"
-              aria-label="Toggle navigation"
-            >
-              <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-              <ul class="navbar-nav ms-auto">
-                <li class="nav-item">
-                  <a href="userlisting.html" class="nav-link">Listings</a>
-                </li>
-                <li class="nav-item">
-                  <a href="userfeed.html" class="nav-link">Feed</a>
-                </li>
-                <li class="nav-item">
-                  <a href="usersearch.html" class="nav-link">Search</a>
-                </li>
-                <li class="nav-item">
-                  <a href="userpostcreationpage.html" class="nav-link"
-                    >Create</a
-                  >
-                </li>
-                <li class="nav-item">
-                  <a href="message.html" class="nav-link">Message</a>
-                </li>
-                <li class="nav-item">
-                  <a href="selfuserprofile.html" class="nav-link">
-                    <img
-                      id="profile-picture"
-                      src="../images/github-icon.png"
-                      alt="GitHub icon"
-                    />
-                  </a>
-                </li>
-              </ul>
+          </div>
+          <a href="userprofilemgmt.html">
+            <button class="edit-button">Edit</button>
+          </a>
+        </div>
+        <div class="posts-section">
+          <h2>Posts</h2>
+          <div class="posts">
+            <div class="post-item" onclick="openModal('post1')">
+              <img src="../images/communityOutreachListingImage.jpg" />
+            </div>
+            <div class="post-item" onclick="openModal('post2')">
+              <img src="../images/userfeedexample.jpg" />
             </div>
             <div class="post-item" onclick="openModal('post3')"></div>
             <div class="post-item" onclick="openModal('post4')"></div>
@@ -128,7 +101,7 @@
             <div class="post-item" onclick="openModal('post6')"></div>
           </div>
         </div>
-        <div class="listings-section">
+        <div class="listing-section">
           <h2>Signed Up Listings</h2>
           <div class="listings">
             <div class="listing-item">
@@ -161,7 +134,9 @@
               </a>
             </div>
             <div class="listing-item">
-              <div class="listingimage"></div>
+              <div class="listingimage">
+                <img src="../images/userfeedexample.jpg" />
+              </div>
               <a href="userviewlisting.html" class="no-underline">
                 <div class="listinginfobox">
                   <p class="listingname">[ Insert Listing Name ]</p>
@@ -189,54 +164,56 @@
       </div>
     </main>
     <!-- Modal -->
-    <div id="postModal" class="modal" onclick="closeModal(event)">
-      <div class="modal-content" onclick="event.stopPropagation()">
-        <div class="modal-body">
-          <div class="modal-left">
-            <div class="modal-header">
-              <img
-                src="../images/github-icon.png"
-                alt="Profile Picture"
-                class="profile-pic"
-              />
-              <span class="username">EcoVolunteers</span>
-            </div>
-            <img
-              src="../images/userfeedexample.jpg"
-              alt="Post Image"
-              class="modal-image"
-            />
-          </div>
-          <div class="modal-right">
-            <div class="comments-container">
-              <div class="comments">
-                <div class="comment">
-                  <img
-                    src="../images/user1.png"
-                    alt="User1"
-                    class="profile-pic small"
-                  />
-                  <p><strong>User1:</strong> Great post!</p>
-                </div>
-                <div class="comment">
-                  <img
-                    src="../images/user2.png"
-                    alt="User2"
-                    class="profile-pic small"
-                  />
-                  <p><strong>User2:</strong> Love this!</p>
-                </div>
-                <!-- Repeat for other comments -->
+    <div class="post-modal-container">
+      <div id="postModal" class="modal" onclick="closeModal(event)">
+        <div class="modal-content" onclick="event.stopPropagation()">
+          <div class="modal-body">
+            <div class="modal-left">
+              <div class="modal-header">
+                <img
+                  src="../images/github-icon.png"
+                  alt="Profile Picture"
+                  class="profile-pic"
+                />
+                <span class="username">EcoVolunteers</span>
               </div>
-            </div>
-            <hr />
-            <div class="comment-form">
-              <input
-                type="text"
-                id="commentInput"
-                placeholder="Add a comment..."
+              <img
+                src="../images/userfeedexample.jpg"
+                alt="Post Image"
+                class="modal-image"
               />
-              <button onclick="addComment()">Post</button>
+            </div>
+            <div class="modal-right">
+              <div class="comments-container">
+                <div class="comments">
+                  <div class="comment">
+                    <img
+                      src="../images/user1.png"
+                      alt="User1"
+                      class="profile-pic small"
+                    />
+                    <p><strong>User1:</strong> Great post!</p>
+                  </div>
+                  <div class="comment">
+                    <img
+                      src="../images/user2.png"
+                      alt="User2"
+                      class="profile-pic small"
+                    />
+                    <p><strong>User2:</strong> Love this!</p>
+                  </div>
+                  <!-- Repeat for other comments -->
+                </div>
+              </div>
+              <hr />
+              <div class="comment-form">
+                <input
+                  type="text"
+                  id="commentInput"
+                  placeholder="Add a comment..."
+                />
+                <button onclick="addComment()">Post</button>
+              </div>
             </div>
           </div>
         </div>
