@@ -56,6 +56,7 @@ CREATE TABLE Volunteer (
     Username VARCHAR(15) UNIQUE,
     Gender VARCHAR(20) CHECK (Gender IN ('Male', 'Female', 'Prefer Not To Say')) NOT NULL,
     Bio VARCHAR(150),
+	MediaPath VARCHAR(255),
     Salt VARCHAR(255),
     HashedPassword VARCHAR(255),
     CONSTRAINT PK_Volunteer PRIMARY KEY (AccID),
@@ -65,13 +66,14 @@ CREATE TABLE Volunteer (
 -- Create the Organisation table
 CREATE TABLE Organisation (
     AccID SMALLINT,
-    OrgName VARCHAR(20) NOT NULL,
+    OrgName VARCHAR(15) NOT NULL,
 	Website VARCHAR(255) NOT NULL,
     IssueArea VARCHAR(50) NOT NULL,
     Mission VARCHAR(255) NOT NULL,
     Descr TEXT NOT NULL,
     Addr VARCHAR(255) NOT NULL,
     AptFloorUnit VARCHAR(50) NOT NULL,
+	MediaPath VARCHAR(255),
     Salt VARCHAR(255),
     HashedPassword VARCHAR(255),
     CONSTRAINT PK_Organisation PRIMARY KEY (AccID),
@@ -164,35 +166,35 @@ VALUES
     ('sambrown','84567890', 'volunteer3@example.com', 'password3');
 
 -- Insert data into Volunteer table
-INSERT INTO Volunteer (AccID, FName, LName, Username, Gender, Bio, Salt, HashedPassword)
+INSERT INTO Volunteer (AccID, FName, LName, Username, Gender, Bio, MediaPath, Salt, HashedPassword)
 VALUES 
-    (1, 'John', 'Doe', 'johndoe', 'Male', 'Volunteer bio for John Doe', 'salt1', 'hashedpassword1'),
-    (3, 'Jane', 'Smith', 'janesmith', 'Female', 'Volunteer bio for Jane Smith', 'salt2', 'hashedpassword2'),
-    (5, 'Sam', 'Brown', 'sambrown', 'Prefer Not To Say', 'Volunteer bio for Sam Brown', 'salt3', 'hashedpassword3');
+    (1, 'John', 'Doe', 'johndoe', 'Male', 'Volunteer bio for John Doe', 'johndoe-pfp.jpg', 'salt1', 'hashedpassword1'),
+    (3, 'Jane', 'Smith', 'janesmith', 'Female', 'Volunteer bio for Jane Smith', 'janesmith-pfp.jpg', 'salt2', 'hashedpassword2'),
+    (5, 'Sam', 'Brown', 'sambrown', 'Prefer Not To Say', 'Volunteer bio for Sam Brown',  'sambrown-pfp.jpg', 'salt3', 'hashedpassword3');
 
 -- Insert data into Organisation table
-INSERT INTO Organisation (AccID, OrgName, Website, IssueArea, Mission, Descr, Addr, AptFloorUnit, Salt, HashedPassword)
+INSERT INTO Organisation (AccID, OrgName, Website, IssueArea, Mission, Descr, Addr, AptFloorUnit, MediaPath, Salt, HashedPassword)
 VALUES 
-    (2, 'Helping Hands', 'helpinghands.com', 'Community Service', 'Our mission is to help the community.', 'Description of Helping Hands', '123 Main St', 'Suite 100', 'salt4', 'hashedpassword4'),
-    (4, 'Green Earth', 'greenearth.com', 'Environmental Protection', 'Our mission is to protect the environment.', 'Description of Green Earth', '456 Elm St', 'Suite 200', 'salt5', 'hashedpassword5');
+    (2, 'Helping Hands', 'helpinghands.com', 'Community Service', 'Our mission is to help the community.', 'Description of Helping Hands', '123 Main St', 'Suite 100', 'helpinghands-pfp.jpg' , 'salt4', 'hashedpassword4'),
+    (4, 'Green Earth', 'greenearth.com', 'Environmental Protection', 'Our mission is to protect the environment.', 'Description of Green Earth', '456 Elm St', 'Suite 200',  'greenearth-pfp.jpg', 'salt5', 'hashedpassword5');
 
 -- Insert data into Post table
 INSERT INTO Post (PostedBy, MediaPath, Caption)
 VALUES 
-    (1, '/images/post1.jpg', 'Volunteering at the local shelter'),
-    (2, '/images/post2.jpg', 'Organizing a community cleanup'),
-    (3, '/images/post3.jpg', 'Helping at the food bank'),
-    (4, '/images/post4.jpg', 'Tree planting event'),
-    (5, '/images/post5.jpg', 'Volunteering at the animal rescue');
+    (1, 'post1.jpg', 'Volunteering at the local shelter'),
+    (2, 'post2.jpg', 'Organizing a community cleanup'),
+    (3, 'post3.jpg', 'Helping at the food bank'),
+    (4, 'post4.jpg', 'Tree planting event'),
+    (5, 'post5.jpg', 'Volunteering at the animal rescue');
 
 -- Insert data into Listing table
 INSERT INTO Listing (PostedBy, ListingName, Addr, StartDate, EndDate, CauseArea, Skill, Requirements, About, MediaPath)
 VALUES 
-    (2, 'Community Cleanup', '123 Main St', '2024-09-03', '2024-09-04', 'Community Service', 'Coordination', 'Must be able to lift heavy weights', 'Join us for a community cleanup event', '/images/listing1.jpg'),
-    (2, 'Food Bank Assistance', '456 Elm St', '2024-09-10', '2024-09-15', 'Hunger Relief', 'Organization', 'Must be punctual and reliable', 'Help organize and distribute food at our local food bank', '/images/listing2.jpg'),
-    (4, 'Tree Planting', '789 Oak St', '2024-10-05', '2024-10-05', 'Environmental Protection', 'Gardening', 'Must bring own gloves', 'Participate in a tree planting event to help the environment', '/images/listing3.jpg'),
-    (4, 'Beach Cleanup', '101 Beach Ave', '2024-10-01', '2024-10-01', 'Environmental Protection', 'Cleanup', 'Comfortable working outdoors', 'Join us for a beach cleanup to protect marine life', '/images/listing4.jpg'),
-    (2, 'Community Outreach', '202 Maple St', '2024-10-20', '2024-10-25', 'Community Service', 'Communication', 'Friendly and approachable', 'Help us reach out to community members about our services', '/images/listing5.jpg');
+    (2, 'Community Cleanup', '123 Main St', '2024-09-03', '2024-09-04', 'Community Service', 'Coordination', 'Must be able to lift heavy weights', 'Join us for a community cleanup event', 'community-cleanup-listing.jpg'),
+    (2, 'Food Bank Assistance', '456 Elm St', '2024-09-10', '2024-09-15', 'Hunger Relief', 'Organization', 'Must be punctual and reliable', 'Help organize and distribute food at our local food bank', 'food-bank-assistance-listing.jpg'),
+    (4, 'Tree Planting', '789 Oak St', '2024-10-05', '2024-10-05', 'Environmental Protection', 'Gardening', 'Must bring own gloves', 'Participate in a tree planting event to help the environment', 'tree-planting-listing.jpg'),
+    (4, 'Beach Cleanup', '101 Beach Ave', '2024-10-01', '2024-10-01', 'Environmental Protection', 'Cleanup', 'Comfortable working outdoors', 'Join us for a beach cleanup to protect marine life', 'beach-cleanup-listing.jpg'),
+    (2, 'Community Outreach', '202 Maple St', '2024-10-20', '2024-10-25', 'Community Service', 'Communication', 'Friendly and approachable', 'Help us reach out to community members about our services', 'community-outreach-listing.jpg');
 
 -- Insert data into Likes table
 INSERT INTO Likes (AccID, PostID)
@@ -250,7 +252,3 @@ SELECT * FROM Comment;
 SELECT * FROM Follower;
 SELECT * FROM SignUp;
 SELECT * FROM SavedListing
-
-
-
-
