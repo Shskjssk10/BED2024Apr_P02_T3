@@ -7,8 +7,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     return;
   }
   try {
-    // const currentAccountID = localStorage.getItem("userID");
-    const currentAccountID = 2
+    const currentAccountID = localStorage.getItem("userID");
     // Get all Accounts
     const accountsResponse = await fetch(`/userFeedPage`, {
       method: "GET",
@@ -56,6 +55,10 @@ document.addEventListener("DOMContentLoaded", async () => {
     } catch (error) {
       console.error(error);
     }
+
+    const profilePicture = document.querySelector("#profile-link");
+    profilePicture.src = image.url;
+
     profileSection.innerHTML = `
       <img
         src="${image.url}"

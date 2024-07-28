@@ -43,6 +43,25 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (!organisationResponse.ok) {
       throw new Error(organisation.message || "Failed to load listing");
     }
+    // Get current account 
+    const volunteerResponse = await fetch(
+      `/volunteers/${currentAccID}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    console.log(
+      "Response status on ORGANISATION:",
+      volunteerResponse.status
+    );
+    const volunteer = await volunteerResponse.json();
+    // console.log("Organisation received:", organisation);
+    if (!volunteerResponse.ok) {
+      throw new Error(organisation.message || "Failed to load listing");
+    }
 
     // Get More Related Listings
     const relatedListingsResponse = await fetch(
@@ -112,6 +131,15 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (savedRes.length === 0){
       savedButtonHTML = "Save";
     }
+    let profilePicture = await fetch(`/image/${volunteer.MediaPath}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    const profilePictureContainer = document.querySelector("#profile-link");
+    profilePictureContainer.src = profilePicture.url;
 
     const listingHeader = document.querySelector(".listing-header");
     const mainContentContainer = document.querySelector(".main-content");

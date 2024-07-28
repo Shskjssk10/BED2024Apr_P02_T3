@@ -8,20 +8,15 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
   try {
     // Get Volunteer Details
-    const currentAccountID = parseInt(sessionStorage.getItem("userID"));
-
-    const volunteerResponse = await fetch(
-      `/volunteerProfile/${currentAccountID}`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
+    const currentAccountID = parseInt(localStorage.getItem("userID"));
+    const volunteerResponse = await fetch(`/volunteerProfile/${currentAccountID}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
     console.log("Response status on VOLUNTEER:", volunteerResponse.status);
     const volunteer = await volunteerResponse.json();
-    // console.log("Volunteer received:", temp);
     if (!volunteerResponse.ok) {
       throw new Error(volunteer.message || "Failed to load volunteer");
     }
@@ -41,6 +36,15 @@ document.addEventListener("DOMContentLoaded", async () => {
       throw new Error(organisations.message || "Failed to load organisation");
     }
 
+    const profilePictureContainer = document.querySelector("#profile-picture");
+    let pfp = await fetch(`/image/${volunteer.info.MediaPath}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    profilePictureContainer.src = pfp.url;
+    
     const profileHeaderSection = document.querySelector(".profile-header");
     const postSection = document.querySelector(".posts");
     const listingSection = document.querySelector(".listings-section");
@@ -63,6 +67,10 @@ document.addEventListener("DOMContentLoaded", async () => {
         console.error(error);
       }
     }
+
+    const profilePicture = document.querySelector("#profile-picture");
+    profilePicture.src = image;
+
     profileHeaderSection.innerHTML = `
       <img
         src="${image}"

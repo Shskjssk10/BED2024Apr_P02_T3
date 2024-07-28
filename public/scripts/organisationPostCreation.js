@@ -8,16 +8,42 @@ document.addEventListener("DOMContentLoaded", async () => {
     return;
   }
   try {
-    const accountID = 6;
-    const imageName = "/post/imageName.jpg";
+    const accountID = localStorage.getItem("userID");
+
+    let account = "";
+    try {
+      const accountResponse = await fetch(`/organisations/${accountID}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      console.log("Response status on VOLUNTEER:", accountResponse.status);
+      account = await accountResponse.json();
+    } catch (error) {
+      console.error(error);
+    }
+  
+    const profilePictureContainer = document.querySelector("#profile-link");
+    console.log("🚀 ~ document.addEventListener ~ profilePictureContainer:", profilePictureContainer)
+    let profilePicture = await fetch(`/image/${account.MediaPath}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    profilePictureContainer.src = profilePicture.url;
+
+
     const submittonButton = document.querySelector(".post-button");
     submittonButton.addEventListener('click', async (event) => {
       event.preventDefault();
-      console.log("Post has been clicked!!!")
+      alert("Post has been posted!")
       const caption = document.querySelector("#caption").value;
+      const randomInt = Math.floor(Math.random() * 3) + 1;
       const postPost = {
         "PostedBy" : accountID,
-        "MediaPath" : imageName,
+        "MediaPath" : `random${randomInt}-post.jpg`,
         "Caption" : caption
       }
       const postPostResponse = await fetch(

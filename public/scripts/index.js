@@ -5,39 +5,45 @@ document.addEventListener("DOMContentLoaded", async () => {
   const accType = sessionStorage.getItem("AccType");
   console.log(accType);
 
-  if (accType === "Organisation") {
+  let fetchPath = "";
+  if (accType === "Organisation"){ 
     document.getElementById("profile-link").href =
-      "./selforganisationprofile.html";
+      "./organisationprofilemgmt.html";
+    fetchPath = "/organisations"
   } else if (accType === "Volunteer") {
-    document.getElementById("profile-link").href = "./selfuserprofile.html";
+    document.getElementById("profile-link").href = "./userprofilemgmt.html";
+    fetchPath = "/volunteers"
   }
-
-  const token = sessionStorage.getItem("authToken");
+  let account = "";
+  try {
+    const currentAccountID = parseInt(localStorage.getItem("userID"));
+    const accountResponse = await fetch(`${fetchPath}/${currentAccountID}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    console.log("Response status on VOLUNTEER:", accountResponse.status);
+    account = await accountResponse.json();
+  } catch (error) {
+    console.error(error);
+  }
+  const token = getCookie("authToken");
 
   console.log("authToken from cookie:", token);
 
   if (!token) {
     alert("Please log in to access this page.");
-    window.location.href = "../html/login.html";
-  }
+    window.location.href = "login.html";
+  } 
 
-  try {
-    const response = await fetch("/auth/verify-token", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${token}`,
-      },
-    });
-
-    if (!response.ok) {
-      throw new Error("Invalid or expired token");
-    }
-  } catch (error) {
-    console.error("Error verifying token:", error);
-    alert("Invalid or expired token. Please log in again.");
-    window.location.href = "../html/login.html";
-    return;
-  }
-  const profileLink = document.getElementById("profile-link");
+  const profilePictureContainer = document.querySelector("#profile-link");
+  console.log("🚀 ~ document.addEventListener ~ profilePictureContainer:", profilePictureContainer)
+  let pfp = await fetch(`/image/${account.MediaPath}`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+  profilePictureContainer.src = pfp.url;
 });
