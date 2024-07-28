@@ -1,4 +1,12 @@
 document.addEventListener("DOMContentLoaded", async () => {
+  const token = sessionStorage.getItem("authToken");
+  console.log("authToken from cookie:", token);
+
+  if (!token) {
+    alert("Please log in to access this page.");
+    window.location.href = "login.html";
+  } 
+  
   const username = sessionStorage.getItem("username");
   console.log(username);
 
@@ -7,16 +15,16 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   let fetchPath = "";
   if (accType === "Organisation"){ 
-    document.getElementById("profile-link").href =
-      "./organisationprofilemgmt.html";
+    document.getElementById("pfp-navbar").href =
+      "selforganisationprofile.html";
     fetchPath = "/organisations"
   } else if (accType === "Volunteer") {
-    document.getElementById("profile-link").href = "./userprofilemgmt.html";
+    document.getElementById("pfp-navbar").href = "selfuserprofile.html";
     fetchPath = "/volunteers"
   }
   let account = "";
   try {
-    const currentAccountID = parseInt(localStorage.getItem("userID"));
+    const currentAccountID = parseInt(sessionStorage.getItem("userID"));
     const accountResponse = await fetch(`${fetchPath}/${currentAccountID}`, {
       method: "GET",
       headers: {
@@ -28,7 +36,6 @@ document.addEventListener("DOMContentLoaded", async () => {
   } catch (error) {
     console.error(error);
   }
-  const token = sessionStorage.getItem("authToken");
 
   console.log("authToken from session storage:", token);
 

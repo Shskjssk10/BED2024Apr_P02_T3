@@ -8,11 +8,12 @@ document.addEventListener("DOMContentLoaded", async () => {
     return;
   }
   try {
-    const accountID = localStorage.getItem("userID");
+    // const accountID = localStorage.getItem("userID");
+    const accountID = 1
 
     let account = "";
     try {
-      const accountResponse = await fetch(`/organisations/${accountID}`, {
+      const accountResponse = await fetch(`/volunteers/${accountID}`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -25,7 +26,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
   
     const profilePictureContainer = document.querySelector("#profile-link");
-    console.log("🚀 ~ document.addEventListener ~ profilePictureContainer:", profilePictureContainer)
     let profilePicture = await fetch(`/image/${account.MediaPath}`, {
       method: "GET",
       headers: {
@@ -34,18 +34,18 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
     profilePictureContainer.src = profilePicture.url;
 
-
     const submittonButton = document.querySelector(".post-button");
     submittonButton.addEventListener('click', async (event) => {
       event.preventDefault();
-      alert("Post has been posted!")
-      const caption = document.querySelector("#caption").value;
       const randomInt = Math.floor(Math.random() * 3) + 1;
+      console.log("Post has been clicked!!!")
+      const caption = document.querySelector("#caption").value;
       const postPost = {
         "PostedBy" : accountID,
         "MediaPath" : `random${randomInt}-post.jpg`,
         "Caption" : caption
       }
+      alert("Post has been created!")
       const postPostResponse = await fetch(
         `http://localhost:8080/postCreation`,
         {
@@ -61,7 +61,6 @@ document.addEventListener("DOMContentLoaded", async () => {
       console.log(updatedData);
       console.log("Post posted:", updatedData);
     })
-
   } catch (error) {
     console.error("Error deleting follow:", error);
     alert("Error deleting follow: " + error.message);

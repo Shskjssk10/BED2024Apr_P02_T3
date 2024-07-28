@@ -1,42 +1,17 @@
 document.addEventListener("DOMContentLoaded", async function () {
+  //log message to ensure dom loaded
   console.log("DOM loaded");
 
+  //get account type
   const accType = sessionStorage.getItem("AccType");
   console.log(accType);
 
-  let fetchPath = "";
-  if (accType === "Organisation"){ 
+  if (accType === "Organisation") {
     document.getElementById("profile-link").href =
       "./organisationprofilemgmt.html";
-    fetchPath = "/organisations"
   } else if (accType === "Volunteer") {
     document.getElementById("profile-link").href = "./userprofilemgmt.html";
-    fetchPath = "/volunteers"
   }
-
-  try {
-    const currentAccountID = parseInt(localStorage.getItem("userID"));
-    const accountResponse = await fetch(`${fetchPath}/${currentAccountID}`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-    console.log("Response status on VOLUNTEER:", accountResponse.status);
-    account = await accountResponse.json();
-  } catch (error) {
-    console.error(error);
-  }
-
-  const profilePictureContainer = document.querySelector("#profile-link");
-  console.log("🚀 ~ document.addEventListener ~ profilePictureContainer:", profilePictureContainer)
-  let pfp = await fetch(`/image/${account.MediaPath}`, {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
-  profilePictureContainer.src = pfp.url;
 
   //initialise socket connection
   const socket = io("http://localhost:3000");
@@ -239,6 +214,4 @@ document.addEventListener("DOMContentLoaded", async function () {
       }
     });
   }
-
-
 });

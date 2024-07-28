@@ -1,22 +1,11 @@
 document.addEventListener("DOMContentLoaded", async function () {
   //retrieve the user id from local storage
-  const userID = parseInt(localStorage.getItem("userID"));
+  const userID = parseInt(sessionStorage.getItem("userID"));
   //HENDRIK GET
   //GET request using the user id from local storage
   const response = await fetch(`/volunteers/${userID}`);
   const data = await response.json();
-  const token = localStorage.getItem("authToken");
-
-  const profilePictureContainer = document.querySelector("#profile-link");
-  const profilePictureCard = document.querySelector("#profile-picture")
-  let profilePicture = await fetch(`/image/${data.MediaPath}`, {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
-  profilePictureContainer.src = profilePicture.url;
-  profilePictureCard.src = profilePicture.url;
+  const token = sessionStorage.getItem("authToken");
 
   //dynamically display the user data based on user id
   //for the top card
@@ -97,14 +86,17 @@ document.addEventListener("DOMContentLoaded", async function () {
     // Cheryl's part
     if (password.value) {
       try {
-        const updatePasswordResponse = await fetch(`/volunteers/${userID}/password`, {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({ newPassword: password.value }),
-        });
+        const updatePasswordResponse = await fetch(
+          `/volunteers/${userID}/password`,
+          {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify({ newPassword: password.value }),
+          }
+        );
 
         if (!updatePasswordResponse.ok) {
           throw new Error("Failed to update password");

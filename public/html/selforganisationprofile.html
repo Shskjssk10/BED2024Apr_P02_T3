@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -15,7 +14,7 @@
     />
   </head>
   <body style="background-color: #fff8e7">
-    <header>
+    <main>
       <nav class="navbar navbar-light navbar-expand-sm custom-navbar">
         <div class="container-fluid">
           <a href="#" class="navbar-brand mb-0 h1"
@@ -42,10 +41,10 @@
                 <a href="organisationfeed.html" class="nav-link">Feed</a>
               </li>
               <li class="nav-item">
-                <a href="organisationsearch.html" class="nav-link">Search</a>
+                <a href="G_organisationsearch.html" class="nav-link">Search</a>
               </li>
               <li class="nav-item">
-                <a href="organisationpostcreationpage.html" class="nav-link"
+                <a href="G_organisationpostcreationpage.html" class="nav-link"
                   >Create</a
                 >
               </li>
@@ -54,134 +53,181 @@
               </li>
               <li class="nav-item">
                 <a href="selforganisationprofile.html" class="nav-link"
-                  ><img id="profile-link" src="../images/github-icon.png" alt="GitHub icon"
+                  ><img
+                    id="profile-link"
+                    src="../images/github-icon.png"
+                    alt="GitHub icon"
                 /></a>
               </li>
             </ul>
           </div>
-          <a href="G_organisationprofilemgmt.html">
-            <button class="edit-button">Edit</button>
-          </a>
         </div>
-      </div>
-      <div class="posts-section">
-        <h2>Posts</h2>
-        <div class="posts">
-          <div class="post-item" onclick="openModal('post1')">
-            <img src="../images/communityOutreachListingImage.jpg" />
+      </nav>
+    </header>
+    <main>
+      <div class="profile-container">
+        <div class="profile-header">
+          <img
+            src="../images/profile-pic.png"
+            alt="Profile Picture"
+            class="profile-image"
+          />
+          <div class="profile-info">
+            <h1>EcoVolunteers</h1>
+            <p>
+              We are dedicated to promoting sustainability through
+              community-driven initiatives. Join us in making a difference!
+            </p>
+            <div class="profile-stats">
+              <span>6 Listings</span> • <span>1839 Followers</span> •
+              <span>25 Following</span>
+            </div>
+            <a href="G_organisationprofilemgmt.html">
+              <button class="edit-button">Edit</button>
+            </a>
           </div>
-          <div class="post-item" onclick="openModal('post2')">
-            <img src="../images/userfeedexample.jpg" />
-          </div>
-          <div class="post-item" onclick="openModal('post3')"></div>
-          <div class="post-item" onclick="openModal('post4')"></div>
-          <div class="post-item" onclick="openModal('post5')"></div>
-          <div class="post-item" onclick="openModal('post6')"></div>
         </div>
-      </div>
-      <div class="listings-section">
-        <h2>Listings</h2>
-        <div class="listings">
-          <div class="listing-item">
-            <div class="listingimage">
+        <div class="posts-section">
+          <h2>Posts</h2>
+          <div class="posts">
+            <div class="post-item" onclick="openModal('post1')">
               <img src="../images/communityOutreachListingImage.jpg" />
             </div>
-            <div class="listinginfobox">
-              <p class="listingname">[ Insert Listing Name ]</p>
-              <p class="listinginfo">[ Insert Listing Organisation Name ]</p>
-              <p class="listinginfo">[ Insert Address ]</p>
-            </div>
-          </div>
-          <div class="listing-item">
-            <div class="listingimage">
+            <div class="post-item" onclick="openModal('post2')">
               <img src="../images/userfeedexample.jpg" />
             </div>
-            <div class="listinginfobox">
-              <p class="listingname">[ Insert Listing Name ]</p>
-              <p class="listinginfo">[ Insert Listing Organisation Name ]</p>
-              <p class="listinginfo">[ Insert Address ]</p>
+            <div class="post-item" onclick="openModal('post3')"></div>
+            <div class="post-item" onclick="openModal('post4')"></div>
+            <div class="post-item" onclick="openModal('post5')"></div>
+            <div class="post-item" onclick="openModal('post6')"></div>
+          </div>
+        </div>
+        <div class="listings-section">
+          <h2>Listings</h2>
+          <div class="listings">
+            <div class="listing-item">
+              <div class="listingimage">
+                <img src="../images/communityOutreachListingImage.jpg" />
+              </div>
+              <div class="listinginfobox">
+                <p class="listingname">[ Insert Listing Name ]</p>
+                <p class="listinginfo">[ Insert Listing Organisation Name ]</p>
+                <p class="listinginfo">[ Insert Address ]</p>
+              </div>
+            </div>
+            <div class="listing-item">
+              <div class="listingimage">
+                <img src="../images/userfeedexample.jpg" />
+              </div>
+              <div class="listinginfobox">
+                <p class="listingname">[ Insert Listing Name ]</p>
+                <p class="listinginfo">[ Insert Listing Organisation Name ]</p>
+                <p class="listinginfo">[ Insert Address ]</p>
+              </div>
+            </div>
+          </div>
+          <div class="listings-footer">
+            <a href="organisationcreatelisting.html">
+              <button class="add-button">+</button>
+            </a>
+            <a href="G_organisationlisting.html">
+              <button class="view-all-button">View all</button>
+            </a>
+          </div>
+        </div>
+      </div>
+    </main>
+    <!-- Modal -->
+    <div class="post-modal-container">
+      <div id="postModal" class="modal" onclick="closeModal(event)">
+        <div class="modal-content" onclick="event.stopPropagation()">
+          <div class="modal-body">
+            <div class="modal-left">
+              <div class="modal-header">
+                <img
+                  src="../images/github-icon.png"
+                  alt="Profile Picture"
+                  class="profile-pic"
+                />
+                <span class="username">EcoVolunteers</span>
+              </div>
+              <img
+                src="../images/userfeedexample.jpg"
+                alt="Post Image"
+                class="modal-image"
+              />
+            </div>
+            <div class="modal-right">
+              <div class="comments-container">
+                <div class="comments">
+                  <div class="comment">
+                    <img
+                      src="../images/user1.png"
+                      alt="User1"
+                      class="profile-pic small"
+                    />
+                    <p><strong>User1:</strong> Great post!</p>
+                  </div>
+                  <div class="comment">
+                    <img
+                      src="../images/default-pfp.png"
+                      alt="User2"
+                      class="profile-pic small"
+                    />
+                    <p><strong>User2:</strong> Love this!</p>
+                  </div>
+                  <!-- Repeat for other comments -->
+                </div>
+              </div>
+              <hr />
+              <div class="comment-form">
+                <input
+                  type="text"
+                  id="commentInput"
+                  placeholder="Add a comment..."
+                />
+                <button onclick="addComment()">Post</button>
+              </div>
             </div>
           </div>
         </div>
-        <div class="listings-footer">
-          <a href="organisationcreatelisting.html">
-            <button class="add-button">+</button>
-          </a>
-          <a href="G_organisationlisting.html">
-            <button class="view-all-button">View all</button>
-          </a>
-        </div>
       </div>
     </div>
-  </main>
-  <!-- Modal -->
-  <div id="postModal" class="modal" onclick="closeModal(event)">
-    <div class="modal-content" onclick="event.stopPropagation()">
-      <div class="modal-body">
-        <div class="modal-left">
-          <div class="modal-header">
-            <img src="../images/github-icon.png" alt="Profile Picture" class="profile-pic" />
-            <span class="username">EcoVolunteers</span>
-          </div>
-          <img src="../images/userfeedexample.jpg" alt="Post Image" class="modal-image" />
-        </div>
-        <div class="modal-right">
-          <div class="comments-container">
-            <div class="comments">
-              <div class="comment">
-                <img src="../images/user1.png" alt="User1" class="profile-pic small" />
-                <p><strong>User1:</strong> Great post!</p>
-              </div>
-              <div class="comment">
-                <img src="../images/user2.png" alt="User2" class="profile-pic small" />
-                <p><strong>User2:</strong> Love this!</p>
-              </div>
-              <!-- Repeat for other comments -->
-            </div>
-          </div>
-          <hr />
-          <div class="comment-form">
-            <input type="text" id="commentInput" placeholder="Add a comment..." />
-            <button onclick="addComment()">Post</button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
 
-  <footer>
-    <div class="footer-wrapper">
-      <div class="brand">
-        <a href="#" class="navbar-brand mb-0 h1">
-          <span style="color: #f6ecec">Helping</span>
-          <span style="color: #ff8f80">Hearts</span>
-        </a>
+    <footer>
+      <div class="footer-wrapper">
+        <div class="brand">
+          <a href="#" class="navbar-brand mb-0 h1">
+            <span style="color: #f6ecec">Helping</span>
+            <span style="color: #ff8f80">Hearts</span>
+          </a>
+        </div>
+        <div class="footer-middle">
+          <small>HelpingHearts Copyright 2024 IT02 Team 3</small>
+        </div>
+        <div class="site-map">
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item">
+              <a href="organisationlisting.html" class="nav-link">Listings</a>
+            </li>
+            <li class="nav-item">
+              <a href="organisationfeed.html" class="nav-link">Feed</a>
+            </li>
+            <li class="nav-item">
+              <a href="G_organisationsearch.html" class="nav-link">Search</a>
+            </li>
+            <li class="nav-item">
+              <a href="G_organisationpostcreationpage.html" class="nav-link"
+                >Create</a
+              >
+            </li>
+            <li class="nav-item">
+              <a href="message.html" class="nav-link">Message</a>
+            </li>
+          </ul>
+        </div>
       </div>
-      <div class="footer-middle">
-        <small>HelpingHearts Copyright 2024 IT02 Team 3</small>
-      </div>
-      <div class="site-map">
-        <ul class="navbar-nav ms-auto">
-          <li class="nav-item">
-            <a href="organisationlisting.html" class="nav-link">Listings</a>
-          </li>
-          <li class="nav-item">
-            <a href="organisationfeed.html" class="nav-link">Feed</a>
-          </li>
-          <li class="nav-item">
-            <a href="organisationsearch.html" class="nav-link">Search</a>
-          </li>
-          <li class="nav-item">
-            <a href="organisationpostcreationpage.html" class="nav-link">Create</a>
-          </li>
-          <li class="nav-item">
-            <a href="message.html" class="nav-link">Message</a>
-          </li>
-        </ul>
-      </div>
-    </div>
-  </footer>
-  <script src="../scripts/selfOrganisationProfile.js"></script>
-</body>
-
+    </footer>
+    <script src="../scripts/selfOrganisationProfile.js"></script>
+  </body>
 </html>

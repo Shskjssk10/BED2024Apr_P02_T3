@@ -39,39 +39,42 @@ document.addEventListener("DOMContentLoaded", async () => {
         Authorization: `Bearer ${token}`,
       },
     });
-
     console.log("Response status:", response.status);
-
     const orgDetails = await response.json();
-    console.log("Organisation details received:", orgDetails);
-
-    try {
-      const accountResponse = await fetch(`/organisations/${orgId}`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-      console.log("Response status on VOLUNTEER:", accountResponse.status);
-      account = await accountResponse.json();
-    } catch (error) {
-      console.error(error);
-    }
-
-    const profilePictureContainer = document.querySelector("#profile-link");
-    let profilePicture = await fetch(`/image/${account.MediaPath}`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-    profilePictureContainer.src = profilePicture.url;
     if (!response.ok) {
       throw new Error(
         orgDetails.message || "Failed to load organisation details"
       );
     }
-    document.getElementById("profile-image").src = profilePicture.url;
+
+    const organisationResponse = await fetch(`/organisations/${orgId}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    console.log("Response status:", organisationResponse.status);
+    const organisation = await organisationResponse.json();
+    if (!organisationResponse.ok) {
+      throw new Error(
+        organisation.message || "Failed to load organisation details"
+      );
+    }
+
+    let profilePicture = await fetch(`/image/${organisation.MediaPath}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    const profilePictureContainer = document.querySelector("#profile-link");
+    const profileImageContainer = document.querySelector("#profile-image");
+    console.log("🚀 ~ document.addEventListener ~ profilePictureContainer:", profilePictureContainer)
+    // profileImageContainer.src = profilePicture.url;
+    // profilePictureContainer.src = profilePicture.url;
+
     document.getElementById("orgName").textContent = orgDetails.OrgName;
     document.getElementById("orgMission").textContent = orgDetails.Mission;
     document.getElementById(
@@ -116,12 +119,18 @@ document.addEventListener("DOMContentLoaded", async () => {
     } else {
       noListingsMessage.style.display = "none";
 
-      listings.forEach((listing) => {
+      listings.forEach(async (listing) => {
+        let listingImage = await fetch(`/image/${listing.MediaPath}`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
         const listingItem = template.cloneNode(true);
         listingItem.style.display = "flex";
         listingItem.id = "";
         listingItem.querySelector(".listing-image").src =
-          listing.ImagePath ||
+        listingImage.url ||
           "https://storage.gignite.ai/mediaengine/model1/41096b32-b087-493f-94f3-f13aa79d2526.png";
         listingItem.querySelector(".listing-name").textContent =
           listing.ListingName;
