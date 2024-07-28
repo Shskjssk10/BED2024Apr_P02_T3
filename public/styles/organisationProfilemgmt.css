@@ -14,8 +14,8 @@
 }
 
 .card-body {
-  width: 50%;
-  margin: 0 0 0 20rem;
+  width: 600px;
+  margin: 0 0 0 18rem;
   height: 9rem;
   display: flex;
   align-items: center;
@@ -77,4 +77,9 @@ footer {
   display: flex; /* Make it a flex container */
   justify-content: space-between; /* Distribute space evenly */
   align-items: center; /* Align content vertically */
+}
+
+.form-group {
+  max-width: 600px;
+  margin: 1.2rem 0 0 18rem;
 }

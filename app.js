@@ -89,23 +89,25 @@ app.get("/", (req, res) => {
 
 // Google Bucket Credentials
 const bucketName = process.env.BUCKET_NAME;
-const keyFile = process.env.KEYFILENAME
+const keyFile = process.env.KEYFILENAME;
 
-const {Storage} = require('@google-cloud/storage');
-const storage = new Storage({keyFilename: keyFile});
+const { Storage } = require("@google-cloud/storage");
+const storage = new Storage({ keyFilename: keyFile });
 const googleBucketMiddleware = require("./middlewares/googleBucketMiddleware");
 
-// Google Bucket  
+// Google Bucket
 app.get("/image/:mediapath", async (req, res) => {
   try {
     const mediaPath = req.params.mediapath;
-    const imageData = await googleBucketMiddleware.downloadIntoMemory(mediaPath);
-    res.setHeader('Content-Type', 'image/jpeg'); // Or the appropriate MIME type
-    res.send(imageData[0]); 
+    const imageData = await googleBucketMiddleware.downloadIntoMemory(
+      mediaPath
+    );
+    res.setHeader("Content-Type", "image/jpeg"); // Or the appropriate MIME type
+    res.send(imageData[0]);
   } catch (err) {
-    res.status(500).json({ error: 'Failed to download image' });
+    res.status(500).json({ error: "Failed to download image" });
   }
-})
+});
 
 app.post("/image", googleBucketMiddleware.uploadFromMemory);
 // const Busboy = require('busboy');
@@ -139,7 +141,7 @@ app.post("/image", googleBucketMiddleware.uploadFromMemory);
 //         res.status(500).json({ error: err.message }); // Send a more specific error
 //       }
 //     });
-    
+
 //     // Pipe the request to Busboy
 //     req.pipe(busboy);
 
@@ -159,7 +161,7 @@ const searchPageController = require("./controllers/userSearchPageController");
 const userFeedPageController = require("./controllers/userFeedPageController");
 const userProfileController = require("./controllers/userProfileController");
 const followController = require("./controllers/followController");
-const signUpController = require("./controllers/signUpController")
+const signUpController = require("./controllers/signUpController");
 const savedListingController = require("./controllers/savedListingController");
 const commentController = require("./controllers/commentController");
 
@@ -183,6 +185,7 @@ app.delete("/volunteers/:id", volunteerController.deleteVolunteer);
 app.get("/organisations", organisationController.getAllOrganisations); //get all organisation
 app.get("/organisations/:id", organisationController.getOrgById);
 app.put("/organisations/:id", organisationController.updateOrgProfile);
+app.delete("/organisations/:id", organisationController.deleteOrg);
 
 app.get("/organisations/:OrgName", organisationController.getOrgByName);
 //app.put("/organisations/:OrgName", organisationController.updateOrgProfile);
@@ -214,7 +217,7 @@ app.get("/comment/:id", commentController.getAllCommentsByPostID);
 app.post("/userFeedPage", userFeedPageController.postComment);
 
 // app.get("/userProfile/:id", postController.getAllPostsByAccID)
-app.get("/userProfile/:id", volunteerController.getAllFollowersAndFollowing)
+app.get("/userProfile/:id", volunteerController.getAllFollowersAndFollowing);
 app.get("/volunteerProfile/:id", userProfileController.getAccountInfo);
 app.get("/organisationProfile/:id", userProfileController.getOrganisationInfo);
 
@@ -225,7 +228,10 @@ app.get("/signUp/:AccID/:ListingID", signUpController.getAllSignUpByListingID);
 app.post("/signUp", signUpController.postSignUp);
 app.delete("/signUp", signUpController.deleteSignUp);
 
-app.get("/savedListing/:AccID/:ListingID", savedListingController.getAllSavedByListingID);
+app.get(
+  "/savedListing/:AccID/:ListingID",
+  savedListingController.getAllSavedByListingID
+);
 app.post("/savedListing", savedListingController.postSaved);
 app.delete("/savedListing", savedListingController.deleteSaved);
 
