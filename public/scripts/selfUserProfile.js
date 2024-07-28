@@ -8,8 +8,8 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
   try {
     // Get Volunteer Details
-    //change the 3 cannot hard code
-    const currentAccountID = parseInt(localStorage.getItem("userID"));
+    // const currentAccountID = parseInt(localStorage.getItem("userID"));
+    const currentAccountID = 1;
     const volunteerResponse = await fetch(`/volunteerProfile/${currentAccountID}`, {
       method: "GET",
       headers: {
@@ -45,19 +45,25 @@ document.addEventListener("DOMContentLoaded", async () => {
     listingSection.innerHTML = "";
     // Appending Profile Data
     let image = "";
-    try {
-      image = await fetch(`/image/${currentAccountID.MediaPath}`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-    } catch (error) {
-      console.error(error);
+    if (volunteer.info.MediaPath === null){
+      image = "/public/images/default-pfp.png"
+    }
+    else {
+      try {
+        image = await fetch(`/image/${volunteer.info.MediaPath}`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+        image = image.url
+      } catch (error) {
+        console.error(error);
+      }
     }
     profileHeaderSection.innerHTML = `
       <img
-        src="${image.url}"
+        src="${image}"
         alt="Profile Picture"
         class="profile-image"
       />
@@ -79,10 +85,16 @@ document.addEventListener("DOMContentLoaded", async () => {
     for (const post of volunteerPosts) {
       const postContainer = document.createElement("div");
       postContainer.classList.add("post-item");
-
+      postContainer.id = post.PostID;
+      image = await fetch(`/image/${post.MediaPath}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
       const imageContainer = document.createElement("img");
-      postContainer.textContent = imageContainer;
-
+      imageContainer.src = image.url;
+      postContainer.appendChild(imageContainer);
       postSection.appendChild(postContainer);
     }
     // Appending Sign Up Listings Data
@@ -131,9 +143,8 @@ document.addEventListener("DOMContentLoaded", async () => {
       const listingContainer = document.createElement("a");
       listingContainer.classList.add("no-underline");
       listingContainer.href="organisationprofile.html";
-      const orgName =
-        organisations.find((org) => org.id === listing.PostedBy)?.OrgName ??
-        null;
+      const targetOrganisation = organisations.find((org) => org.AccID === listing.PostedBy);
+      let username = targetOrganisation.OrgName
       try {
         image = await fetch(`/image/${listing.MediaPath}`, {
           method: "GET",
@@ -151,7 +162,7 @@ document.addEventListener("DOMContentLoaded", async () => {
           </div>
           <div class="listinginfobox">
             <p class="listingname">${listing.ListingName}</p>
-            <p class="listinginfo">${orgName}</p>
+            <p class="listinginfo">${username}</p>
             <p class="listinginfo">${listing.Addr}</p>
           </div>
         </div>

@@ -40,7 +40,6 @@ class Follower {
     const result = await request.query(sqlQuery);
 
     connection.close();
-    console.log("🚀 ~ Follower ~ getFollowersByID ~ result.recordset:", result)
     return result.recordset.map(
       (row) =>
         new Follower(

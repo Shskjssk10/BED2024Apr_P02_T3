@@ -19,7 +19,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   if (accType === "Organisation") {
     document.getElementById("profile-link").href =
-      "./organisationprofilemgmt.html";
+      "./G_organisationprofilemgmt.html";
   } else if (accType === "Volunteer") {
     document.getElementById("profile-link").href = "./userprofilemgmt.html";
   }
