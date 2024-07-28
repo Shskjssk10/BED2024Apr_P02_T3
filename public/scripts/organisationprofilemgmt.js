@@ -6,7 +6,7 @@ document.addEventListener("DOMContentLoaded", async function () {
   const data = await response.json();
   console.log(data);
 
-  const token = localStorage.getItem("authToken");
+  const token = sessionStorage.getItem("authToken");
   //console.log(token);
 
   //for the top card
