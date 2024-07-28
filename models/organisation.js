@@ -273,7 +273,8 @@ class Organisation {
           result.recordset[0].AptFloorUnit,
           result.recordset[0].PhoneNo,
           result.recordset[0].Email,
-          result.recordset[0].Password
+          result.recordset[0].Password,
+          result.recordset[0].MediaPath
         )
       : null; // Handle organisation not found
   }

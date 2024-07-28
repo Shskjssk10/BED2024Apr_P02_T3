@@ -7,7 +7,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     return;
   }
   try {
-    const currentAccountID = localStorage.getItem("userID");
+    const currentAccountID = sessionStorage.getItem("viewAccID");
+
     // Get all Accounts
     const accountsResponse = await fetch(`/userFeedPage`, {
       method: "GET",

@@ -262,7 +262,8 @@ class Volunteer {
           result.recordset[0].Bio,
           result.recordset[0].PhoneNo,
           result.recordset[0].Email,
-          result.recordset[0].Password
+          result.recordset[0].Password,
+          result.recordset[0].MediaPath
         )
       : null; // Handle volunteer not found
   }

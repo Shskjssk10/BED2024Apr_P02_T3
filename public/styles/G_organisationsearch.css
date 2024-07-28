@@ -1,0 +1,113 @@
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #fff8e7;
+  font-family: Arial, sans-serif;
+}
+
+/* Main container styling */
+.max-w-7xl {
+  max-width: calc(100vw - 32px);
+  padding: 32px;
+  margin: 0 auto;
+}
+
+/* Typography classes */
+.text-3xl {
+  font-size: 2rem;
+  font-weight: bold;
+}
+
+.text-2xl {
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.mb-4 {
+  margin-bottom: 16px;
+}
+
+/* Input styling */
+.input {
+  width: 100%;
+  padding: 8px 16px;
+  border-radius: 9999px;
+  border: 1px solid #d1d5db;
+  outline: none;
+}
+
+.input:focus {
+  border-color: #000;
+}
+
+/* Grid layout */
+.grid {
+  display: grid;
+  gap: 16px;
+}
+
+@media screen and (min-width: 768px) {
+  .grid-cols-1 {
+    grid-template-columns: repeat(1, minmax(0, 1fr));
+  }
+
+  .md\:grid-cols-3 {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+/* Card styling */
+.card {
+  background: #fff;
+  padding: 16px;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.avatar {
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+}
+
+.avatar img {
+  border-radius: 9999px;
+  width: 48px;
+  height: 48px;
+  object-fit: cover;
+}
+
+.avatar-fallback {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  background-color: #e5e7eb;
+  border-radius: 9999px;
+  font-size: 1.25rem;
+  color: #6b7280;
+}
+
+.card-title {
+  font-weight: bold;
+  font-size: 1.25rem;
+}
+
+.card-description {
+  color: #6b7280;
+}
+
+.btn {
+  background-color: #d8a46f;
+  color: #fff;
+  padding: 8px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  text-align: center;
+  border: none;
+}
+
+.btn:hover {
+  background-color: #bf7e3e;
+}
