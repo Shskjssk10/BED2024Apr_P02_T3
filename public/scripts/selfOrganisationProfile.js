@@ -9,12 +9,15 @@ document.addEventListener("DOMContentLoaded", async () => {
   try {
     // Get Organisation Details
     const currentAccountID = parseInt(localStorage.getItem("userID"));
-    const organisationResponse = await fetch(`/organisationProfile/${currentAccountID}`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+    const organisationResponse = await fetch(
+      `/organisationProfile/${currentAccountID}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
     console.log(
       "Response status on ORGANISATION:",
       organisationResponse.status
@@ -43,7 +46,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     const profilePicture = document.querySelector("#profile-link");
-    profilePicture.src = image.url
+    profilePicture.src = image.url;
 
     profileSection.innerHTML = `
       <img

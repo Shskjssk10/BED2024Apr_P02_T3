@@ -1,17 +1,19 @@
 document.addEventListener("DOMContentLoaded", async function () {
+  //log message to ensure dom loaded
   console.log("DOM loaded");
 
+  //get account type
   const accType = sessionStorage.getItem("AccType");
   console.log(accType);
 
   let fetchPath = "";
-  if (accType === "Organisation"){ 
+  if (accType === "Organisation") {
     document.getElementById("profile-link").href =
       "./organisationprofilemgmt.html";
-    fetchPath = "/organisations"
+    fetchPath = "/organisations";
   } else if (accType === "Volunteer") {
     document.getElementById("profile-link").href = "./userprofilemgmt.html";
-    fetchPath = "/volunteers"
+    fetchPath = "/volunteers";
   }
 
   try {
@@ -29,7 +31,10 @@ document.addEventListener("DOMContentLoaded", async function () {
   }
 
   const profilePictureContainer = document.querySelector("#profile-link");
-  console.log("🚀 ~ document.addEventListener ~ profilePictureContainer:", profilePictureContainer)
+  console.log(
+    "🚀 ~ document.addEventListener ~ profilePictureContainer:",
+    profilePictureContainer
+  );
   let pfp = await fetch(`/image/${account.MediaPath}`, {
     method: "GET",
     headers: {
@@ -239,6 +244,4 @@ document.addEventListener("DOMContentLoaded", async function () {
       }
     });
   }
-
-
 });
