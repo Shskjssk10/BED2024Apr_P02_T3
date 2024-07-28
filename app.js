@@ -164,6 +164,8 @@ const followController = require("./controllers/followController");
 const signUpController = require("./controllers/signUpController");
 const savedListingController = require("./controllers/savedListingController");
 const commentController = require("./controllers/commentController");
+const swaggerUi = require("swagger-ui-express");
+const swaggerDocument = require("./swagger-output.json"); // Import generated spec
 
 const sql = require("mssql");
 
@@ -174,8 +176,9 @@ app.use((req, res, next) => {
   next();
 });
 
-app.get("/organisation/details/:id", organisationController.getOrgDetails);
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
+app.get("/organisation/details/:id", organisationController.getOrgDetails);
 app.get("/volunteers", volunteerController.getAllVolunteers); //get all user
 app.get("/volunteers/:id", volunteerController.getVolunteerById); // Get user by ID
 app.get("/volunteers/:username", volunteerController.getVolunteerByUsername);
