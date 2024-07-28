@@ -64,31 +64,7 @@
     </header>
 
     <div class="form-container">
-      <h2>Insert Media</h2>
       <form action="http://localhost:8080/postCreation" method="post">
-        <div class="form-group">
-          <input type="file" id="mediaInput" style="display: none" />
-          <button
-            type="button"
-            class="upload-button"
-            onclick="document.getElementById('mediaInput').click();"
-          >
-            Select from computer
-          </button>
-        </div>
-        <div
-          class="form-group"
-          id="mediaPreviewContainer"
-          style="display: none"
-        >
-          <label for="mediaPreview">Media Preview</label>
-          <img
-            id="mediaPreview"
-            src="#"
-            alt="Media Preview"
-            style="max-width: 100%"
-          />
-        </div>
         <div class="form-group">
           <label for="caption">Caption</label>
           <textarea
