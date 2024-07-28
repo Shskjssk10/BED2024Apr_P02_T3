@@ -48,13 +48,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     alert("Please log in to access this page.");
     window.location.href = "login.html";
   } 
-  // else {
-  //   document.querySelector(".logout-button").addEventListener("click", () => {
-  //     document.cookie =
-  //       "authToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-  //     window.location.href = "login.html";
-  //   });
-  // }
 
   const profilePictureContainer = document.querySelector("#profile-link");
   console.log("🚀 ~ document.addEventListener ~ profilePictureContainer:", profilePictureContainer)
