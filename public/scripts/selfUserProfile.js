@@ -17,7 +17,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
     console.log("Response status on VOLUNTEER:", volunteerResponse.status);
     const volunteer = await volunteerResponse.json();
-    // console.log("Volunteer received:", temp);
     if (!volunteerResponse.ok) {
       throw new Error(volunteer.message || "Failed to load volunteer");
     }
@@ -69,6 +68,10 @@ document.addEventListener("DOMContentLoaded", async () => {
         console.error(error);
       }
     }
+
+    const profilePicture = document.querySelector("#profile-picture");
+    profilePicture.src = image;
+
     profileHeaderSection.innerHTML = `
       <img
         src="${image}"
