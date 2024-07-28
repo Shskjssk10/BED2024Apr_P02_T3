@@ -12,45 +12,59 @@ const getAllVolunteers = async (req, res) => {
 };
 
 const getVolunteerById = async (req, res) => {
+  //get id that is input from req parameter and convert to int
   const id = parseInt(req.params.id);
   try {
+    //fetch volunteer with given id
     const volunteer = await Volunteer.getVolunteerById(id);
     if (!volunteer) {
+      //send 404 if volunteer not found
       return res.status(404).send("Volunteer not found");
     }
+    //send volunteer data as json
     res.json(volunteer);
   } catch (error) {
+    //log the error if there is
     console.error(error);
     res.status(500).send("Error retrieving Volunteer");
   }
 };
 
 const updateVolunteerProfile = async (req, res) => {
+  //get id from req parameters and convert to int
+  //get updated data from req body
   const userId = parseInt(req.params.id);
   const updatedData = req.body;
 
   try {
+    //try to update volunteer with given id and updated data
     const updatedVolunteer = await Volunteer.updateVolunteerProfile(
       userId,
       updatedData
     );
+    //if no volunteer with given id then 404 not found
     if (!updatedVolunteer) {
       return res.status(404).send("Volunteer not found");
     }
+    //else send updated data as a json response
     res.json(updatedVolunteer);
   } catch (error) {
+    //log error in console and send error 500 if update error
     console.error(error);
     res.status(500).send("Error updating Volunteer");
   }
 };
 
 const deleteVolunteer = async (req, res) => {
+  //get id from req parameter and convert to int
   const id = parseInt(req.params.id);
   try {
     // Call your function to delete the volunteer
     await Volunteer.deleteVolunteer(id);
+    //if successful delete
     res.status(200).send("Volunteer deleted successfully");
   } catch (error) {
+    //else log the error
     console.error("Error deleting volunteer:", error);
     res.status(500).send("Error deleting volunteer");
   }
