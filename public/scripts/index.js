@@ -19,9 +19,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
   if (accType === "Organisation") {
     document.getElementById("profile-link").href =
-      "./G_organisationprofilemgmt.html";
+      "./selforganisationprofile.html";
   } else if (accType === "Volunteer") {
-    document.getElementById("profile-link").href = "./userprofilemgmt.html";
+    document.getElementById("profile-link").href = "./selfuserprofile.html";
   }
 
   const token = getCookie("authToken");
