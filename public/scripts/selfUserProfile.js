@@ -44,9 +44,8 @@ document.addEventListener("DOMContentLoaded", async () => {
         "Content-Type": "application/json",
       },
     });
-    console.log("🚀 ~ document.addEventListener ~ pfp:", pfp)
-    
     profilePictureContainer.src = pfp.url;
+    
     const profileHeaderSection = document.querySelector(".profile-header");
     const postSection = document.querySelector(".posts");
     const listingSection = document.querySelector(".listings-section");
