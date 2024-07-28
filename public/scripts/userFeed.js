@@ -8,6 +8,19 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
   try {
     const currentAccID = localStorage.getItem("userID");
+    // Current account
+    const accountResponse = await fetch(`/volunteers/${currentAccID}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    console.log("Response status on POST:", accountResponse.status);
+    let account = await accountResponse.json();
+    console.log(account);
+    if (!accountResponse.ok) {
+      throw new Error(account.message || "Failed to load account");
+    }
 
     // Get all posts from followed acounts
     const postResponse = await fetch(`/followedPost/${currentAccID}`, {
@@ -44,6 +57,15 @@ document.addEventListener("DOMContentLoaded", async () => {
     } else {
       currentUsername = currentAcc.Username;
     }
+
+    let profilePicture = await fetch(`/image/${account.MediaPath}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    const profilePictureContainer = document.querySelector("#profile-link");
+    profilePictureContainer.src = profilePicture.url;
 
     const feedContainer = document.querySelector(".feed-container");
     const postModalContainer = document.querySelector(".post-modal-container");

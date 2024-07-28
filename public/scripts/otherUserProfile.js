@@ -7,8 +7,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     return;
   }
   try {
-    // const currentAccountID = localStorage.getItem("userID");
-    const currentAccountID = 1;
+    const currentAccountID = localStorage.getItem("userID");
     // Get Current Account
     const volunteerResponse = await fetch(`/volunteerProfile/${currentAccountID}`, {
       method: "GET",
@@ -55,6 +54,10 @@ document.addEventListener("DOMContentLoaded", async () => {
     } catch (error) {
       console.error(error);
     }
+
+    const profilePicture = document.querySelector("#profile-link");
+    profilePicture.src = image.url;
+
     profileSection.innerHTML = `
       <img
         src="${image.url}"

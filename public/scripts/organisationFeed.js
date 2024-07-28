@@ -7,7 +7,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     return;
   }
   try {
-    const currentAccID = localStorage.getItem("userID");
+    const currentAccID = parseInt(localStorage.getItem("userID"));
 
     // Get all posts from followed acounts
     const postResponse = await fetch(`/followedPost/${currentAccID}`, {
@@ -44,6 +44,30 @@ document.addEventListener("DOMContentLoaded", async () => {
     } else {
       currentUsername = currentAcc.Username;
     }
+
+    let account = "";
+    try {
+      const accountResponse = await fetch(`/organisations/${currentAccID}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      console.log("Response status on VOLUNTEER:", accountResponse.status);
+      account = await accountResponse.json();
+    } catch (error) {
+      console.error(error);
+    }
+  
+    const profilePictureContainer = document.querySelector("#profile-link");
+    console.log("🚀 ~ document.addEventListener ~ profilePictureContainer:", profilePictureContainer)
+    let profilePicture = await fetch(`/image/${account.MediaPath}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    profilePictureContainer.src = profilePicture.url;
 
     const feedContainer = document.querySelector(".feed-container");
     const postModalContainer = document.querySelector(".post-modal-container");
