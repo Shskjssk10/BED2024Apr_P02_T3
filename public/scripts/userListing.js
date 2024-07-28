@@ -9,6 +9,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
   try {
     // Get all Listings
+    const currentAccID = parseInt(localStorage.getItem("userID"));
     const listingsResponse = await fetch("/listing", {
       method: "GET",
       headers: {
@@ -36,7 +37,35 @@ document.addEventListener("DOMContentLoaded", async () => {
       throw new Error(organisations.message || "Failed to load organisations");
     }
 
+    // Get volunteer
+    const volunteerResponse = await fetch(`/volunteers/${currentAccID}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    console.log("Response status:", volunteerResponse.status);
+    const volunteer = await volunteerResponse.json();
+    console.log("volunteer received:", volunteer);
+    if (!volunteerResponse.ok) {
+      throw new Error(volunteer.message || "Failed to load volunteer");
+    }
+
     // Apending data into page
+    let profilePicture = "";
+    try {
+      profilePicture = await fetch(`/image/${volunteer.MediaPath}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+    } catch (error) {
+      console.error(error);
+    }
+    const profilePictureContainer = document.querySelector("#profile-link");
+    profilePictureContainer.src = profilePicture.url;
+
     const listingsContainer = document.querySelector(".userlistings");
     async function processListing(listing){
       const listingItem = document.createElement("a");
