@@ -11,8 +11,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@google-cloud/storage": "^7.12.0",
-    "bcrypt": "^5.1.1",
+    "@google-cloud/storage": "^5.18.3",
+    "bcryptjs": "^3.0.3",
     "blob": "^0.1.0",
     "body-parser": "^1.20.2",
     "cookie-parser": "^1.4.6",
@@ -29,10 +29,11 @@
     "socket.io": "^4.7.5",
     "socket.io-client": "^4.7.5",
     "swagger-autogen": "^2.23.7",
-    "swagger-ui-express": "^5.0.1"
+    "swagger-ui-express": "^5.0.1",
+    "tar": "^7.5.12"
   },
   "devDependencies": {
     "jest": "^29.7.0",
-    "next": "^14.2.5"
+    "next": "^16.2.1"
   }
 }
